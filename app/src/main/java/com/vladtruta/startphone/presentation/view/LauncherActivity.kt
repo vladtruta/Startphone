@@ -23,9 +23,9 @@ class LauncherActivity : AppCompatActivity() {
 
         launcherViewModel.currentWeather.observe(this, Observer { })
 
-        launcherViewModel.wifiSignalLevel.observe(this, Observer { })
+        launcherViewModel.networkConnected.observe(this, Observer { })
 
-        launcherViewModel.mobileSignalStrength.observe(this, Observer { })
+        launcherViewModel.networkConnectionStrength.observe(this, Observer { })
 
         launcherViewModel.dateTime.observe(this, Observer { })
     }

@@ -27,6 +27,7 @@ class StartphoneApp : Application() {
         DateTimeHelper.registerTimeTickReceiver(this)
         MobileSignalHelper.registerPhoneStateListener()
         WifiConnectionHelper.registerWifiConnectionReceiver(this)
+        NetworkConnectivityHelper.registerNetworkCallback()
     }
 
     override fun onTerminate() {
@@ -34,6 +35,7 @@ class StartphoneApp : Application() {
         DateTimeHelper.unregisterTimeTickReceiver(this)
         MobileSignalHelper.unregisterPhoneStateListener()
         WifiConnectionHelper.unregisterWifiConnectionReceiver(this)
+        NetworkConnectivityHelper.unregisterNetworkCallback()
 
         super.onTerminate()
     }

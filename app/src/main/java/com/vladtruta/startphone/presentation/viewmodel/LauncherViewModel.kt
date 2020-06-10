@@ -12,7 +12,8 @@ class LauncherViewModel(private val weatherRepository: IWeatherRepo) : ViewModel
     BatteryStatusHelper.BatteryStatusListener,
     DateTimeHelper.DateTimeListener,
     MobileSignalHelper.MobileSignalListener,
-    WifiConnectionHelper.WifiConnectionListener {
+    WifiConnectionHelper.WifiConnectionListener,
+    NetworkConnectivityHelper.NetworkConnectivityListener {
 
     private val _currentWeather = MutableLiveData<Result<Weather>>()
     val currentWeather: LiveData<Result<Weather>> = _currentWeather
@@ -23,17 +24,25 @@ class LauncherViewModel(private val weatherRepository: IWeatherRepo) : ViewModel
     private val _dateTime = MutableLiveData<FormattedDateTime>()
     val dateTime: LiveData<FormattedDateTime> = _dateTime
 
-    private val _mobileSignalStrength = MutableLiveData(MobileSignalHelper.calculateSignalStrength())
-    val mobileSignalStrength: LiveData<Int> = _mobileSignalStrength
+    private val _networkConnected = MutableLiveData(NetworkConnectivityHelper.isNetworkConnected())
+    val networkConnected: LiveData<Boolean> = _networkConnected
 
+    private val _mobileSignalStrength =
+        MutableLiveData(MobileSignalHelper.calculateSignalStrength())
     private val _wifiSignalLevel = MutableLiveData(WifiConnectionHelper.calculateSignalLevel())
-    val wifiSignalLevel: LiveData<Int> = _wifiSignalLevel
+    var networkConnectionStrength: LiveData<Int> =
+        if (NetworkConnectivityHelper.isWifiConnected()) {
+            _wifiSignalLevel
+        } else {
+            _mobileSignalStrength
+        }
 
     init {
         BatteryStatusHelper.addListener(this)
         DateTimeHelper.addListener(this)
         MobileSignalHelper.addListener(this)
         WifiConnectionHelper.addListener(this)
+        NetworkConnectivityHelper.addListener(this)
         LocationHelper.addListener(this)
         LocationHelper.requestLastKnownLocation()
     }
@@ -54,7 +63,7 @@ class LauncherViewModel(private val weatherRepository: IWeatherRepo) : ViewModel
     }
 
     override fun onDateTimeTick(dateTime: FormattedDateTime) {
-       _dateTime.postValue(dateTime)
+        _dateTime.postValue(dateTime)
     }
 
     override fun onMobileSignalStrengthChanged(strength: Int) {
@@ -65,12 +74,29 @@ class LauncherViewModel(private val weatherRepository: IWeatherRepo) : ViewModel
         _wifiSignalLevel.postValue(level)
     }
 
+    override fun onNetworkConnected() {
+        _networkConnected.postValue(true)
+    }
+
+    override fun onNetworkStateChanged(isWifi: Boolean) {
+        networkConnectionStrength = if (isWifi) {
+            _wifiSignalLevel
+        } else {
+            _mobileSignalStrength
+        }
+    }
+
+    override fun onNetworkDisconnected() {
+        _networkConnected.postValue(false)
+    }
+
     override fun onCleared() {
         BatteryStatusHelper.removeListener(this)
         DateTimeHelper.removeListener(this)
         LocationHelper.removeListener(this)
         MobileSignalHelper.removeListener(this)
         WifiConnectionHelper.removeListener(this)
+        NetworkConnectivityHelper.removeListener(this)
 
         super.onCleared()
     }

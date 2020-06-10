@@ -1,6 +1,7 @@
 package com.vladtruta.startphone.di
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.telephony.TelephonyManager
@@ -20,6 +21,8 @@ val appModule = module {
 
     single { provideTelephonyManager() }
 
+    single { provideConnectivityManager() }
+
     single { provideBatteryManager() }
 
     single { provideFusedLocationProviderClient() }
@@ -37,6 +40,10 @@ private fun provideWifiManager(): WifiManager {
 
 private fun provideTelephonyManager(): TelephonyManager {
     return StartphoneApp.instance.applicationContext.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+}
+
+private fun provideConnectivityManager(): ConnectivityManager {
+    return StartphoneApp.instance.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 }
 
 private fun provideBatteryManager(): BatteryManager {
