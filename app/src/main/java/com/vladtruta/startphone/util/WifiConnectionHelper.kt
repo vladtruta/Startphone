@@ -6,16 +6,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import android.util.Log
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-object WifiConnectionHelper : KoinComponent {
+class WifiConnectionHelper(private val wifiManager: WifiManager) {
+    companion object {
+        private const val TAG = "WifiConnectionHelper"
+        private const val MAX_LEVELS = 5
+    }
 
-    private const val TAG = "WifiConnectionHelper"
-
-    private const val MAX_LEVELS = 5
-
-    private val wifiManager by inject<WifiManager>()
     private val listeners = mutableListOf<WifiConnectionListener>()
 
     private val wifiConnectionReceiver = object : BroadcastReceiver() {

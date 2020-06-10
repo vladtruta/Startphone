@@ -9,15 +9,13 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 @SuppressLint("LongLogTag")
-object NetworkConnectivityHelper : KoinComponent {
+class NetworkConnectivityHelper(private val connectivityManager: ConnectivityManager) {
+    companion object {
+        private const val TAG = "NetworkConnectivityHelper"
+    }
 
-    private const val TAG = "NetworkConnectivityHelper"
-
-    private val connectivityManager by inject<ConnectivityManager>()
     private val mainHandler = Handler(Looper.getMainLooper())
     private val listeners = mutableListOf<NetworkConnectivityListener>()
 

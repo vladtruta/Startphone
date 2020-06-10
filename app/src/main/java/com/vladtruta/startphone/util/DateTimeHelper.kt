@@ -9,9 +9,10 @@ import com.vladtruta.startphone.model.local.FormattedDateTime
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
-object DateTimeHelper {
-
-    private const val TAG = "DateTimeHelper"
+class DateTimeHelper {
+    companion object {
+        private const val TAG = "DateTimeHelper"
+    }
 
     private val listeners = mutableListOf<DateTimeListener>()
 

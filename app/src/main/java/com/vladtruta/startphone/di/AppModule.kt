@@ -11,27 +11,30 @@ import com.google.gson.Gson
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
 import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.repository.WeatherRepository
-import com.vladtruta.startphone.util.StartphoneApp
+import com.vladtruta.startphone.util.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
 
+    single { Gson() }
+
     single { provideWifiManager() }
-
     single { provideTelephonyManager() }
-
     single { provideConnectivityManager() }
-
     single { provideBatteryManager() }
-
     single { provideFusedLocationProviderClient() }
 
-    single { Gson() }
+    single { BatteryStatusHelper(get()) }
+    single { DateTimeHelper() }
+    single { LocationHelper(get()) }
+    single { MobileSignalHelper(get()) }
+    single { NetworkConnectivityHelper(get()) }
+    single { WifiConnectionHelper(get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
 
-    viewModel { LauncherViewModel(get()) }
+    viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }
 
 private fun provideWifiManager(): WifiManager {

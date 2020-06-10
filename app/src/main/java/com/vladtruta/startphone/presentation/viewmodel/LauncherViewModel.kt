@@ -1,13 +1,24 @@
 package com.vladtruta.startphone.presentation.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.vladtruta.startphone.model.local.FormattedDateTime
 import com.vladtruta.startphone.model.local.Weather
 import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.util.*
 import kotlinx.coroutines.launch
 
-class LauncherViewModel(private val weatherRepository: IWeatherRepo) : ViewModel(),
+class LauncherViewModel(
+    private val weatherRepository: IWeatherRepo,
+    private val batteryStatusHelper: BatteryStatusHelper,
+    private val networkConnectivityHelper: NetworkConnectivityHelper,
+    private val wifiConnectionHelper: WifiConnectionHelper,
+    private val mobileSignalHelper: MobileSignalHelper,
+    private val locationHelper: LocationHelper,
+    private val dateTimeHelper: DateTimeHelper
+) : ViewModel(),
     LocationHelper.LocationListener,
     BatteryStatusHelper.BatteryStatusListener,
     DateTimeHelper.DateTimeListener,
@@ -18,33 +29,33 @@ class LauncherViewModel(private val weatherRepository: IWeatherRepo) : ViewModel
     private val _currentWeather = MutableLiveData<Result<Weather>>()
     val currentWeather: LiveData<Result<Weather>> = _currentWeather
 
-    private val _batteryLevel = MutableLiveData(BatteryStatusHelper.getBatteryStatus())
+    private val _batteryLevel = MutableLiveData(batteryStatusHelper.getBatteryStatus())
     val batteryLevel: LiveData<Pair<Int, Boolean>> = _batteryLevel
 
     private val _dateTime = MutableLiveData<FormattedDateTime>()
     val dateTime: LiveData<FormattedDateTime> = _dateTime
 
-    private val _networkConnected = MutableLiveData(NetworkConnectivityHelper.isNetworkConnected())
+    private val _networkConnected = MutableLiveData(networkConnectivityHelper.isNetworkConnected())
     val networkConnected: LiveData<Boolean> = _networkConnected
 
     private val _mobileSignalStrength =
-        MutableLiveData(MobileSignalHelper.calculateSignalStrength())
-    private val _wifiSignalLevel = MutableLiveData(WifiConnectionHelper.calculateSignalLevel())
+        MutableLiveData(mobileSignalHelper.calculateSignalStrength())
+    private val _wifiSignalLevel = MutableLiveData(wifiConnectionHelper.calculateSignalLevel())
     var networkConnectionStrength: LiveData<Int> =
-        if (NetworkConnectivityHelper.isWifiConnected()) {
+        if (networkConnectivityHelper.isWifiConnected()) {
             _wifiSignalLevel
         } else {
             _mobileSignalStrength
         }
 
     init {
-        BatteryStatusHelper.addListener(this)
-        DateTimeHelper.addListener(this)
-        MobileSignalHelper.addListener(this)
-        WifiConnectionHelper.addListener(this)
-        NetworkConnectivityHelper.addListener(this)
-        LocationHelper.addListener(this)
-        LocationHelper.requestLastKnownLocation()
+        batteryStatusHelper.addListener(this)
+        dateTimeHelper.addListener(this)
+        mobileSignalHelper.addListener(this)
+        wifiConnectionHelper.addListener(this)
+        networkConnectivityHelper.addListener(this)
+        locationHelper.addListener(this)
+        locationHelper.requestLastKnownLocation()
     }
 
     override fun onLastLocationRetrieved(latitude: Double, longitude: Double) {
@@ -91,12 +102,12 @@ class LauncherViewModel(private val weatherRepository: IWeatherRepo) : ViewModel
     }
 
     override fun onCleared() {
-        BatteryStatusHelper.removeListener(this)
-        DateTimeHelper.removeListener(this)
-        LocationHelper.removeListener(this)
-        MobileSignalHelper.removeListener(this)
-        WifiConnectionHelper.removeListener(this)
-        NetworkConnectivityHelper.removeListener(this)
+        batteryStatusHelper.removeListener(this)
+        dateTimeHelper.removeListener(this)
+        locationHelper.removeListener(this)
+        mobileSignalHelper.removeListener(this)
+        wifiConnectionHelper.removeListener(this)
+        networkConnectivityHelper.removeListener(this)
 
         super.onCleared()
     }

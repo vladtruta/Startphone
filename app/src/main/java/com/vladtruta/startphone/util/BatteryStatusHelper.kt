@@ -6,14 +6,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.util.Log
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-object BatteryStatusHelper : KoinComponent {
+class BatteryStatusHelper(private val batteryManager: BatteryManager) {
+    companion object {
+        private const val TAG = "BatteryStatusHelper"
+    }
 
-    private const val TAG = "BatteryStatusHelper"
-
-    private val batteryManager by inject<BatteryManager>()
     private val listeners = mutableListOf<BatteryStatusListener>()
 
     private val batteryStatusReceiver = object : BroadcastReceiver() {

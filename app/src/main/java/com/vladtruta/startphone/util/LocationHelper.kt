@@ -2,21 +2,19 @@ package com.vladtruta.startphone.util
 
 import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-object LocationHelper : KoinComponent {
+class LocationHelper(private val fusedLocationProviderClient: FusedLocationProviderClient) {
+    companion object {
+        private const val TAG = "LocationHelper"
+    }
 
-    private const val TAG = "LocationHelper"
-
-    private val fusedLocationProviderClient by inject<FusedLocationProviderClient>()
     private val listeners = mutableListOf<LocationListener>()
 
     fun requestLastKnownLocation() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) {
                 Log.d(
-                    TAG,
+                    Companion.TAG,
                     "requestLastKnownLocation Success - latitude: ${location.latitude}, longitude: ${location.longitude}"
                 )
 
@@ -27,10 +25,10 @@ object LocationHelper : KoinComponent {
                     )
                 }
             } else {
-                Log.e(TAG, "requestLastKnownLocation Failure: location is null")
+                Log.e(Companion.TAG, "requestLastKnownLocation Failure: location is null")
             }
         }.addOnFailureListener {
-            Log.e(TAG, "requestLastKnownLocation Failure: ${it.message}", it)
+            Log.e(Companion.TAG, "requestLastKnownLocation Failure: ${it.message}", it)
         }
     }
 

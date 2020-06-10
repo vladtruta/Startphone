@@ -1,16 +1,13 @@
 package com.vladtruta.startphone.util
 
-import android.annotation.SuppressLint
 import android.telephony.*
 import android.util.Log
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-object MobileSignalHelper : KoinComponent {
+class MobileSignalHelper(private val telephonyManager: TelephonyManager) {
+    companion object {
+        private const val TAG = "MobileSignalHelper"
+    }
 
-    private const val TAG = "MobileSignalHelper"
-
-    private val telephonyManager by inject<TelephonyManager>()
     private val listeners = mutableListOf<MobileSignalListener>()
 
     private val phoneStateListener = object : PhoneStateListener() {
