@@ -71,8 +71,9 @@ object NetworkConnectivityHelper : KoinComponent {
         }
     }
 
+    @Suppress("DEPRECATION")
     fun isNetworkConnected(): Boolean {
-        return networkConnected
+        return connectivityManager.activeNetworkInfo?.isConnected ?: false
     }
 
     fun isWifiConnected(): Boolean {
