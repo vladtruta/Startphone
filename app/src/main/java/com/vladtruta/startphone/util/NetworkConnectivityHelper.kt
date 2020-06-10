@@ -21,10 +21,13 @@ object NetworkConnectivityHelper : KoinComponent {
     private val mainHandler = Handler(Looper.getMainLooper())
     private val listeners = mutableListOf<NetworkConnectivityListener>()
 
+    private var networkConnected = false
+
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
             mainHandler.post {
+                networkConnected = true
                 listeners.forEach { it.onNetworkConnected() }
             }
         }
@@ -43,6 +46,7 @@ object NetworkConnectivityHelper : KoinComponent {
         override fun onLost(network: Network) {
             super.onLost(network)
             mainHandler.post {
+                networkConnected = false
                 listeners.forEach { it.onNetworkDisconnected() }
             }
         }
@@ -68,16 +72,16 @@ object NetworkConnectivityHelper : KoinComponent {
     }
 
     fun isNetworkConnected(): Boolean {
-        return isWifiConnected() || isMobileDataConnected()
+        return networkConnected
     }
 
     fun isWifiConnected(): Boolean {
-        return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        return networkConnected && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             ?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
     }
 
     fun isMobileDataConnected(): Boolean {
-        return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        return networkConnected && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             ?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
     }
 
