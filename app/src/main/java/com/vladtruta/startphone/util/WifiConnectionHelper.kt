@@ -5,10 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
+import android.util.Log
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 object WifiConnectionHelper : KoinComponent {
+
+    private const val TAG = "WifiConnectionHelper"
 
     private const val MAX_LEVELS = 5
 
@@ -22,6 +25,8 @@ object WifiConnectionHelper : KoinComponent {
                     val dbm = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -100)
                     val signalLevel = calculateSignalLevel(dbm)
 
+                    Log.d(TAG, "WifiManager.RSSI_CHANGED_ACTION - signalLevel: $signalLevel")
+
                     listeners.forEach { it.onWifiSignalLevelChanged(signalLevel) }
                 }
             }
@@ -29,7 +34,11 @@ object WifiConnectionHelper : KoinComponent {
     }
 
     fun calculateSignalLevel(rssi: Int = wifiManager.connectionInfo.rssi): Int {
-        return WifiManager.calculateSignalLevel(rssi, MAX_LEVELS)
+        val signalLevel = WifiManager.calculateSignalLevel(rssi, MAX_LEVELS)
+
+        Log.d(TAG, "calculateSignalLevel - signalLevel: $signalLevel")
+
+        return signalLevel
     }
 
     fun registerWifiConnectionReceiver(context: Context) {

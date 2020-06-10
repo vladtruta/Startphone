@@ -4,10 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
+import com.vladtruta.startphone.model.local.FormattedDateTime
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
 object DateTimeHelper {
+
+    private const val TAG = "DateTimeHelper"
 
     private val listeners = mutableListOf<DateTimeListener>()
 
@@ -15,15 +19,7 @@ object DateTimeHelper {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 Intent.ACTION_TIME_TICK -> {
-                    listeners.forEach {
-                        it.onDateTimeTick(
-                            getCurrentTime(),
-                            getCurrentYear(),
-                            getCurrentMonth(),
-                            getCurrentDayOfMonth(),
-                            getCurrentDayOfWeek()
-                        )
-                    }
+                    listeners.forEach { it.onDateTimeTick(getCurrentDateAndTime()) }
                 }
             }
         }
@@ -38,26 +34,22 @@ object DateTimeHelper {
         context.unregisterReceiver(timeTickReceiver)
     }
 
-    fun getCurrentTime(): String {
+    fun getCurrentDateAndTime(): FormattedDateTime {
         val currentDateTime = DateTime.now()
         val formatter = DateTimeFormat.forPattern("HH:mm")
-        return formatter.print(currentDateTime)
-    }
+        val formattedTime = formatter.print(currentDateTime)
 
-    fun getCurrentYear(): String {
-        return DateTime.now().year().asString
-    }
+        val formattedDateTime =  FormattedDateTime(
+            formattedTime,
+            currentDateTime.year().asString,
+            currentDateTime.monthOfYear().asText,
+            currentDateTime.dayOfMonth().asString,
+            currentDateTime.dayOfWeek().asText
+        )
 
-    fun getCurrentMonth(): String {
-        return DateTime.now().monthOfYear().asText
-    }
+        Log.d(TAG, "getCurrentDateAndTime - formattedDateTime: $formattedDateTime")
 
-    fun getCurrentDayOfMonth(): String {
-        return DateTime.now().dayOfMonth().asString
-    }
-
-    fun getCurrentDayOfWeek(): String {
-        return DateTime.now().dayOfWeek().asText
+        return formattedDateTime
     }
 
     fun addListener(listener: DateTimeListener) {
@@ -73,12 +65,6 @@ object DateTimeHelper {
     }
 
     interface DateTimeListener {
-        fun onDateTimeTick(
-            time: String,
-            year: String,
-            month: String,
-            dayOfMonth: String,
-            dayOfWeek: String
-        )
+        fun onDateTimeTick(dateTime: FormattedDateTime)
     }
 }

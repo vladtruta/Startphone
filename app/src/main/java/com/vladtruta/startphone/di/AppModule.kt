@@ -7,8 +7,11 @@ import android.telephony.TelephonyManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
+import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
+import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.repository.WeatherRepository
 import com.vladtruta.startphone.util.StartphoneApp
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -23,7 +26,9 @@ val appModule = module {
 
     single { Gson() }
 
-    factory { WeatherRepository(get()) }
+    single<IWeatherRepo> { WeatherRepository(get()) }
+
+    viewModel { LauncherViewModel(get()) }
 }
 
 private fun provideWifiManager(): WifiManager {

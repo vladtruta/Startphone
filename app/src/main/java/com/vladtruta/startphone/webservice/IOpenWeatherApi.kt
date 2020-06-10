@@ -13,7 +13,7 @@ interface IOpenWeatherApi {
         @Query("lon") longitude: Double,
         @Query("units") units: String = "metric",
         @Query("exclude") exclude: String = "minutely,hourly,daily",
-        @Query("lang") languageCode: String = "ro",
+        @Query("lang") languageCode: String = "en",
         @Query("appid") apiKey: String = BuildConfig.OPEN_WEATHER_API_KEY
     ): ApiWeatherResponse
 

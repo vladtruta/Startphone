@@ -22,5 +22,19 @@ class StartphoneApp : Application() {
             androidLogger()
             modules(appModule + networkModule)
         }
+
+        BatteryStatusHelper.registerBatteryReceiver(this)
+        DateTimeHelper.registerTimeTickReceiver(this)
+        MobileSignalHelper.registerPhoneStateListener()
+        WifiConnectionHelper.registerWifiConnectionReceiver(this)
+    }
+
+    override fun onTerminate() {
+        BatteryStatusHelper.unregisterBatteryReceiver(this)
+        DateTimeHelper.unregisterTimeTickReceiver(this)
+        MobileSignalHelper.unregisterPhoneStateListener()
+        WifiConnectionHelper.unregisterWifiConnectionReceiver(this)
+
+        super.onTerminate()
     }
 }

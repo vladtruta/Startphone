@@ -5,10 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
+import android.util.Log
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 object BatteryStatusHelper : KoinComponent {
+
+    private const val TAG = "BatteryStatusHelper"
 
     private val batteryManager by inject<BatteryManager>()
     private val listeners = mutableListOf<BatteryStatusListener>()
@@ -39,11 +42,19 @@ object BatteryStatusHelper : KoinComponent {
         }
 
         val batteryPercentageInteger = (batteryPercentage * 100).toInt()
+
+        Log.d(TAG, "getBatteryStatusForIntent - percentage: $batteryPercentageInteger, isCharging: $isCharging")
+
         return Pair(batteryPercentageInteger, isCharging)
     }
 
-    fun calculateBatteryPercentage(): Int {
-        return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+    fun getBatteryStatus(): Pair<Int, Boolean> {
+        val batteryPercentage = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+        val isCharging = batteryManager.isCharging
+
+        Log.d(TAG, "getBatteryStatus - percentage: $batteryPercentage, isCharging: $isCharging")
+
+        return Pair(batteryPercentage, isCharging)
     }
 
     fun registerBatteryReceiver(context: Context) {

@@ -14,7 +14,21 @@ object LocationHelper : KoinComponent {
 
     fun requestLastKnownLocation() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-            listeners.forEach { it.onLastLocationRetrieved(location.latitude, location.longitude) }
+            if (location != null) {
+                Log.d(
+                    TAG,
+                    "requestLastKnownLocation Success - latitude: ${location.latitude}, longitude: ${location.longitude}"
+                )
+
+                listeners.forEach {
+                    it.onLastLocationRetrieved(
+                        location.latitude,
+                        location.longitude
+                    )
+                }
+            } else {
+                Log.e(TAG, "requestLastKnownLocation Failure: location is null")
+            }
         }.addOnFailureListener {
             Log.e(TAG, "requestLastKnownLocation Failure: ${it.message}", it)
         }
