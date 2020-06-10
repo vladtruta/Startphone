@@ -1,8 +1,13 @@
 package com.vladtruta.startphone.util
 
 import android.app.Application
+import com.vladtruta.startphone.di.appModule
+import com.vladtruta.startphone.di.networkModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
-class StartphoneApp: Application(){
+class StartphoneApp : Application() {
     companion object {
         lateinit var instance: StartphoneApp
             private set
@@ -11,5 +16,11 @@ class StartphoneApp: Application(){
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        startKoin {
+            androidContext(this@StartphoneApp)
+            androidLogger()
+            modules(appModule + networkModule)
+        }
     }
 }
