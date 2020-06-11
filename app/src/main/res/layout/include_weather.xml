@@ -1,38 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/battery_level_iv"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="4dp"
-        android:layout_gravity="center_horizontal"
-        android:importantForAccessibility="no"
-        tools:src="@drawable/ic_wb_sunny"
-        tools:tint="@android:color/holo_orange_light" />
-
-    <TextView
-        android:id="@+id/weather_tv"
+    <LinearLayout
+        android:id="@+id/weather_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceHeadline5"
-        tools:text="Sunny" />
+        android:orientation="vertical"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
-    <TextView
-        android:id="@+id/temperature_tv"
+        <ImageView
+            android:id="@+id/weather_iv"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:importantForAccessibility="no"
+            tools:src="@drawable/ic_wb_sunny"
+            tools:tint="@android:color/holo_orange_light" />
+
+        <TextView
+            android:id="@+id/weather_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            android:textStyle="bold"
+            tools:text="Sunny" />
+
+        <TextView
+            android:id="@+id/temperature_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:textAppearance="?attr/textAppearanceHeadline3"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            tools:text="20℃" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/loading_pb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:includeFontPadding="false"
-        android:textAppearance="?attr/textAppearanceHeadline3"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        tools:text="20℃" />
-
-</LinearLayout>
+        android:layout_gravity="center"
+        android:indeterminateTint="@android:color/holo_orange_dark" />
+</FrameLayout>

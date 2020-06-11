@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName
 import com.vladtruta.startphone.model.local.Weather
 
 data class ApiWeatherResponse(
+    @SerializedName("temp")
+    val temp: Double? = null,
     @SerializedName("weather")
     val weathers: List<ApiWeather>? = null
 ) {
@@ -12,12 +14,14 @@ data class ApiWeatherResponse(
         val main: String? = null,
         @SerializedName("icon")
         val iconUrl: String? = null
-    ) {
-        fun toWeather(): Weather? {
-            main ?: return null
-            iconUrl ?: return null
+    )
 
-            return Weather(main, iconUrl)
-        }
+    fun toWeather(): Weather? {
+        temp ?: return null
+        val firstWeather = weathers?.firstOrNull() ?: return null
+        firstWeather.main ?: return null
+        firstWeather.iconUrl ?: return null
+
+        return Weather(firstWeather.main, firstWeather.iconUrl, temp)
     }
 }

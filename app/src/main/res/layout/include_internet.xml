@@ -10,6 +10,7 @@
         android:gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:elevation="2dp"
         android:text="@string/internet"
         android:background="@color/light_gray"
         android:textAllCaps="true"
@@ -22,7 +23,7 @@
         android:layout_gravity="center">
 
         <ImageView
-            android:id="@+id/wifi_level_iv"
+            android:id="@+id/internet_level_iv"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
@@ -33,7 +34,7 @@
             tools:tint="@android:color/holo_green_dark" />
 
         <TextView
-            android:id="@+id/wifi_level_tv"
+            android:id="@+id/internet_level_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|bottom"

@@ -32,7 +32,7 @@ class LauncherViewModel(
     private val _batteryLevel = MutableLiveData(batteryStatusHelper.getBatteryStatus())
     val batteryLevel: LiveData<Pair<Int, Boolean>> = _batteryLevel
 
-    private val _dateTime = MutableLiveData<FormattedDateTime>()
+    private val _dateTime = MutableLiveData(dateTimeHelper.getCurrentDateAndTime())
     val dateTime: LiveData<FormattedDateTime> = _dateTime
 
     private val _networkConnected = MutableLiveData(networkConnectivityHelper.isNetworkConnected())
@@ -40,6 +40,8 @@ class LauncherViewModel(
 
     private val _mobileSignalStrength =
         MutableLiveData(mobileSignalHelper.calculateSignalStrength())
+    val mobileSignalStrength: LiveData<Int> = _mobileSignalStrength
+
     private val _wifiSignalLevel = MutableLiveData(wifiConnectionHelper.calculateSignalLevel())
     var networkConnectionStrength: LiveData<Int> =
         if (networkConnectivityHelper.isWifiConnected()) {

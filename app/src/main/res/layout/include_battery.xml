@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="@color/light_gray"
+        android:elevation="2dp"
         android:gravity="center_horizontal"
         android:text="@string/battery"
         android:textAllCaps="true"

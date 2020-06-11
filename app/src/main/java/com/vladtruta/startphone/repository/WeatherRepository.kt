@@ -12,13 +12,10 @@ class WeatherRepository(private val openWeatherApi: IOpenWeatherApi) : IWeatherR
         return withContext(Dispatchers.IO) {
             try {
                 val response = openWeatherApi.getCurrentWeatherInfo(latitude, longitude)
+                val currentWeather = response.toWeather()
+                    ?: throw Exception("Invalid weather info for lat: $latitude, long: $longitude")
 
-                val currentWeather = response.weathers?.firstOrNull()
-                    ?: throw Exception("No weather info found for lat: $latitude, long: $longitude")
-                val weather = currentWeather.toWeather()
-                    ?: throw Exception("Incomplete weather info")
-
-                return@withContext weather
+                return@withContext currentWeather
             } catch (error: Exception) {
                 throw Exception("Failed to get weather info", error)
             }

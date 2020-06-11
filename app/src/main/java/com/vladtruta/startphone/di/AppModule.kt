@@ -30,6 +30,7 @@ val appModule = module {
     single { MobileSignalHelper(get()) }
     single { NetworkConnectivityHelper(get()) }
     single { WifiConnectionHelper(get()) }
+    single { ImageHelper() }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
 
