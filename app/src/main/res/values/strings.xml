@@ -10,7 +10,7 @@
     <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="page">Page:</string>
-    <string name="information">Information</string>
+    <string name="date_time_weather">Date, Time &amp; Weather</string>
     <string name="battery_percentage_placeholder">%1$d%%</string>
     <string name="temperature_degrees_placeholder">%1$s℃</string>
 </resources>

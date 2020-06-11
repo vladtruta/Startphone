@@ -1,9 +1,7 @@
 package com.vladtruta.startphone.presentation.view
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -27,6 +25,7 @@ class LauncherActivity : AppCompatActivity(), ApplicationsAdapter.ApplicationsLi
     private val launcherViewModel by viewModel<LauncherViewModel>()
     private val imageHelper by inject<ImageHelper>()
     private val applicationsAdapter by inject<ApplicationsAdapter>()
+    private val appPackageManager by inject<PackageManager>()
 
     private lateinit var binding: ActivityLauncherBinding
 
@@ -234,15 +233,7 @@ class LauncherActivity : AppCompatActivity(), ApplicationsAdapter.ApplicationsLi
     }
 
     override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
-        val intent = Intent(applicationInfo.packageName)
-        tryOpenIntent(intent)
-    }
-
-    private fun tryOpenIntent(intent: Intent) {
-        try {
-            startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            Log.e(TAG, "tryOpenIntent Failure: ${e.message}", e)
-        }
+        val intent = appPackageManager.getLaunchIntentForPackage(applicationInfo.packageName) ?: return
+        startActivity(intent)
     }
 }

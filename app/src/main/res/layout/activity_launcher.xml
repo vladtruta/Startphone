@@ -13,7 +13,7 @@
         android:background="@color/light_gray"
         android:elevation="5dp"
         android:gravity="center_horizontal"
-        android:text="@string/information"
+        android:text="@string/date_time_weather"
         android:textAllCaps="true"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textStyle="bold" />
