@@ -29,7 +29,7 @@
             android:importantForAccessibility="no"
             android:paddingStart="8dp"
             android:paddingEnd="0dp"
-            tools:src="@drawable/ic_wifi_3"
+            tools:src="@drawable/ic_wifi_2"
             tools:tint="@android:color/holo_green_dark" />
 
         <TextView

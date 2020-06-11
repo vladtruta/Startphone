@@ -8,11 +8,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
+        android:background="@color/light_gray"
+        android:gravity="center_horizontal"
         android:text="@string/battery"
         android:textAllCaps="true"
-        android:background="@color/light_gray"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textStyle="bold" />
 
@@ -31,14 +31,15 @@
             android:paddingEnd="32dp"
             android:rotation="90"
             android:scaleType="centerCrop"
-            tools:src="@drawable/ic_battery_low"
+            tools:src="@drawable/ic_battery_2"
             tools:tint="@android:color/holo_green_dark" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
 
             <TextView
                 android:id="@+id/battery_level_tv"
@@ -56,7 +57,9 @@
                 android:layout_height="42dp"
                 android:importantForAccessibility="no"
                 android:rotation="90"
-                tools:src="@drawable/ic_plug" />
+                android:visibility="gone"
+                tools:src="@drawable/ic_plug"
+                tools:visibility="visible" />
 
         </LinearLayout>
 
