@@ -159,7 +159,7 @@
                 android:layout_gravity="center_vertical"
                 android:text="@string/page"
                 android:textAllCaps="true"
-                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textStyle="bold" />
 
             <TextView
