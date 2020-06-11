@@ -29,6 +29,7 @@
             android:layout_gravity="center"
             android:importantForAccessibility="no"
             android:paddingStart="8dp"
+            android:paddingBottom="4dp"
             android:paddingEnd="0dp"
             tools:src="@drawable/ic_wifi_2"
             tools:tint="@android:color/holo_green_dark" />
