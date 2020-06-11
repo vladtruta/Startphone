@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.telephony.TelephonyManager
+import android.view.WindowManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
@@ -24,6 +25,7 @@ val appModule = module {
     single { provideConnectivityManager() }
     single { provideBatteryManager() }
     single { providePackageManager() }
+    single { provideWindowManager() }
     single { provideFusedLocationProviderClient() }
 
     single { BatteryStatusHelper(get()) }
@@ -54,6 +56,10 @@ private fun provideConnectivityManager(): ConnectivityManager {
 
 private fun provideBatteryManager(): BatteryManager {
     return StartphoneApp.instance.applicationContext.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+}
+
+private fun provideWindowManager(): WindowManager {
+    return StartphoneApp.instance.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 }
 
 private fun providePackageManager(): PackageManager {

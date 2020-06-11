@@ -1,5 +1,6 @@
 package com.vladtruta.startphone.presentation.view
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,7 @@ import com.vladtruta.startphone.databinding.ActivityLauncherBinding
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.presentation.adapter.ApplicationPageAdapter
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
+import com.vladtruta.startphone.service.HelpingHandService
 import com.vladtruta.startphone.util.ImageHelper
 import com.vladtruta.startphone.util.UIUtils
 import org.koin.android.ext.android.inject
@@ -59,6 +61,14 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
         initViewPager()
         initActions()
         initObservers()
+
+        startHelpingHand()
+    }
+
+    override fun onDestroy() {
+        stopHelpingHand()
+
+        super.onDestroy()
     }
 
     private fun initViewPager() {
@@ -70,7 +80,8 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
         // Disable scrolling of the ViewPager
         binding.applicationsVp.isUserInputEnabled = false
 
-        binding.applicationsVp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.applicationsVp.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position == RecyclerView.NO_POSITION) {
                     return
@@ -94,9 +105,15 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
                     }
                 }
 
-                binding.currentPageTv.text = UIUtils.getString(R.string.current_page_placeholder, currentPosition, lastPosition)
-                binding.previousPageEfab.text = UIUtils.getString(R.string.page_placeholder, currentPosition - 1)
-                binding.nextPageEfab.text = UIUtils.getString(R.string.page_placeholder, currentPosition + 1)
+                binding.currentPageTv.text = UIUtils.getString(
+                    R.string.current_page_placeholder,
+                    currentPosition,
+                    lastPosition
+                )
+                binding.previousPageEfab.text =
+                    UIUtils.getString(R.string.page_placeholder, currentPosition - 1)
+                binding.nextPageEfab.text =
+                    UIUtils.getString(R.string.page_placeholder, currentPosition + 1)
             }
         })
     }
@@ -278,6 +295,15 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
 
             applicationPageAdapter.submitList(it)
         })
+    }
+
+    private fun startHelpingHand() {
+        val intent = Intent(this, HelpingHandService::class.java)
+        startService(intent)
+    }
+
+    private fun stopHelpingHand() {
+        stopService(intent)
     }
 
     override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
