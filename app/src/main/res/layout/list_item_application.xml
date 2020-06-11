@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/selectableItemBackground">
 
     <LinearLayout
@@ -18,13 +19,13 @@
             android:id="@+id/application_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:autoSizeTextType="uniform"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="1dp"
             android:layout_marginTop="1dp"
             android:layout_marginEnd="1dp"
             android:background="@android:color/holo_orange_light"
             android:elevation="2dp"
-            android:ellipsize="end"
             android:gravity="center"
             android:includeFontPadding="false"
             android:maxLines="1"
