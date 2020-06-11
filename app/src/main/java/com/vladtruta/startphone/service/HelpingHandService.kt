@@ -1,5 +1,6 @@
 package com.vladtruta.startphone.service
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.os.IBinder
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.OverlayHelpingHandBinding
 import com.vladtruta.startphone.util.getSize
@@ -16,7 +18,12 @@ import org.koin.android.ext.android.inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
+
 class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
+
+    companion object {
+        private const val ANIMATE_TO_NEAREST_WALL_DURATION_MS = 300L
+    }
 
     private val windowManager by inject<WindowManager>()
     private lateinit var binding: OverlayHelpingHandBinding
@@ -107,8 +114,16 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
                 } else {
                     0
                 }).toFloat()
-                params.x = nearestXWall.toInt()
-                windowManager.updateViewLayout(binding.root, params)
+
+                ObjectAnimator.ofFloat(params.x.toFloat(), nearestXWall).apply {
+                    interpolator = FastOutSlowInInterpolator()
+                    duration = ANIMATE_TO_NEAREST_WALL_DURATION_MS
+                    addUpdateListener {
+                        params.x = (it.animatedValue as? Float ?: 0.0f).roundToInt()
+                        windowManager.updateViewLayout(binding.root, params)
+                    }
+                    start()
+                }
 
                 return true
             }
