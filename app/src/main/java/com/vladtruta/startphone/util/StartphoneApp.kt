@@ -1,23 +1,45 @@
 package com.vladtruta.startphone.util
 
 import android.app.Application
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.vladtruta.startphone.di.appModule
 import com.vladtruta.startphone.di.networkModule
+import com.vladtruta.startphone.service.HelpingHandService
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class StartphoneApp : Application() {
+class StartphoneApp : Application(), LifecycleObserver {
+
     private val batteryStatusHelper by inject<BatteryStatusHelper>()
     private val dateTimeHelper by inject<DateTimeHelper>()
     private val mobileSignalHelper by inject<MobileSignalHelper>()
     private val wifiConnectionHelper by inject<WifiConnectionHelper>()
     private val networkConnectivityHelper by inject<NetworkConnectivityHelper>()
 
+    private lateinit var helpingHandIntent: Intent
+
     companion object {
         lateinit var instance: StartphoneApp
             private set
+
+        val isInForeground: Boolean
+            get() = ProcessLifecycleOwner.get().lifecycle.currentState >= Lifecycle.State.STARTED
+
+        fun hasDrawOverlayPermissions(): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Settings.canDrawOverlays(instance)
+            } else {
+                true
+            }
+        }
     }
 
     override fun onCreate() {
@@ -35,6 +57,23 @@ class StartphoneApp : Application() {
         mobileSignalHelper.registerPhoneStateListener()
         wifiConnectionHelper.registerWifiConnectionReceiver(this)
         networkConnectivityHelper.registerNetworkCallback()
+
+        helpingHandIntent = Intent(this, HelpingHandService::class.java)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onAppEnteredBackground() {
+        if (hasDrawOverlayPermissions()) {
+            startService(helpingHandIntent)
+        }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onAppEnteredForeground() {
+        if (hasDrawOverlayPermissions()) {
+            stopService(helpingHandIntent)
+        }
     }
 
     override fun onTerminate() {

@@ -49,16 +49,16 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
 
         params = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
             )
         } else {
             WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
@@ -104,7 +104,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
                 val yDiff = event.rawY - initialTouchY
 
                 if (abs(xDiff) < 5 && abs(yDiff) < 5) {
-                    // Open Helping Hand Dialog
+                   openHelpingHandDialog()
                 }
 
                 // Logic to auto-position the widget based on where it is positioned currently w.r.t middle of the screen.
@@ -143,6 +143,12 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
         }
 
         return false
+    }
+
+    private fun openHelpingHandDialog() {
+        binding.helpIv.visibility = View.GONE
+        binding.helpingHandLl.visibility = View.VISIBLE
+        binding.helpingHandOverlayView.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {
