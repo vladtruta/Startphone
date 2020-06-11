@@ -11,7 +11,7 @@ import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 
 @Suppress("unused")
-object ImageHelper {
+class ImageHelper {
     fun loadImage(
         activity: Activity,
         imageView: ImageView,

@@ -14,7 +14,7 @@ class LocationHelper(private val fusedLocationProviderClient: FusedLocationProvi
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) {
                 Log.d(
-                    Companion.TAG,
+                    TAG,
                     "requestLastKnownLocation Success - latitude: ${location.latitude}, longitude: ${location.longitude}"
                 )
 
@@ -25,10 +25,10 @@ class LocationHelper(private val fusedLocationProviderClient: FusedLocationProvi
                     )
                 }
             } else {
-                Log.e(Companion.TAG, "requestLastKnownLocation Failure: location is null")
+                Log.e(TAG, "requestLastKnownLocation Failure: location is null")
             }
         }.addOnFailureListener {
-            Log.e(Companion.TAG, "requestLastKnownLocation Failure: ${it.message}", it)
+            Log.e(TAG, "requestLastKnownLocation Failure: ${it.message}", it)
         }
     }
 
