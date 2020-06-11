@@ -37,6 +37,7 @@ val appModule = module {
     single { NetworkConnectivityHelper(get()) }
     single { WifiConnectionHelper(get()) }
     single { ImageHelper() }
+    single { NotificationsHelper(get()) }
     single { LauncherApplicationsHelper(get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
