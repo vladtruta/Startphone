@@ -1,5 +1,6 @@
 package com.vladtruta.startphone.di
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -27,6 +28,7 @@ val appModule = module {
     single { providePackageManager() }
     single { provideWindowManager() }
     single { provideFusedLocationProviderClient() }
+    single { provideNotificationManager() }
 
     single { BatteryStatusHelper(get()) }
     single { DateTimeHelper() }
@@ -64,6 +66,10 @@ private fun provideWindowManager(): WindowManager {
 
 private fun providePackageManager(): PackageManager {
     return StartphoneApp.instance.packageManager
+}
+
+private fun provideNotificationManager(): NotificationManager? {
+    return StartphoneApp.instance.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
 }
 
 private fun provideFusedLocationProviderClient(): FusedLocationProviderClient {
