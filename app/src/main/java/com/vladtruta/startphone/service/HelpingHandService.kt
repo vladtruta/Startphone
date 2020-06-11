@@ -20,7 +20,6 @@ import com.vladtruta.startphone.util.NotificationsHelper
 import com.vladtruta.startphone.util.UIUtils
 import com.vladtruta.startphone.util.getSize
 import org.koin.android.ext.android.inject
-import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
@@ -60,16 +59,16 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
 
         params = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
             )
         } else {
             WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
@@ -84,6 +83,8 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
 
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(this)
         binding.root.setOnTouchListener(this)
+
+        initActions()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -119,10 +120,6 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
             MotionEvent.ACTION_UP -> {
                 val xDiff = event.rawX - initialTouchX
                 val yDiff = event.rawY - initialTouchY
-
-                if (abs(xDiff) < 5 && abs(yDiff) < 5) {
-                    openHelpingHandDialog()
-                }
 
                 // Logic to auto-position the widget based on where it is positioned currently w.r.t middle of the screen.
                 val middle = screenWidth / 2
@@ -192,6 +189,10 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
         )
 
         startForeground(STARTPHONE_FOREGROUND_SERVICE_ID, notification)
+    }
+
+    private fun initActions() {
+        binding.helpIv.setOnClickListener { openHelpingHandDialog() }
     }
 
     private fun openHelpingHandDialog() {
