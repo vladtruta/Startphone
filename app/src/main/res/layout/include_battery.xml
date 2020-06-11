@@ -6,11 +6,13 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
         android:text="@string/battery"
         android:textAllCaps="true"
+        android:background="@color/light_gray"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textStyle="bold" />
 

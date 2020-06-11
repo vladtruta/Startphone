@@ -6,10 +6,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/signal"
+        android:background="@color/light_gray"
         android:textAllCaps="true"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textStyle="bold" />

@@ -10,6 +10,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/light_gray"
+        android:elevation="5dp"
         android:gravity="center_horizontal"
         android:text="@string/information"
         android:textAllCaps="true"
@@ -19,7 +21,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/dividerVertical" />
+        android:background="?attr/dividerVertical"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +39,8 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="?attr/dividerVertical" />
+            android:background="?attr/dividerVertical"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/calendar_incl"
@@ -48,7 +52,8 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="?attr/dividerVertical" />
+            android:background="?attr/dividerVertical"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/weather_incl"
@@ -110,6 +115,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/light_gray"
+        android:elevation="5dp"
         android:gravity="center_horizontal"
         android:text="@string/applications"
         android:textAllCaps="true"
@@ -119,7 +126,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/dividerVertical" />
+        android:background="?attr/dividerVertical"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="wrap_content"
@@ -139,6 +147,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/light_gray"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="horizontal"
@@ -153,6 +162,8 @@
             android:textStyle="bold"
             app:icon="@drawable/ic_arrow_left"
             app:iconPadding="4dp"
+            app:strokeColor="@android:color/black"
+            app:strokeWidth="1dp"
             tools:text="Page 1" />
 
         <LinearLayout
@@ -195,6 +206,8 @@
             app:icon="@drawable/ic_arrow_right"
             app:iconGravity="end"
             app:iconPadding="4dp"
+            app:strokeColor="@android:color/black"
+            app:strokeWidth="1dp"
             tools:text="Page 3" />
 
     </LinearLayout>
