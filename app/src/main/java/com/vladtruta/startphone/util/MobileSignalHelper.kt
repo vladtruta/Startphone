@@ -18,7 +18,7 @@ class MobileSignalHelper(private val telephonyManager: TelephonyManager) {
 
             Log.d(TAG, "onSignalStrengthsChanged - level: $level")
 
-            listeners.forEach { it.onMobileSignalStrengthChanged(signalStrength?.level ?: 0) }
+            listeners.forEach { it.onCellularSignalStrengthChanged(signalStrength?.level ?: 0) }
         }
     }
 
@@ -59,6 +59,6 @@ class MobileSignalHelper(private val telephonyManager: TelephonyManager) {
     }
 
     interface MobileSignalListener {
-        fun onMobileSignalStrengthChanged(strength: Int)
+        fun onCellularSignalStrengthChanged(strength: Int)
     }
 }

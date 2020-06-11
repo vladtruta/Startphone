@@ -82,16 +82,20 @@ class LauncherViewModel(
         _dateTime.postValue(dateTime)
     }
 
-    override fun onMobileSignalStrengthChanged(strength: Int) {
+    override fun onCellularSignalStrengthChanged(strength: Int) {
         _mobileSignalStrength.postValue(strength)
+    }
+
+    override fun onNetworkConnected() {
+        _networkConnected.postValue(true)
     }
 
     override fun onWifiSignalLevelChanged(level: Int) {
         _wifiSignalLevel.postValue(level)
     }
 
-    override fun onNetworkConnected() {
-        _networkConnected.postValue(true)
+    override fun onNetworkDisconnected() {
+        _networkConnected.postValue(false)
     }
 
     override fun onNetworkStateChanged(isWifi: Boolean) {
@@ -100,10 +104,6 @@ class LauncherViewModel(
         } else {
             _networkConnectionStrength.postValue(_mobileSignalStrength.value)
         }
-    }
-
-    override fun onNetworkDisconnected() {
-        _networkConnected.postValue(false)
     }
 
     override fun onCleared() {
