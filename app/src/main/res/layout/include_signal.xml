@@ -5,34 +5,41 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:id="@+id/signal_strength_iv"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:importantForAccessibility="no"
-            tools:src="@drawable/ic_signal_cellular_2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textAppearance="?attr/textAppearanceHeadline3"
-            tools:text="2" />
-
-    </LinearLayout>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/signal"
         android:textAllCaps="true"
-        android:textAppearance="?attr/textAppearanceHeadline5" />
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/signal_strength_iv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom"
+            android:importantForAccessibility="no"
+            android:paddingTop="16dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_signal_1"
+            tools:tint="@android:color/holo_green_dark" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:includeFontPadding="false"
+            android:textAppearance="?attr/textAppearanceHeadline3"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            tools:text="1" />
+
+    </FrameLayout>
 
 </LinearLayout>

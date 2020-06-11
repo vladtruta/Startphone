@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/battery_level_iv"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center_horizontal"
+        android:importantForAccessibility="no"
+        tools:src="@drawable/ic_wb_sunny"
+        tools:tint="@android:color/holo_orange_light" />
+
+    <TextView
+        android:id="@+id/weather_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        tools:text="Sunny" />
+
+    <TextView
+        android:id="@+id/temperature_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:includeFontPadding="false"
+        android:textAppearance="?attr/textAppearanceHeadline3"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        tools:text="20℃" />
+
+</LinearLayout>

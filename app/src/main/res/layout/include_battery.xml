@@ -6,27 +6,58 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/battery_level_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textAlignment="center"
-        android:textAppearance="?attr/textAppearanceHeadline4"
-        tools:text="62%" />
-
-    <ImageView
-        android:id="@+id/battery_level_iv"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:importantForAccessibility="no"
-        tools:src="@drawable/ic_battery_50" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/battery"
         android:textAllCaps="true"
-        android:textAppearance="?attr/textAppearanceHeadline5" />
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/battery_level_iv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:paddingStart="0dp"
+            android:paddingEnd="32dp"
+            android:rotation="90"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_battery_low"
+            tools:tint="@android:color/holo_green_dark" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/battery_level_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textAppearance="?attr/textAppearanceHeadline4"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                tools:text="62%" />
+
+            <ImageView
+                android:id="@+id/battery_charging_iv"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:importantForAccessibility="no"
+                android:rotation="90"
+                tools:src="@drawable/ic_plug" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

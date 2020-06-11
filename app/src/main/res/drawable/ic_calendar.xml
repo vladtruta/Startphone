@@ -1,8 +1,18 @@
-<!-- drawable/calendar_blank.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:height="24dp"
-    android:width="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-    <path android:fillColor="#000" android:pathData="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1" />
+    android:width="18dp"
+    android:height="20dp"
+    android:viewportWidth="18"
+    android:viewportHeight="20">
+  <path
+      android:pathData="M17,18L1,18L1,7L17,7M13,0L13,1.9L5,1.9L5,0L3,0L3,1.9L2,1.9C0.89,1.9 0,2.7455 0,3.8L0,17.1C0,18.1493 0.8954,19 2,19L16,19C17.1046,19 18,18.1493 18,17.1L18,3.8C18,2.7455 17.1,1.9 16,1.9L15,1.9L15,0"
+      android:strokeWidth="1"
+      android:fillColor="#000000"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
+  <path
+      android:pathData="M0,3.9272C0.0196,3.6866 0.0387,3.5187 0.0571,3.4235C0.0914,3.2467 0.1485,3.1057 0.1896,3.0115C0.3327,2.6842 0.5732,2.429 0.7654,2.2533C0.9155,2.1162 1.0957,1.9574 1.4699,1.8764C1.5533,1.8583 1.707,1.824 1.8453,1.812C2.0292,1.796 2.4141,1.796 3,1.812L15,1.812C16.104,1.764 16.8429,1.8718 17.2168,2.1354C17.4307,2.2863 17.6457,2.5705 17.8331,2.9142C17.9265,3.0854 17.9821,3.4231 18,3.9272L18,7.1L0,7.1L0,3.9272Z"
+      android:strokeWidth="1"
+      android:fillColor="#E5544C"
+      android:fillType="nonZero"
+      android:strokeColor="#00000000"/>
 </vector>

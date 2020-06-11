@@ -1,48 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/calendar_iv"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:importantForAccessibility="no"
-            tools:src="@drawable/ic_calendar" />
-
-        <TextView
-            android:id="@+id/day_of_week_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="28dp"
-            android:textColor="@android:color/white"
-            android:textAppearance="?attr/textAppearanceHeadline5"
-            tools:text="Monday" />
-
-        <TextView
-            android:id="@+id/day_of_month_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="34dp"
-            android:textAppearance="?attr/textAppearanceHeadline3"
-            tools:text="12" />
-
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/calendar_iv"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_gravity="center"
+        android:importantForAccessibility="no"
+        tools:src="@drawable/ic_calendar" />
 
     <TextView
+        android:id="@+id/day_of_week_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/date"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="22dp"
         android:textAllCaps="true"
-        android:textAppearance="?attr/textAppearanceHeadline5" />
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="@android:color/white"
+        tools:text="Wednesday" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/day_of_month_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="18dp"
+        android:includeFontPadding="false"
+        android:textAppearance="?attr/textAppearanceHeadline1"
+        android:textColor="@android:color/black"
+        android:textSize="80sp"
+        android:textStyle="bold"
+        tools:text="12" />
+
+</FrameLayout>
