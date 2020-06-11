@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/battery_level_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textAppearance="?attr/textAppearanceHeadline4"
+        tools:text="62%" />
+
+    <ImageView
+        android:id="@+id/battery_level_iv"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:importantForAccessibility="no"
+        tools:src="@drawable/ic_battery_50" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/battery"
+        android:textAllCaps="true"
+        android:textAppearance="?attr/textAppearanceHeadline5" />
+
+</LinearLayout>
