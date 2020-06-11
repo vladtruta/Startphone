@@ -44,7 +44,7 @@ class LauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLauncherBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_launcher)
+        setContentView(binding.root)
 
         initObservers()
     }
@@ -78,7 +78,7 @@ class LauncherActivity : AppCompatActivity() {
                 }
             }
 
-            binding.batteryIncl.batteryLevelTv.text = percentage.toString()
+            binding.batteryIncl.batteryLevelTv.text = UIUtils.getString(R.string.battery_percentage_placeholder, percentage)
             binding.batteryIncl.batteryLevelIv.setImageResource(batteryImage)
             binding.batteryIncl.batteryLevelIv.imageTintList =
                 UIUtils.getColorStateList(batteryColor)
@@ -100,7 +100,7 @@ class LauncherActivity : AppCompatActivity() {
                 binding.weatherIncl.loadingPb.visibility = View.GONE
 
                 binding.weatherIncl.weatherTv.text = it.main
-                binding.weatherIncl.temperatureTv.text = it.temperature.roundToInt().toString()
+                binding.weatherIncl.temperatureTv.text = UIUtils.getString(R.string.temperature_degrees_placeholder, it.temperature.roundToInt())
 
                 val imageUrl = "${BuildConfig.OPEN_WEATHER_ICON_BASE_URL}${it.iconUrl}@4x.png"
                 imageHelper.loadImage(this, binding.weatherIncl.weatherIv, imageUrl)
@@ -116,10 +116,12 @@ class LauncherActivity : AppCompatActivity() {
             if (!it) {
                 val noInternetImage = R.drawable.ic_wifi_0
                 val noInternetColor = android.R.color.holo_red_dark
+                val noInternetLevel = 0
 
                 binding.internetIncl.internetLevelIv.setImageResource(noInternetImage)
                 binding.internetIncl.internetLevelIv.imageTintList =
                     UIUtils.getColorStateList(noInternetColor)
+                binding.internetIncl.internetLevelTv.text = noInternetLevel.toString()
             }
         })
 

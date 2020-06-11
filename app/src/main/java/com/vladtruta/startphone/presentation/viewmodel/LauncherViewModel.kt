@@ -40,15 +40,18 @@ class LauncherViewModel(
 
     private val _mobileSignalStrength =
         MutableLiveData(mobileSignalHelper.calculateSignalStrength())
-    val mobileSignalStrength: LiveData<Int> = _mobileSignalStrength
 
+    val mobileSignalStrength: LiveData<Int> = _mobileSignalStrength
     private val _wifiSignalLevel = MutableLiveData(wifiConnectionHelper.calculateSignalLevel())
-    var networkConnectionStrength: LiveData<Int> =
+
+    private var _networkConnectionStrength = MutableLiveData<Int>(
         if (networkConnectivityHelper.isWifiConnected()) {
-            _wifiSignalLevel
+            _wifiSignalLevel.value
         } else {
-            _mobileSignalStrength
+            _mobileSignalStrength.value
         }
+    )
+    val networkConnectionStrength: LiveData<Int> = _networkConnectionStrength
 
     init {
         batteryStatusHelper.addListener(this)
@@ -92,10 +95,10 @@ class LauncherViewModel(
     }
 
     override fun onNetworkStateChanged(isWifi: Boolean) {
-        networkConnectionStrength = if (isWifi) {
-            _wifiSignalLevel
+        if (isWifi) {
+            _networkConnectionStrength.postValue(_wifiSignalLevel.value)
         } else {
-            _mobileSignalStrength
+            _networkConnectionStrength.postValue(_mobileSignalStrength.value)
         }
     }
 

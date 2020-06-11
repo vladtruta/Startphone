@@ -8,14 +8,15 @@
         android:id="@+id/weather_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="invisible"
         tools:visibility="visible">
 
         <ImageView
             android:id="@+id/weather_iv"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="4dp"
             android:importantForAccessibility="no"
@@ -27,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:includeFontPadding="false"
             android:textAppearance="?attr/textAppearanceHeadline5"
             android:textStyle="bold"
             tools:text="Sunny" />

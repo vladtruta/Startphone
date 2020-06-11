@@ -19,13 +19,10 @@ class NetworkConnectivityHelper(private val connectivityManager: ConnectivityMan
     private val mainHandler = Handler(Looper.getMainLooper())
     private val listeners = mutableListOf<NetworkConnectivityListener>()
 
-    private var networkConnected = false
-
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
             mainHandler.post {
-                networkConnected = true
                 listeners.forEach { it.onNetworkConnected() }
             }
         }
@@ -44,7 +41,6 @@ class NetworkConnectivityHelper(private val connectivityManager: ConnectivityMan
         override fun onLost(network: Network) {
             super.onLost(network)
             mainHandler.post {
-                networkConnected = false
                 listeners.forEach { it.onNetworkDisconnected() }
             }
         }
@@ -75,13 +71,11 @@ class NetworkConnectivityHelper(private val connectivityManager: ConnectivityMan
     }
 
     fun isWifiConnected(): Boolean {
-        return networkConnected && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            ?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
+        return isNetworkConnected() && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
     }
 
     fun isMobileDataConnected(): Boolean {
-        return networkConnected && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            ?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
+        return isNetworkConnected() && connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
     }
 
     fun addListener(listener: NetworkConnectivityListener) {
