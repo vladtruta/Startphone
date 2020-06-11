@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vladtruta.startphone.databinding.ListItemApplicationBinding
 import com.vladtruta.startphone.model.local.ApplicationInfo
 
-class ApplicationsAdapter : ListAdapter<ApplicationInfo, ApplicationsAdapter.ViewHolder>(ApplicationsDiffCallback()) {
+class ApplicationAdapter : ListAdapter<ApplicationInfo, ApplicationAdapter.ViewHolder>(ApplicationsDiffCallback()) {
 
     var listener: ApplicationsListener? = null
 

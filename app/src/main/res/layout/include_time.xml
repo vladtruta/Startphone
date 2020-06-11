@@ -20,7 +20,8 @@
         android:textColor="@android:color/black"
         android:fontFamily="@font/digital_watch"
         android:includeFontPadding="false"
+        android:textSize="42sp"
         android:textAppearance="?attr/textAppearanceHeadline3"
-        tools:text="13:25" />
+        tools:text="20:20" />
 
 </FrameLayout>

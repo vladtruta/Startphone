@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.vladtruta.startphone.BuildConfig
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.ActivityLauncherBinding
 import com.vladtruta.startphone.model.local.ApplicationInfo
-import com.vladtruta.startphone.presentation.adapter.ApplicationsAdapter
+import com.vladtruta.startphone.presentation.adapter.ApplicationPageAdapter
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
 import com.vladtruta.startphone.util.ImageHelper
 import com.vladtruta.startphone.util.UIUtils
@@ -17,17 +19,17 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
 
-class LauncherActivity : AppCompatActivity(), ApplicationsAdapter.ApplicationsListener {
+class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.ApplicationPageListener {
     companion object {
         private const val TAG = "LauncherActivity"
     }
 
     private val launcherViewModel by viewModel<LauncherViewModel>()
     private val imageHelper by inject<ImageHelper>()
-    private val applicationsAdapter by inject<ApplicationsAdapter>()
     private val appPackageManager by inject<PackageManager>()
 
     private lateinit var binding: ActivityLauncherBinding
+    private lateinit var applicationPageAdapter: ApplicationPageAdapter
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -54,13 +56,59 @@ class LauncherActivity : AppCompatActivity(), ApplicationsAdapter.ApplicationsLi
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initRecyclerView()
+        initViewPager()
+        initActions()
         initObservers()
     }
 
-    private fun initRecyclerView() {
-        applicationsAdapter.listener = this
-        binding.applicationsRv.adapter = applicationsAdapter
+    private fun initViewPager() {
+        applicationPageAdapter = ApplicationPageAdapter().apply {
+            listener = this@LauncherActivity
+        }
+        binding.applicationsVp.adapter = applicationPageAdapter
+
+        // Disable scrolling of the ViewPager
+        binding.applicationsVp.isUserInputEnabled = false
+
+        binding.applicationsVp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                if (position == RecyclerView.NO_POSITION) {
+                    return
+                }
+
+                val currentPosition = position + 1
+                val lastPosition = applicationPageAdapter.itemCount
+
+                when (currentPosition) {
+                    1 -> {
+                        binding.previousPageEfab.visibility = View.INVISIBLE
+                        binding.nextPageEfab.visibility = View.VISIBLE
+                    }
+                    lastPosition -> {
+                        binding.previousPageEfab.visibility = View.VISIBLE
+                        binding.nextPageEfab.visibility = View.INVISIBLE
+                    }
+                    else -> {
+                        binding.previousPageEfab.visibility = View.VISIBLE
+                        binding.nextPageEfab.visibility = View.VISIBLE
+                    }
+                }
+
+                binding.currentPageTv.text = UIUtils.getString(R.string.current_page_placeholder, currentPosition, lastPosition)
+                binding.previousPageEfab.text = UIUtils.getString(R.string.page_placeholder, currentPosition - 1)
+                binding.nextPageEfab.text = UIUtils.getString(R.string.page_placeholder, currentPosition + 1)
+            }
+        })
+    }
+
+    private fun initActions() {
+        binding.previousPageEfab.setOnClickListener {
+            binding.applicationsVp.setCurrentItem(binding.applicationsVp.currentItem - 1, true)
+        }
+
+        binding.nextPageEfab.setOnClickListener {
+            binding.applicationsVp.setCurrentItem(binding.applicationsVp.currentItem + 1, true)
+        }
     }
 
     private fun initObservers() {
@@ -225,15 +273,16 @@ class LauncherActivity : AppCompatActivity(), ApplicationsAdapter.ApplicationsLi
             binding.calendarIncl.dayOfMonthTv.text = it.dayOfMonth
         })
 
-        launcherViewModel.visibleApps.observe(this, Observer {
+        launcherViewModel.visibleAppLists.observe(this, Observer {
             it ?: return@Observer
 
-            applicationsAdapter.submitList(it)
+            applicationPageAdapter.submitList(it)
         })
     }
 
     override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
-        val intent = appPackageManager.getLaunchIntentForPackage(applicationInfo.packageName) ?: return
+        val intent =
+            appPackageManager.getLaunchIntentForPackage(applicationInfo.packageName) ?: return
         startActivity(intent)
     }
 }

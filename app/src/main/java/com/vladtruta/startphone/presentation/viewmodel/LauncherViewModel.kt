@@ -26,6 +26,10 @@ class LauncherViewModel(
     WifiConnectionHelper.WifiConnectionListener,
     NetworkConnectivityHelper.NetworkConnectivityListener {
 
+    companion object {
+        private const val MAX_APPLICATIONS_PER_PAGE = 6
+    }
+
     private val _currentWeather = MutableLiveData<Result<Weather>>()
     val currentWeather: LiveData<Result<Weather>> = _currentWeather
 
@@ -53,10 +57,10 @@ class LauncherViewModel(
     )
     val networkConnectionStrength: LiveData<Int> = _networkConnectionStrength
 
-    private val _visibleApps = liveData(Dispatchers.Default) {
-        emit(launcherApplicationsHelper.getApplicationInfoForAllApps())
+    private val _visibleAppLists = liveData(Dispatchers.Default) {
+        emit(launcherApplicationsHelper.getApplicationInfoForAllApps().chunked(MAX_APPLICATIONS_PER_PAGE))
     }
-    val visibleApps: LiveData<List<ApplicationInfo>> = _visibleApps
+    val visibleAppLists: LiveData<List<List<ApplicationInfo>>> = _visibleAppLists
 
     init {
         batteryStatusHelper.addListener(this)

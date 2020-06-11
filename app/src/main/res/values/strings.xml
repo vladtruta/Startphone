@@ -13,4 +13,6 @@
     <string name="date_time_weather">Date, Time &amp; Weather</string>
     <string name="battery_percentage_placeholder">%1$d%%</string>
     <string name="temperature_degrees_placeholder">%1$s℃</string>
+    <string name="page_placeholder">Page %1$d</string>
+    <string name="current_page_placeholder">%1$d/%2$d</string>
 </resources>

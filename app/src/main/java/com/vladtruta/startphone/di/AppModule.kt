@@ -9,7 +9,6 @@ import android.telephony.TelephonyManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
-import com.vladtruta.startphone.presentation.adapter.ApplicationsAdapter
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
 import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.repository.WeatherRepository
@@ -37,8 +36,6 @@ val appModule = module {
     single { LauncherApplicationsHelper(get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
-
-    factory { ApplicationsAdapter() }
 
     viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 }
