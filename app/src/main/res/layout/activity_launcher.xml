@@ -25,15 +25,15 @@
         android:baselineAligned="false">
 
         <include
-            android:id="@+id/time_incl"
-            layout="@layout/include_time"
+            android:id="@+id/calendar_incl"
+            layout="@layout/include_calendar"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <include
-            android:id="@+id/calendar_incl"
-            layout="@layout/include_calendar"
+            android:id="@+id/time_incl"
+            layout="@layout/include_time"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
@@ -106,25 +106,17 @@
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textStyle="bold" />
 
-    <View
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/applications_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_gravity="center"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         tools:itemCount="6"
         tools:listitem="@layout/list_item_application" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
     <View
         android:layout_width="match_parent"

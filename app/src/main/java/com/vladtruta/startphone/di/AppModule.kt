@@ -1,6 +1,7 @@
 package com.vladtruta.startphone.di
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
@@ -8,6 +9,7 @@ import android.telephony.TelephonyManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
+import com.vladtruta.startphone.presentation.adapter.ApplicationsAdapter
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
 import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.repository.WeatherRepository
@@ -22,6 +24,7 @@ val appModule = module {
     single { provideTelephonyManager() }
     single { provideConnectivityManager() }
     single { provideBatteryManager() }
+    single { providePackageManager() }
     single { provideFusedLocationProviderClient() }
 
     single { BatteryStatusHelper(get()) }
@@ -31,10 +34,13 @@ val appModule = module {
     single { NetworkConnectivityHelper(get()) }
     single { WifiConnectionHelper(get()) }
     single { ImageHelper() }
+    single { LauncherApplicationsHelper(get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
 
-    viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    factory { ApplicationsAdapter() }
+
+    viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 }
 
 private fun provideWifiManager(): WifiManager {
@@ -51,6 +57,10 @@ private fun provideConnectivityManager(): ConnectivityManager {
 
 private fun provideBatteryManager(): BatteryManager {
     return StartphoneApp.instance.applicationContext.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+}
+
+private fun providePackageManager(): PackageManager {
+    return StartphoneApp.instance.packageManager
 }
 
 private fun provideFusedLocationProviderClient(): FusedLocationProviderClient {

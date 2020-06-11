@@ -1,12 +1,17 @@
 package com.vladtruta.startphone.presentation.view
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.vladtruta.startphone.BuildConfig
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.ActivityLauncherBinding
+import com.vladtruta.startphone.model.local.ApplicationInfo
+import com.vladtruta.startphone.presentation.adapter.ApplicationsAdapter
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
 import com.vladtruta.startphone.util.ImageHelper
 import com.vladtruta.startphone.util.UIUtils
@@ -14,10 +19,14 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
 
-class LauncherActivity : AppCompatActivity() {
+class LauncherActivity : AppCompatActivity(), ApplicationsAdapter.ApplicationsListener {
+    companion object {
+        private const val TAG = "LauncherActivity"
+    }
 
     private val launcherViewModel by viewModel<LauncherViewModel>()
     private val imageHelper by inject<ImageHelper>()
+    private val applicationsAdapter by inject<ApplicationsAdapter>()
 
     private lateinit var binding: ActivityLauncherBinding
 
@@ -46,7 +55,13 @@ class LauncherActivity : AppCompatActivity() {
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initRecyclerView()
         initObservers()
+    }
+
+    private fun initRecyclerView() {
+        applicationsAdapter.listener = this
+        binding.applicationsRv.adapter = applicationsAdapter
     }
 
     private fun initObservers() {
@@ -78,7 +93,8 @@ class LauncherActivity : AppCompatActivity() {
                 }
             }
 
-            binding.batteryIncl.batteryLevelTv.text = UIUtils.getString(R.string.battery_percentage_placeholder, percentage)
+            binding.batteryIncl.batteryLevelTv.text =
+                UIUtils.getString(R.string.battery_percentage_placeholder, percentage)
             binding.batteryIncl.batteryLevelIv.setImageResource(batteryImage)
             binding.batteryIncl.batteryLevelIv.imageTintList =
                 UIUtils.getColorStateList(batteryColor)
@@ -100,7 +116,10 @@ class LauncherActivity : AppCompatActivity() {
                 binding.weatherIncl.loadingPb.visibility = View.GONE
 
                 binding.weatherIncl.weatherTv.text = it.main
-                binding.weatherIncl.temperatureTv.text = UIUtils.getString(R.string.temperature_degrees_placeholder, it.temperature.roundToInt())
+                binding.weatherIncl.temperatureTv.text = UIUtils.getString(
+                    R.string.temperature_degrees_placeholder,
+                    it.temperature.roundToInt()
+                )
 
                 val imageUrl = "${BuildConfig.OPEN_WEATHER_ICON_BASE_URL}${it.iconUrl}@4x.png"
                 imageHelper.loadImage(this, binding.weatherIncl.weatherIv, imageUrl)
@@ -206,5 +225,24 @@ class LauncherActivity : AppCompatActivity() {
             binding.calendarIncl.dayOfWeekTv.text = it.dayOfWeek
             binding.calendarIncl.dayOfMonthTv.text = it.dayOfMonth
         })
+
+        launcherViewModel.visibleApps.observe(this, Observer {
+            it ?: return@Observer
+
+            applicationsAdapter.submitList(it)
+        })
+    }
+
+    override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
+        val intent = Intent(applicationInfo.packageName)
+        tryOpenIntent(intent)
+    }
+
+    private fun tryOpenIntent(intent: Intent) {
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Log.e(TAG, "tryOpenIntent Failure: ${e.message}", e)
+        }
     }
 }

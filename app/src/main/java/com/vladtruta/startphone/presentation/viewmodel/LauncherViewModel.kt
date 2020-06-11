@@ -1,13 +1,12 @@
 package com.vladtruta.startphone.presentation.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.FormattedDateTime
 import com.vladtruta.startphone.model.local.Weather
 import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.util.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LauncherViewModel(
@@ -17,7 +16,8 @@ class LauncherViewModel(
     private val wifiConnectionHelper: WifiConnectionHelper,
     private val mobileSignalHelper: MobileSignalHelper,
     private val locationHelper: LocationHelper,
-    private val dateTimeHelper: DateTimeHelper
+    private val dateTimeHelper: DateTimeHelper,
+    private val launcherApplicationsHelper: LauncherApplicationsHelper
 ) : ViewModel(),
     LocationHelper.LocationListener,
     BatteryStatusHelper.BatteryStatusListener,
@@ -52,6 +52,11 @@ class LauncherViewModel(
         }
     )
     val networkConnectionStrength: LiveData<Int> = _networkConnectionStrength
+
+    private val _visibleApps = liveData(Dispatchers.Default) {
+        emit(launcherApplicationsHelper.getApplicationInfoForAllApps())
+    }
+    val visibleApps: LiveData<List<ApplicationInfo>> = _visibleApps
 
     init {
         batteryStatusHelper.addListener(this)
