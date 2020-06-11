@@ -48,8 +48,13 @@ class ApplicationPageAdapter() :
         listener?.onApplicationClicked(applicationInfo)
     }
 
+    override fun onNeedHelpClicked() {
+        listener?.onNeedHelpClicked()
+    }
+
     interface ApplicationPageListener {
         fun onApplicationClicked(applicationInfo: ApplicationInfo)
+        fun onNeedHelpClicked()
     }
 }
 

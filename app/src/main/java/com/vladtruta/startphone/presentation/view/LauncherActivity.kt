@@ -62,11 +62,11 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
         initActions()
         initObservers()
 
-        startHelpingHand()
+        stopHelpingHand()
     }
 
     override fun onDestroy() {
-        stopHelpingHand()
+        startHelpingHand()
 
         super.onDestroy()
     }
@@ -310,5 +310,9 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
         val intent =
             appPackageManager.getLaunchIntentForPackage(applicationInfo.packageName) ?: return
         startActivity(intent)
+    }
+
+    override fun onNeedHelpClicked() {
+
     }
 }

@@ -8,10 +8,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="@drawable/bg_border"
-        android:orientation="vertical"
         android:layout_gravity="center"
+        android:background="@drawable/bg_border"
         android:gravity="center"
+        android:orientation="vertical"
         tools:ignore="UseCompoundDrawables">
 
         <TextView
@@ -23,8 +23,8 @@
             android:layout_marginTop="1dp"
             android:layout_marginEnd="1dp"
             android:background="@android:color/holo_orange_light"
-            android:ellipsize="end"
             android:elevation="2dp"
+            android:ellipsize="end"
             android:gravity="center"
             android:includeFontPadding="false"
             android:maxLines="1"
@@ -35,12 +35,15 @@
             tools:text="Messages" />
 
         <ImageView
-            android:layout_margin="8dp"
             android:id="@+id/application_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
             android:importantForAccessibility="no"
+            android:padding="8dp"
             android:src="@drawable/ic_launcher_foreground" />
 
     </LinearLayout>

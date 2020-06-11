@@ -1,6 +1,7 @@
 package com.vladtruta.startphone.presentation.viewmodel
 
 import androidx.lifecycle.*
+import com.vladtruta.startphone.R
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.FormattedDateTime
 import com.vladtruta.startphone.model.local.Weather
@@ -58,7 +59,24 @@ class LauncherViewModel(
     val networkConnectionStrength: LiveData<Int> = _networkConnectionStrength
 
     private val _visibleAppLists = liveData(Dispatchers.Default) {
-        emit(launcherApplicationsHelper.getApplicationInfoForAllApps().chunked(MAX_APPLICATIONS_PER_PAGE))
+        val appPages = launcherApplicationsHelper.getApplicationInfoForAllApps().chunked(MAX_APPLICATIONS_PER_PAGE)
+        val appPagesWithHelp = mutableListOf<List<ApplicationInfo>>()
+
+        appPages.forEach { page ->
+            val pageWithHelp = page.toMutableList().apply {
+                add(
+                    0,
+                    ApplicationInfo(
+                        UIUtils.getString(R.string.i_need_help),
+                        "",
+                        UIUtils.getDrawable(R.drawable.ic_help)!!
+                    )
+                )
+            }
+            appPagesWithHelp.add(pageWithHelp)
+        }
+
+        emit(appPagesWithHelp.toList())
     }
     val visibleAppLists: LiveData<List<List<ApplicationInfo>>> = _visibleAppLists
 
