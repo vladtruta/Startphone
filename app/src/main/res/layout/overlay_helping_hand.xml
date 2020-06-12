@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
+    android:animateLayoutChanges="false"
     android:background="@android:color/transparent"
     android:clipChildren="false"
     android:clipToPadding="false">
@@ -39,13 +39,15 @@
         android:textColor="@android:color/white"
         android:textSize="23sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:icon="@drawable/ic_arrow_downward"
         app:iconGravity="textEnd"
         app:iconPadding="8dp"
         app:iconSize="30dp"
         app:iconTint="@android:color/white"
         app:strokeColor="@android:color/black"
-        app:strokeWidth="1dp" />
+        app:strokeWidth="1dp"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/helping_hand_ll"
@@ -71,9 +73,9 @@
             android:paddingBottom="8dp"
             android:text="@string/what_can_i_help_you_with"
             android:textAppearance="?attr/textAppearanceHeadline4"
+            android:textSize="30sp"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            app:autoSizeTextType="uniform" />
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
@@ -92,6 +94,8 @@
             android:id="@+id/close_current_app_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:background="?attr/selectableItemBackground">
 
             <FrameLayout
@@ -139,6 +143,8 @@
             android:id="@+id/stuck_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:background="@drawable/bg_help_selector">
 
             <ImageView

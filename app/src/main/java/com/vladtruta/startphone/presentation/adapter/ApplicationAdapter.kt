@@ -10,6 +10,7 @@ import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.ListItemApplicationBinding
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.util.UIUtils
+import com.vladtruta.startphone.util.setRipple
 
 class ApplicationAdapter :
     ListAdapter<ApplicationInfo, ApplicationAdapter.ViewHolder>(ApplicationsDiffCallback()) {
@@ -57,13 +58,13 @@ class ApplicationAdapter :
             binding.applicationIv.setImageDrawable(applicationInfo.icon)
 
             if (applicationInfo.packageName.isNotEmpty()) {
-                binding.applicationIv.setBackgroundColor(Color.WHITE)
+                binding.applicationIv.setRipple()
                 binding.applicationTv.setBackgroundColor(UIUtils.getColor(android.R.color.holo_orange_dark))
                 binding.applicationTv.setTextColor(Color.BLACK)
             } else {
                 // This means it's the help menu
-                binding.applicationIv.setBackgroundColor(UIUtils.getColor(R.color.help_red))
-                binding.applicationTv.setBackgroundColor(UIUtils.getColor(R.color.help_red))
+                binding.applicationIv.background = UIUtils.getDrawable(R.drawable.bg_help_selector)
+                binding.applicationTv.background = UIUtils.getDrawable(R.drawable.bg_help_selector)
                 binding.applicationTv.setTextColor(Color.WHITE)
             }
         }

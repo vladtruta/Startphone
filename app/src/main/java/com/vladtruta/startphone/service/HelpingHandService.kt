@@ -32,6 +32,9 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
         private const val STARTPHONE_FOREGROUND_SERVICE_ID = 731
         private const val NOTIFICATION_CHANNEL_STARTPHONE_OVERLAY =
             "NOTIFICATION_CHANNEL_HELPING_HAND"
+
+        private const val BUBBLE_INITIAL_X_POSITION = 0
+        private val BUBBLE_INITIAL_Y_POSITION = UIUtils.dpToPx(60f)
     }
 
     private val windowManager by inject<WindowManager>()
@@ -176,7 +179,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
     }
 
     private fun initActions() {
-        //binding.helpIv.setOnClickListener { openHelpingHandDialog() }
+        binding.closeHelpingHandEfab.setOnClickListener { closeHelpingHandDialog() }
     }
 
     private fun openHelpingHandDialog() {
@@ -184,8 +187,19 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
         windowManager.updateViewLayout(binding.root, params)
 
         binding.helpIv.visibility = View.GONE
-        binding.helpingHandLl.visibility = View.VISIBLE
         binding.helpingHandOverlayView.visibility = View.VISIBLE
+        binding.closeHelpingHandEfab.show()
+        binding.helpingHandLl.visibility = View.VISIBLE
+    }
+
+    private fun closeHelpingHandDialog() {
+        updateWindowParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        windowManager.updateViewLayout(binding.root, params)
+
+        binding.helpIv.visibility = View.VISIBLE
+        binding.helpingHandOverlayView.visibility = View.GONE
+        binding.closeHelpingHandEfab.hide()
+        binding.helpingHandLl.visibility = View.GONE
     }
 
     private fun updateWindowParams(width: Int, height: Int) {
@@ -207,8 +221,8 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
             )
         }.apply {
             gravity = Gravity.TOP or Gravity.START
-            x = 0
-            y = 100
+            x = BUBBLE_INITIAL_X_POSITION
+            y = BUBBLE_INITIAL_Y_POSITION
         }
     }
 

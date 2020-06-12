@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +21,6 @@
             android:id="@+id/application_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:autoSizeTextType="uniform"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="1dp"
             android:layout_marginTop="1dp"
@@ -33,6 +34,7 @@
             android:textAllCaps="true"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textStyle="bold"
+            app:autoSizeTextType="uniform"
             tools:text="Messages" />
 
         <ImageView
