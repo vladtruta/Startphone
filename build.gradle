@@ -27,6 +27,7 @@ buildscript {
         def koin_version = '2.1.5'
         def joda_time_version = '2.10.6'
         def location_version = '17.0.0'
+        def auth_version = '18.0.0'
         def viewpager2_version = '1.0.0'
         def circle_image_view_version = '3.1.0'
 
@@ -82,8 +83,9 @@ buildscript {
                 // JodaTime
                 "joda-time:joda-time:$joda_time_version",
 
-                // Google Location Services
+                // Google
                 "com.google.android.gms:play-services-location:$location_version",
+                "com.google.android.gms:play-services-auth:$auth_version",
 
                 // ViewPager2
                 "androidx.viewpager2:viewpager2:$viewpager2_version",
