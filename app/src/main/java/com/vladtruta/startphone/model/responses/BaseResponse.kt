@@ -6,5 +6,7 @@ data class BaseResponse<out T>(
     @SerializedName("success")
     val isSuccessful: Boolean,
     @SerializedName("data")
-    val data: T
+    val data: T,
+    @SerializedName("error")
+    val error: String? = null
 )

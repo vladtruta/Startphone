@@ -1,6 +1,7 @@
 package com.vladtruta.startphone.presentation.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -301,6 +302,8 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
     }
 
     override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
+        Log.d(TAG, "onApplicationClicked: $applicationInfo")
+
         launcherViewModel.retrieveTutorialsForPackageName(applicationInfo.packageName)
         launcherApplicationsHelper.updateCurrentlyRunningApplication(applicationInfo)
         launcherApplicationsHelper.startApplicationByPackageName(this, applicationInfo.packageName)
