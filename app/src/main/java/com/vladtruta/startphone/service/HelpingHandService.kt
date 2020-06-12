@@ -100,8 +100,10 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         windowManager.removeView(binding.root)
+        supervisorJob.cancel()
+
+        super.onDestroy()
     }
 
     override fun onGlobalLayout() {

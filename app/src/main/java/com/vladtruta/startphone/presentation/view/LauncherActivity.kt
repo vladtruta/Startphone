@@ -301,6 +301,7 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
     }
 
     override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
+        launcherApplicationsHelper.updateCurrentlyRunningApplication(applicationInfo)
         launcherApplicationsHelper.startApplicationByPackageName(this, applicationInfo.packageName)
     }
 
