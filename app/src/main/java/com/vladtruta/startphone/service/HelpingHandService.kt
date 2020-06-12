@@ -16,7 +16,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.vladtruta.startphone.BuildConfig
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.OverlayHelpingHandBinding
 import com.vladtruta.startphone.model.local.Tutorial
@@ -286,19 +285,11 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
 
     private fun updateDialogWithCurrentlyRunningApplication() {
         val currentlyRunningApplication = launcherApplicationsHelper.currentlyRunningApplication
-        if (currentlyRunningApplication?.packageName == BuildConfig.APPLICATION_ID) {
-            binding.closeCurrentAppLl.visibility = View.GONE
-            binding.stuckLl.visibility = View.GONE
-        } else {
-            binding.closeCurrentAppLl.visibility = View.VISIBLE
-            binding.stuckLl.visibility = View.VISIBLE
-
-            binding.closeCurrentAppTv.text = UIUtils.getString(
-                R.string.close_app_placeholder,
-                currentlyRunningApplication?.label ?: UIUtils.getString(R.string.this_application)
-            )
-            binding.closeAppIv.setImageDrawable(currentlyRunningApplication?.icon)
-        }
+        binding.closeCurrentAppTv.text = UIUtils.getString(
+            R.string.close_app_placeholder,
+            currentlyRunningApplication?.label ?: UIUtils.getString(R.string.this_application)
+        )
+        binding.closeAppIv.setImageDrawable(currentlyRunningApplication?.icon)
     }
 
     private fun updateWindowParams(width: Int, height: Int) {

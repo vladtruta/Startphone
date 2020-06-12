@@ -301,7 +301,7 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
     }
 
     override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
-        launcherApplicationsHelper.startApplicationByPackageName(this, applicationInfo.packageName)
+        launcherApplicationsHelper.restartApplicationByPackageName(this, applicationInfo.packageName)
     }
 
     override fun onNeedHelpClicked() {

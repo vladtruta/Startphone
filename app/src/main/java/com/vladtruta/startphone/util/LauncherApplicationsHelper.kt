@@ -42,17 +42,11 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
         } ?: return
     }
 
-    private fun restartApplicationByPackageName(context: Context, packageName: String) {
+    fun restartApplicationByPackageName(context: Context, packageName: String) {
         val intent = packageManager.getLaunchIntentForPackage(packageName)?.apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         } ?: return
-
-        context.startActivity(intent)
-    }
-
-    fun startApplicationByPackageName(context: Context, packageName: String) {
-        val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return
 
         context.startActivity(intent)
     }
