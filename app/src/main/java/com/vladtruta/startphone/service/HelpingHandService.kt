@@ -286,7 +286,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
     private fun updateDialogWithCurrentlyRunningApplication() {
         val currentlyRunningApplication = launcherApplicationsHelper.currentlyRunningApplication
         binding.closeCurrentAppTv.text = UIUtils.getString(
-            R.string.close_app_placeholder,
+            R.string.exit_app_placeholder,
             currentlyRunningApplication?.label ?: UIUtils.getString(R.string.this_application)
         )
         binding.closeAppIv.setImageDrawable(currentlyRunningApplication?.icon)

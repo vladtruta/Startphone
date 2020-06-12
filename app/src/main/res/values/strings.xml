@@ -23,6 +23,6 @@
     <string name="close_me">Close me</string>
     <string name="accessibility_service_name">Startphone Window Detection Service</string>
     <string name="accessibility_service_description">Service for detecting currently running application, in order to provide relevant assistance.</string>
-    <string name="close_app_placeholder">Close %1$s</string>
+    <string name="exit_app_placeholder">Exit %1$s</string>
     <string name="this_application">This Application</string>
 </resources>
