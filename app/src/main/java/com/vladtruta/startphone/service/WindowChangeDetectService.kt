@@ -8,15 +8,18 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import com.vladtruta.startphone.util.LauncherApplicationsHelper
+import com.vladtruta.startphone.util.StartphoneApp
+import org.koin.android.ext.android.inject
 
 @SuppressLint("LongLogTag")
 class WindowChangeDetectService : AccessibilityService() {
     companion object {
         private const val TAG = "WindowChangeDetectService"
-
-        var currentlyRunningApplicationLabel = ""
-            private set
     }
+
+    private val launcherApplicationsHelper by inject<LauncherApplicationsHelper>()
+    private val startphoneApp by inject<StartphoneApp>()
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -32,16 +35,24 @@ class WindowChangeDetectService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             val packageName = event.packageName ?: return
-            currentlyRunningApplicationLabel = getApplicationNameFromPackageName(packageName.toString())
-
-            Log.d(TAG, "Current app label: $currentlyRunningApplicationLabel")
-
-            val className = event.className ?: return
-            val componentName = ComponentName(packageName.toString(), className.toString())
-            val activityInfo = tryGetActivity(componentName)
-            activityInfo?.let {
-                Log.d(TAG, "Current activity: ${componentName.flattenToShortString()}")
+            var currentlyRunningApplication = launcherApplicationsHelper
+                .getApplicationInfoForPackageNames(packageName.toString())
+                .firstOrNull()
+            if (currentlyRunningApplication?.packageName == "com.vladtruta.startphone" && !startphoneApp.isInForeground) {
+                currentlyRunningApplication = null
             }
+            currentlyRunningApplication?.let {
+                launcherApplicationsHelper.updateCurrentlyRunningApplication(it)
+            }
+
+            Log.d(TAG, "Currently running app: $currentlyRunningApplication")
+
+//            val className = event.className ?: return
+//            val componentName = ComponentName(packageName.toString(), className.toString())
+//            val activityInfo = tryGetActivity(componentName)
+//            activityInfo?.let {
+//                Log.d(TAG, "Current activity: ${componentName.flattenToShortString()}")
+//            }
         }
     }
 
@@ -52,17 +63,6 @@ class WindowChangeDetectService : AccessibilityService() {
             Log.e(TAG, "tryGetActivity Failure: ${e.message}", e)
             null
         }
-    }
-
-    private fun getApplicationNameFromPackageName(packageName: String): String {
-        val applicationInfo = try {
-            packageManager.getApplicationInfo(packageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-            null
-        }
-
-        return (applicationInfo?.let { packageManager.getApplicationLabel(it) }
-            ?: "Application").toString()
     }
 
     override fun onInterrupt() {

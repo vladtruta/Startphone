@@ -6,6 +6,9 @@ import com.vladtruta.startphone.model.local.ApplicationInfo
 
 class LauncherApplicationsHelper(private val packageManager: PackageManager) {
 
+    var currentlyRunningApplication: ApplicationInfo? = null
+        private set
+
     fun getApplicationInfoForAllApps(): List<ApplicationInfo> {
         val intent = Intent(Intent.ACTION_MAIN, null).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
@@ -24,5 +27,9 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
     fun getApplicationInfoForPackageNames(vararg packageNames: String): List<ApplicationInfo> {
         return getApplicationInfoForAllApps()
             .filter { app -> packageNames.any { app.packageName == it } }
+    }
+
+    fun updateCurrentlyRunningApplication(applicationInfo: ApplicationInfo) {
+        currentlyRunningApplication = applicationInfo
     }
 }

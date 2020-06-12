@@ -8,36 +8,40 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-
-object UIUtils {
+object UIUtils: KoinComponent {
+    
+    private val startphoneApp by inject<StartphoneApp>()
+    
     fun getDimension(@DimenRes resId: Int): Int {
-        return StartphoneApp.instance.resources.getDimensionPixelSize(resId)
+        return startphoneApp.resources.getDimensionPixelSize(resId)
     }
 
     fun getDimensionFloat(@DimenRes resId: Int): Float {
-        return StartphoneApp.instance.resources.getDimension(resId)
+        return startphoneApp.resources.getDimension(resId)
     }
 
     fun getString(@StringRes resId: Int, vararg args: Any?): String {
-        return StartphoneApp.instance.resources.getString(resId, *args)
+        return startphoneApp.resources.getString(resId, *args)
     }
 
     fun getDrawable(@DrawableRes resId: Int): Drawable? {
-        return ContextCompat.getDrawable(StartphoneApp.instance, resId)
+        return ContextCompat.getDrawable(startphoneApp, resId)
     }
 
     @ColorInt
     fun getColor(@ColorRes resId: Int): Int {
-        return ContextCompat.getColor(StartphoneApp.instance, resId)
+        return ContextCompat.getColor(startphoneApp, resId)
     }
 
     fun getColorStateList(@ColorRes resId: Int): ColorStateList? {
-        return ContextCompat.getColorStateList(StartphoneApp.instance, resId)
+        return ContextCompat.getColorStateList(startphoneApp, resId)
     }
 
     fun dpToPx(dp: Float): Int {
-        return (dp * StartphoneApp.instance.resources.displayMetrics.density).toInt()
+        return (dp * startphoneApp.resources.displayMetrics.density).toInt()
     }
 
     fun showSoftKeyboardFor(view: View) {

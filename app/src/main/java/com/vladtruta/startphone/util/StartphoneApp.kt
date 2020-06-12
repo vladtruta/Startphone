@@ -29,17 +29,6 @@ class StartphoneApp : Application(), LifecycleObserver {
     companion object {
         lateinit var instance: StartphoneApp
             private set
-
-        val isInForeground: Boolean
-            get() = ProcessLifecycleOwner.get().lifecycle.currentState >= Lifecycle.State.STARTED
-
-        fun hasDrawOverlayPermissions(): Boolean {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Settings.canDrawOverlays(instance)
-            } else {
-                true
-            }
-        }
     }
 
     override fun onCreate() {
@@ -73,6 +62,17 @@ class StartphoneApp : Application(), LifecycleObserver {
     fun onAppEnteredForeground() {
         if (hasDrawOverlayPermissions()) {
             stopService(helpingHandIntent)
+        }
+    }
+
+    val isInForeground: Boolean
+        get() = ProcessLifecycleOwner.get().lifecycle.currentState >= Lifecycle.State.STARTED
+
+    fun hasDrawOverlayPermissions(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Settings.canDrawOverlays(instance)
+        } else {
+            true
         }
     }
 
