@@ -5,6 +5,7 @@ import com.vladtruta.startphone.webservice.IAppApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+
 class ApplicationRepository(private val applicationApi: IAppApi) : IAppRepo {
 
     override suspend fun getTutorialsForPackageName(packageName: String): List<Tutorial> {
@@ -26,4 +27,7 @@ class ApplicationRepository(private val applicationApi: IAppApi) : IAppRepo {
         }
     }
 
+    override suspend fun sendMissingTutorialRequest() {
+
+    }
 }
