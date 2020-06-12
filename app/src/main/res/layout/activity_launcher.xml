@@ -203,7 +203,7 @@
 
     <include
         android:id="@+id/helping_hand_overlay_incl"
-        layout="@layout/overlay_helping_hand"
+        layout="@layout/service_helping_hand"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"

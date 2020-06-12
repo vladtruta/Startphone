@@ -13,6 +13,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
+import com.vladtruta.startphone.repository.ApplicationRepository
+import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.repository.WeatherRepository
 import com.vladtruta.startphone.util.*
@@ -43,6 +45,7 @@ val appModule = module {
     single { LauncherApplicationsHelper(get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
+    single<IAppRepo> { ApplicationRepository(get()) }
 
     viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 }

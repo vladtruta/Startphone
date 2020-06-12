@@ -11,8 +11,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
     single { provideDefaultOkhttpClient() }
+
     single { provideOpenWeatherRetrofit(get(), get()) }
     single { provideOpenWeatherApi(get()) }
+
+    single { provideApplicationRetrofit(get(), get()) }
+    single { provideApplicationApi(get()) }
 }
 
 private fun provideDefaultOkhttpClient(): OkHttpClient {
@@ -35,4 +39,18 @@ private fun provideOpenWeatherRetrofit(client: OkHttpClient, gson: Gson): Retrof
         .build()
 }
 
-private fun provideOpenWeatherApi(retrofit: Retrofit) = retrofit.create(IOpenWeatherApi::class.java)
+private fun provideOpenWeatherApi(retrofit: Retrofit): IOpenWeatherApi {
+    return retrofit.create(IOpenWeatherApi::class.java)
+}
+
+private fun provideApplicationRetrofit(client: OkHttpClient, gson: Gson): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl(BuildConfig.APPLICATION_API_BASE_URL)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+}
+
+private fun provideApplicationApi(retrofit: Retrofit): IOpenWeatherApi {
+    return retrofit.create(IOpenWeatherApi::class.java)
+}

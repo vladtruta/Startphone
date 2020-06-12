@@ -10,6 +10,7 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -17,13 +18,18 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.vladtruta.startphone.R
-import com.vladtruta.startphone.databinding.OverlayHelpingHandBinding
+import com.vladtruta.startphone.databinding.ServiceHelpingHandBinding
 import com.vladtruta.startphone.model.local.Tutorial
 import com.vladtruta.startphone.presentation.adapter.TutorialPageAdapter
+import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.NotificationsHelper
 import com.vladtruta.startphone.util.UIUtils
 import com.vladtruta.startphone.util.getSize
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -33,6 +39,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
     TutorialPageAdapter.TutorialPageListener {
 
     companion object {
+        private const val TAG = "HelpingHandService"
         private const val ANIMATE_TO_NEAREST_WALL_DURATION_MS = 300L
 
         private const val STARTPHONE_FOREGROUND_SERVICE_ID = 731
@@ -41,13 +48,18 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
 
         private const val BUBBLE_INITIAL_X_POSITION = 0
         private val BUBBLE_INITIAL_Y_POSITION = UIUtils.dpToPx(60f)
+
+        private const val MAX_TUTORIALS_PER_PAGE = 5
     }
 
     private val windowManager by inject<WindowManager>()
     private val notificationsHelper by inject<NotificationsHelper>()
     private val launcherApplicationsHelper by inject<LauncherApplicationsHelper>()
+    private val applicationRepository by inject<IAppRepo>()
 
-    private lateinit var binding: OverlayHelpingHandBinding
+    private val supervisorJob = SupervisorJob()
+
+    private lateinit var binding: ServiceHelpingHandBinding
     private lateinit var params: WindowManager.LayoutParams
 
     private lateinit var tutorialPageAdapter: TutorialPageAdapter
@@ -68,7 +80,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
     override fun onCreate() {
         super.onCreate()
         setTheme(R.style.AppTheme)
-        binding = OverlayHelpingHandBinding.inflate(LayoutInflater.from(this), null, false)
+        binding = ServiceHelpingHandBinding.inflate(LayoutInflater.from(this), null, false)
 
         updateWindowParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -81,12 +93,18 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
 
         initViewPager()
         initActions()
+        loadTutorials()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startServiceInForeground()
 
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        windowManager.removeView(binding.root)
     }
 
     override fun onGlobalLayout() {
@@ -238,10 +256,6 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
         })
     }
 
-    override fun onTutorialClicked(tutorial: Tutorial) {
-        println("asdf")
-    }
-
     private fun initActions() {
         binding.closeHelpingHandEfab.setOnClickListener { closeHelpingHandDialog() }
 
@@ -252,6 +266,23 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
         binding.stuckLl.setOnClickListener {
             launcherApplicationsHelper.restartCurrentlyRunningApplication(this)
             closeHelpingHandDialog()
+        }
+    }
+
+    override fun onTutorialClicked(tutorial: Tutorial) {
+
+    }
+
+    private fun loadTutorials() {
+        CoroutineScope(supervisorJob + Dispatchers.Main).launch {
+            launcherApplicationsHelper.currentlyRunningApplication?.packageName?.let {
+                try {
+                    val tutorials = applicationRepository.getTutorialsForPackageName(it)
+                    tutorialPageAdapter.submitList(tutorials.chunked(MAX_TUTORIALS_PER_PAGE))
+                } catch(e: Exception) {
+                    Log.e(TAG, "initTutorials Failure: ${e.message}", e)
+                }
+            }
         }
     }
 
@@ -270,6 +301,15 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
         binding.helpingHandLl.visibility = View.VISIBLE
     }
 
+    private fun updateDialogWithCurrentlyRunningApplication() {
+        val currentlyRunningApplication = launcherApplicationsHelper.currentlyRunningApplication
+        binding.closeCurrentAppTv.text = UIUtils.getString(
+            R.string.exit_app_placeholder,
+            currentlyRunningApplication?.label ?: UIUtils.getString(R.string.this_application)
+        )
+        binding.closeAppIv.setImageDrawable(currentlyRunningApplication?.icon)
+    }
+
     private fun closeHelpingHandDialog() {
         updateWindowParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -281,15 +321,6 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
         binding.helpingHandOverlayView.visibility = View.GONE
         binding.closeHelpingHandEfab.visibility = View.GONE
         binding.helpingHandLl.visibility = View.GONE
-    }
-
-    private fun updateDialogWithCurrentlyRunningApplication() {
-        val currentlyRunningApplication = launcherApplicationsHelper.currentlyRunningApplication
-        binding.closeCurrentAppTv.text = UIUtils.getString(
-            R.string.exit_app_placeholder,
-            currentlyRunningApplication?.label ?: UIUtils.getString(R.string.this_application)
-        )
-        binding.closeAppIv.setImageDrawable(currentlyRunningApplication?.icon)
     }
 
     private fun updateWindowParams(width: Int, height: Int) {
@@ -314,10 +345,5 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
             x = BUBBLE_INITIAL_X_POSITION
             y = BUBBLE_INITIAL_Y_POSITION
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        windowManager.removeView(binding.root)
     }
 }
