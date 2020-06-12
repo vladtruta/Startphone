@@ -18,4 +18,7 @@
     <string name="i_need_help">I need help</string>
     <string name="foreground_notification_content_text">The application is running in the foreground.</string>
     <string name="notification_channel_description">Notifications related to general Startphone functionality.</string>
+    <string name="what_can_i_help_you_with">What can I help you with?</string>
+    <string name="help_me_i_stuck">Help me, I am stuck!</string>
+    <string name="close_me">Close me</string>
 </resources>
