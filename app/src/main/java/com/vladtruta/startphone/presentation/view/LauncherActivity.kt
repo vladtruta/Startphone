@@ -1,6 +1,5 @@
 package com.vladtruta.startphone.presentation.view
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +25,6 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
 
     private val launcherViewModel by viewModel<LauncherViewModel>()
     private val imageHelper by inject<ImageHelper>()
-    private val appPackageManager by inject<PackageManager>()
 
     private lateinit var binding: ActivityLauncherBinding
     private lateinit var applicationPageAdapter: ApplicationPageAdapter
@@ -288,8 +286,7 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
     }
 
     override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
-        val intent =
-            appPackageManager.getLaunchIntentForPackage(applicationInfo.packageName) ?: return
+        val intent = packageManager.getLaunchIntentForPackage(applicationInfo.packageName) ?: return
         startActivity(intent)
     }
 

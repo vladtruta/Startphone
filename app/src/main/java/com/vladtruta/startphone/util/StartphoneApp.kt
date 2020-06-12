@@ -83,6 +83,8 @@ class StartphoneApp : Application(), LifecycleObserver {
         wifiConnectionHelper.unregisterWifiConnectionReceiver(this)
         networkConnectivityHelper.unregisterNetworkCallback()
 
+        stopService(helpingHandIntent)
+
         super.onTerminate()
     }
 }

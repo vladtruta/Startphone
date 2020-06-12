@@ -21,4 +21,6 @@
     <string name="what_can_i_help_you_with">What can I help you with?</string>
     <string name="help_me_i_stuck">Help me, I am stuck!</string>
     <string name="close_me">Close me</string>
+    <string name="accessibility_service_name">Startphone Window Detection Service</string>
+    <string name="accessibility_service_description">Service for detecting currently running application, in order to provide relevant assistance.</string>
 </resources>
