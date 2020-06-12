@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".util.StartphoneApp"
@@ -18,10 +18,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-
-        <activity android:name=".presentation.view.LauncherActivity"
-            android:launchMode="singleTask" >
-
+        <activity android:name=".presentation.view.GoogleSignInActivity"></activity>
+        <activity
+            android:name=".presentation.view.LauncherActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,9 +34,7 @@
         <service
             android:name=".service.HelpingHandService"
             android:enabled="true"
-            android:exported="false">
-        </service>
-
+            android:exported="false"></service>
     </application>
 
 </manifest>
