@@ -55,6 +55,7 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
         setContentView(binding.root)
 
         initViewPager()
+        initHelpingHandOverlay()
         initActions()
         initObservers()
     }
@@ -104,6 +105,20 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
                     UIUtils.getString(R.string.page_placeholder, currentPosition + 1)
             }
         })
+    }
+
+    private fun initHelpingHandOverlay() {
+        binding.helpingHandOverlayIncl.helpIv.visibility = View.GONE
+        binding.helpingHandOverlayIncl.helpingHandOverlayView.visibility = View.VISIBLE
+        binding.helpingHandOverlayIncl.helpingHandOverlayView.isClickable = true
+        binding.helpingHandOverlayIncl.helpingHandOverlayView.isFocusable = true
+        binding.helpingHandOverlayIncl.helpingHandLl.visibility = View.VISIBLE
+        binding.helpingHandOverlayIncl.closeHelpingHandEfab.visibility = View.VISIBLE
+        binding.helpingHandOverlayIncl.closeCurrentAppLl.visibility = View.GONE
+        binding.helpingHandOverlayIncl.stuckLl.visibility = View.GONE
+        binding.helpingHandOverlayIncl.tutorialPagesLl.visibility = View.GONE
+
+        binding.helpingHandOverlayIncl.closeHelpingHandEfab.setOnClickListener { hideHelpingHandOverlay() }
     }
 
     private fun initActions() {
@@ -291,6 +306,14 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
     }
 
     override fun onNeedHelpClicked() {
+        showHelpingHandOverlay()
+    }
 
+    private fun showHelpingHandOverlay() {
+        binding.helpingHandOverlayIncl.root.visibility = View.VISIBLE
+    }
+
+    private fun hideHelpingHandOverlay() {
+        binding.helpingHandOverlayIncl.root.visibility = View.GONE
     }
 }

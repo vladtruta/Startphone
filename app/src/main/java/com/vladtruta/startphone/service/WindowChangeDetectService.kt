@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import com.vladtruta.startphone.BuildConfig
 import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.StartphoneApp
 import org.koin.android.ext.android.inject
@@ -38,7 +39,7 @@ class WindowChangeDetectService : AccessibilityService() {
             var currentlyRunningApplication = launcherApplicationsHelper
                 .getApplicationInfoForPackageNames(packageName.toString())
                 .firstOrNull()
-            if (currentlyRunningApplication?.packageName == "com.vladtruta.startphone" && !startphoneApp.isInForeground) {
+            if (currentlyRunningApplication?.packageName == BuildConfig.APPLICATION_ID && !startphoneApp.isInForeground) {
                 currentlyRunningApplication = null
             }
             currentlyRunningApplication?.let {

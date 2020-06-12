@@ -14,8 +14,14 @@ import android.view.*
 import android.view.View.OnTouchListener
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.vladtruta.startphone.BuildConfig
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.OverlayHelpingHandBinding
+import com.vladtruta.startphone.model.local.Tutorial
+import com.vladtruta.startphone.presentation.adapter.TutorialPageAdapter
+import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.NotificationsHelper
 import com.vladtruta.startphone.util.UIUtils
 import com.vladtruta.startphone.util.getSize
@@ -24,7 +30,8 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
-class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
+class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
+    TutorialPageAdapter.TutorialPageListener {
 
     companion object {
         private const val ANIMATE_TO_NEAREST_WALL_DURATION_MS = 300L
@@ -39,9 +46,12 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
 
     private val windowManager by inject<WindowManager>()
     private val notificationsHelper by inject<NotificationsHelper>()
+    private val launcherApplicationsHelper by inject<LauncherApplicationsHelper>()
 
     private lateinit var binding: OverlayHelpingHandBinding
     private lateinit var params: WindowManager.LayoutParams
+
+    private lateinit var tutorialPageAdapter: TutorialPageAdapter
 
     private var screenWidth = 0
 
@@ -61,12 +71,16 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
         setTheme(R.style.AppTheme)
         binding = OverlayHelpingHandBinding.inflate(LayoutInflater.from(this), null, false)
 
-        updateWindowParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        updateWindowParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
         windowManager.addView(binding.root, params)
 
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(this)
         binding.root.setOnTouchListener(this)
 
+        initViewPager()
         initActions()
     }
 
@@ -105,7 +119,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
                 val yDiff = event.rawY - initialTouchY
 
                 if (abs(xDiff) < 5 && abs(yDiff) < 5) {
-                   openHelpingHandDialog()
+                    openHelpingHandDialog()
                 }
 
                 // Logic to auto-position the widget based on where it is positioned currently w.r.t middle of the screen.
@@ -178,13 +192,69 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
         startForeground(STARTPHONE_FOREGROUND_SERVICE_ID, notification)
     }
 
+    private fun initViewPager() {
+        tutorialPageAdapter = TutorialPageAdapter().apply {
+            listener = this@HelpingHandService
+        }
+        binding.tutorialsVp.adapter = tutorialPageAdapter
+
+        // Disable scrolling of the ViewPager
+        binding.tutorialsVp.isUserInputEnabled = false
+
+        binding.tutorialsVp.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                if (position == RecyclerView.NO_POSITION) {
+                    return
+                }
+
+                val currentPosition = position + 1
+                val lastPosition = tutorialPageAdapter.itemCount
+
+                when (currentPosition) {
+                    lastPosition -> {
+                        binding.previousPageEfab.visibility = View.VISIBLE
+                        binding.nextPageEfab.visibility = View.INVISIBLE
+                    }
+                    1 -> {
+                        binding.previousPageEfab.visibility = View.INVISIBLE
+                        binding.nextPageEfab.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        binding.previousPageEfab.visibility = View.VISIBLE
+                        binding.nextPageEfab.visibility = View.VISIBLE
+                    }
+                }
+
+                binding.currentPageTv.text = UIUtils.getString(
+                    R.string.current_page_placeholder,
+                    currentPosition,
+                    lastPosition
+                )
+                binding.previousPageEfab.text =
+                    UIUtils.getString(R.string.page_placeholder, currentPosition - 1)
+                binding.nextPageEfab.text =
+                    UIUtils.getString(R.string.page_placeholder, currentPosition + 1)
+            }
+        })
+    }
+
+    override fun onTutorialClicked(tutorial: Tutorial) {
+        println("asdf")
+    }
+
     private fun initActions() {
         binding.closeHelpingHandEfab.setOnClickListener { closeHelpingHandDialog() }
     }
 
     private fun openHelpingHandDialog() {
-        updateWindowParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        updateWindowParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT
+        )
         windowManager.updateViewLayout(binding.root, params)
+
+        updateDialogWithCurrentlyRunningApplication()
 
         binding.helpIv.visibility = View.GONE
         binding.helpingHandOverlayView.visibility = View.VISIBLE
@@ -193,13 +263,33 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener {
     }
 
     private fun closeHelpingHandDialog() {
-        updateWindowParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        updateWindowParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
         windowManager.updateViewLayout(binding.root, params)
 
         binding.helpIv.visibility = View.VISIBLE
         binding.helpingHandOverlayView.visibility = View.GONE
         binding.closeHelpingHandEfab.hide()
         binding.helpingHandLl.visibility = View.GONE
+    }
+
+    private fun updateDialogWithCurrentlyRunningApplication() {
+        val currentlyRunningApplication = launcherApplicationsHelper.currentlyRunningApplication
+        if (currentlyRunningApplication?.packageName == BuildConfig.APPLICATION_ID) {
+            binding.closeCurrentAppLl.visibility = View.GONE
+            binding.stuckLl.visibility = View.GONE
+        } else {
+            binding.closeCurrentAppLl.visibility = View.VISIBLE
+            binding.stuckLl.visibility = View.VISIBLE
+
+            binding.closeCurrentAppTv.text = UIUtils.getString(
+                R.string.close_app_placeholder,
+                currentlyRunningApplication?.label ?: UIUtils.getString(R.string.this_application)
+            )
+            binding.closeAppIv.setImageDrawable(currentlyRunningApplication?.icon)
+        }
     }
 
     private fun updateWindowParams(width: Int, height: Int) {
