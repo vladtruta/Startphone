@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.ListItemTutorialBinding
 import com.vladtruta.startphone.model.local.Tutorial
+import com.vladtruta.startphone.util.UIUtils
 
 class TutorialAdapter : ListAdapter<Tutorial, TutorialAdapter.ViewHolder>(TutorialDiffCallback()) {
 
@@ -49,7 +51,7 @@ class TutorialAdapter : ListAdapter<Tutorial, TutorialAdapter.ViewHolder>(Tutori
                 return
             }
 
-            binding.tutorialNumberTv.text = position.toString()
+            binding.tutorialNumberTv.text = UIUtils.getString(R.string.tutorial_index_placeholder, position + 1)
             binding.tutorialQuestionTv.text = tutorial.title
         }
     }

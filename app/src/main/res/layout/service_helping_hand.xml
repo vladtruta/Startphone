@@ -238,7 +238,7 @@
                     android:textAllCaps="true"
                     android:textAppearance="?attr/textAppearanceHeadline5"
                     android:textStyle="bold"
-                    tools:text="2/3" />
+                    android:text="1/2" />
 
             </LinearLayout>
 

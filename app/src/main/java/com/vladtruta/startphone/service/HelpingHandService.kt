@@ -224,13 +224,17 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
                 val lastPosition = tutorialPageAdapter.itemCount
 
                 when (currentPosition) {
+                    1 -> {
+                        binding.previousPageEfab.visibility = View.INVISIBLE
+                        if (lastPosition == 1) {
+                            binding.nextPageEfab.visibility = View.INVISIBLE
+                        } else {
+                            binding.nextPageEfab.visibility = View.VISIBLE
+                        }
+                    }
                     lastPosition -> {
                         binding.previousPageEfab.visibility = View.VISIBLE
                         binding.nextPageEfab.visibility = View.INVISIBLE
-                    }
-                    1 -> {
-                        binding.previousPageEfab.visibility = View.INVISIBLE
-                        binding.nextPageEfab.visibility = View.VISIBLE
                     }
                     else -> {
                         binding.previousPageEfab.visibility = View.VISIBLE

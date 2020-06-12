@@ -26,4 +26,5 @@
     <string name="exit_app_placeholder">Exit %1$s</string>
     <string name="this_application">This Application</string>
     <string name="close_this_application">Close this application</string>
+    <string name="tutorial_index_placeholder">%1$d.</string>
 </resources>
