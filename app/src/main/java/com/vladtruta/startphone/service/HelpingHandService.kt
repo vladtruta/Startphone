@@ -245,6 +245,15 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
 
     private fun initActions() {
         binding.closeHelpingHandEfab.setOnClickListener { closeHelpingHandDialog() }
+
+        binding.closeCurrentAppLl.setOnClickListener {
+            launcherApplicationsHelper.startLauncher(this)
+        }
+
+        binding.stuckLl.setOnClickListener {
+            launcherApplicationsHelper.restartCurrentlyRunningApplication(this)
+            closeHelpingHandDialog()
+        }
     }
 
     private fun openHelpingHandDialog() {
@@ -258,7 +267,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
 
         binding.helpIv.visibility = View.GONE
         binding.helpingHandOverlayView.visibility = View.VISIBLE
-        binding.closeHelpingHandEfab.show()
+        binding.closeHelpingHandEfab.visibility = View.VISIBLE
         binding.helpingHandLl.visibility = View.VISIBLE
     }
 
@@ -271,7 +280,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
 
         binding.helpIv.visibility = View.VISIBLE
         binding.helpingHandOverlayView.visibility = View.GONE
-        binding.closeHelpingHandEfab.hide()
+        binding.closeHelpingHandEfab.visibility = View.GONE
         binding.helpingHandLl.visibility = View.GONE
     }
 

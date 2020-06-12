@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,18 +25,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black_50"
+        android:clickable="true"
+        android:focusable="true"
         android:visibility="gone"
         tools:visibility="visible" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="16dp"
+        app:layout_anchor="@id/helping_hand_ll">
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/close_helping_hand_efab"
@@ -58,211 +57,212 @@
             app:strokeColor="@android:color/black"
             app:strokeWidth="1dp"
             tools:visibility="visible" />
+    </FrameLayout>
 
-        <LinearLayout
-            android:id="@+id/helping_hand_ll"
+    <LinearLayout
+        android:id="@+id/helping_hand_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_rounded_corners"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_rounded_corners"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:backgroundTint="@color/light_gray"
+            android:elevation="5dp"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:text="@string/what_can_i_help_you_with"
+            android:textAppearance="?attr/textAppearanceHeadline4"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="match_parent"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/tutorials_vp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:overScrollMode="never" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/dividerHorizontal" />
+
+        <LinearLayout
+            android:id="@+id/close_current_app_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_rounded_corners"
-                android:backgroundTint="@color/light_gray"
-                android:elevation="5dp"
-                android:gravity="center_horizontal"
-                android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp"
-                android:text="@string/what_can_i_help_you_with"
-                android:textAppearance="?attr/textAppearanceHeadline4"
-                android:textColor="@android:color/black"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/tutorials_vp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:overScrollMode="never" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/dividerHorizontal" />
-
-            <LinearLayout
-                android:id="@+id/close_current_app_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true">
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp">
-
-                    <ImageView
-                        android:id="@+id/close_app_iv"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_help" />
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_close"
-                        android:tint="@android:color/holo_red_dark" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/close_current_app_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:textAllCaps="true"
-                    android:textAppearance="?attr/textAppearanceHeadline5"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    tools:text="Close Messages" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/dividerHorizontal" />
-
-            <LinearLayout
-                android:id="@+id/stuck_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_help_selector"
-                android:clickable="true"
-                android:focusable="true">
+                <ImageView
+                    android:id="@+id/close_app_iv"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_help" />
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_help" />
+                    android:src="@drawable/ic_close"
+                    android:tint="@android:color/holo_red_dark" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/close_current_app_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                tools:text="Close Messages" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/dividerHorizontal" />
+
+        <LinearLayout
+            android:id="@+id/stuck_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_help_selector"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_help" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/help_me_i_stuck"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/dividerHorizontal" />
+
+        <LinearLayout
+            android:id="@+id/tutorial_pages_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_gray"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/previous_page_efab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_orange_light"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="Page 1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:icon="@drawable/ic_arrow_left"
+                app:iconGravity="start"
+                app:iconPadding="4dp"
+                app:strokeColor="@android:color/black"
+                app:strokeWidth="1dp"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/help_me_i_stuck"
+                    android:text="@string/page"
+                    android:textAllCaps="true"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/current_page_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="4dp"
                     android:textAllCaps="true"
                     android:textAppearance="?attr/textAppearanceHeadline5"
-                    android:textColor="@android:color/white"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="2/3" />
+
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/dividerHorizontal" />
-
-            <LinearLayout
-                android:id="@+id/tutorial_pages_ll"
-                android:layout_width="match_parent"
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/next_page_efab"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/light_gray"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:backgroundTint="@android:color/holo_orange_light"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="Page 3"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:icon="@drawable/ic_arrow_right"
+                app:iconGravity="end"
+                app:iconPadding="4dp"
+                app:strokeColor="@android:color/black"
+                app:strokeWidth="1dp"
+                tools:visibility="visible" />
 
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/previous_page_efab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/holo_orange_light"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="Page 1"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:visibility="invisible"
-                    app:icon="@drawable/ic_arrow_left"
-                    app:iconGravity="start"
-                    app:iconPadding="4dp"
-                    app:strokeColor="@android:color/black"
-                    app:strokeWidth="1dp"
-                    tools:visibility="visible" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/page"
-                        android:textAllCaps="true"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/current_page_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="4dp"
-                        android:textAllCaps="true"
-                        android:textAppearance="?attr/textAppearanceHeadline5"
-                        android:textStyle="bold"
-                        tools:text="2/3" />
-
-                </LinearLayout>
-
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/next_page_efab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/holo_orange_light"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="Page 3"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:visibility="invisible"
-                    app:icon="@drawable/ic_arrow_right"
-                    app:iconGravity="end"
-                    app:iconPadding="4dp"
-                    app:strokeColor="@android:color/black"
-                    app:strokeWidth="1dp"
-                    tools:visibility="visible" />
-
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

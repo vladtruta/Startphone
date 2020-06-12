@@ -13,6 +13,7 @@ import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.presentation.adapter.ApplicationPageAdapter
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
 import com.vladtruta.startphone.util.ImageHelper
+import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.UIUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,6 +26,7 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
 
     private val launcherViewModel by viewModel<LauncherViewModel>()
     private val imageHelper by inject<ImageHelper>()
+    private val launcherApplicationsHelper by inject<LauncherApplicationsHelper>()
 
     private lateinit var binding: ActivityLauncherBinding
     private lateinit var applicationPageAdapter: ApplicationPageAdapter
@@ -110,8 +112,6 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
     private fun initHelpingHandOverlay() {
         binding.helpingHandOverlayIncl.helpIv.visibility = View.GONE
         binding.helpingHandOverlayIncl.helpingHandOverlayView.visibility = View.VISIBLE
-        binding.helpingHandOverlayIncl.helpingHandOverlayView.isClickable = true
-        binding.helpingHandOverlayIncl.helpingHandOverlayView.isFocusable = true
         binding.helpingHandOverlayIncl.helpingHandLl.visibility = View.VISIBLE
         binding.helpingHandOverlayIncl.closeHelpingHandEfab.visibility = View.VISIBLE
         binding.helpingHandOverlayIncl.closeCurrentAppLl.visibility = View.GONE
@@ -301,8 +301,7 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
     }
 
     override fun onApplicationClicked(applicationInfo: ApplicationInfo) {
-        val intent = packageManager.getLaunchIntentForPackage(applicationInfo.packageName) ?: return
-        startActivity(intent)
+        launcherApplicationsHelper.startApplicationByPackageName(this, applicationInfo.packageName)
     }
 
     override fun onNeedHelpClicked() {
