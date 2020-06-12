@@ -1,10 +1,12 @@
 package com.vladtruta.startphone.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.FormattedDateTime
 import com.vladtruta.startphone.model.local.Weather
+import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.util.*
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +14,7 @@ import kotlinx.coroutines.launch
 
 class LauncherViewModel(
     private val weatherRepository: IWeatherRepo,
+    private val applicationRepository: IAppRepo,
     private val batteryStatusHelper: BatteryStatusHelper,
     private val networkConnectivityHelper: NetworkConnectivityHelper,
     private val wifiConnectionHelper: WifiConnectionHelper,
@@ -28,6 +31,8 @@ class LauncherViewModel(
     NetworkConnectivityHelper.NetworkConnectivityListener {
 
     companion object {
+        private const val TAG = "LauncherViewModel"
+
         private const val MAX_APPLICATIONS_PER_PAGE = 6
     }
 
@@ -59,7 +64,8 @@ class LauncherViewModel(
     val networkConnectionStrength: LiveData<Int> = _networkConnectionStrength
 
     private val _visibleAppLists = liveData(Dispatchers.Default) {
-        val appPages = launcherApplicationsHelper.getApplicationInfoForAllApps().chunked(MAX_APPLICATIONS_PER_PAGE)
+        val appPages = launcherApplicationsHelper.getApplicationInfoForAllApps()
+            .chunked(MAX_APPLICATIONS_PER_PAGE)
         val appPagesWithHelp = mutableListOf<List<ApplicationInfo>>()
 
         appPages.forEach { page ->
@@ -142,5 +148,16 @@ class LauncherViewModel(
         networkConnectivityHelper.removeListener(this)
 
         super.onCleared()
+    }
+
+    fun retrieveTutorialsForPackageName(packageName: String) {
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val tutorials = applicationRepository.getTutorialsForPackageName(packageName)
+                launcherApplicationsHelper.updateTutorialsForCurrentlyRunningApplication(tutorials)
+            } catch (e: Exception) {
+               Log.e(TAG, "retrieveTutorialsForPackageName Failure: ${e.message}", e)
+            }
+        }
     }
 }

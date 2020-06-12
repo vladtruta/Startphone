@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.vladtruta.startphone.model.local.ApplicationInfo
+import com.vladtruta.startphone.model.local.Tutorial
 import com.vladtruta.startphone.presentation.view.LauncherActivity
 
 
@@ -13,6 +14,9 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
 
     private val _currentlyRunningApplication = MutableLiveData<ApplicationInfo>()
     val currentlyRunningApplication: LiveData<ApplicationInfo> = _currentlyRunningApplication
+
+    private val _tutorialsForCurrentlyRunningApplication = MutableLiveData<List<Tutorial>>()
+    val tutorialsForCurrentlyRunningApplication: LiveData<List<Tutorial>> = _tutorialsForCurrentlyRunningApplication
 
     fun getApplicationInfoForAllApps(): List<ApplicationInfo> {
         val intent = Intent(Intent.ACTION_MAIN, null).apply {
@@ -36,6 +40,10 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
 
     fun updateCurrentlyRunningApplication(applicationInfo: ApplicationInfo) {
         _currentlyRunningApplication.postValue(applicationInfo)
+    }
+
+    fun updateTutorialsForCurrentlyRunningApplication(tutorials: List<Tutorial>) {
+        _tutorialsForCurrentlyRunningApplication.postValue(tutorials)
     }
 
     fun restartCurrentlyRunningApplication(context: Context) {

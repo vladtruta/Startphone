@@ -47,7 +47,7 @@ val appModule = module {
     single<IWeatherRepo> { WeatherRepository(get()) }
     single<IAppRepo> { ApplicationRepository(get()) }
 
-    viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }
 
 private fun provideGson(): Gson {

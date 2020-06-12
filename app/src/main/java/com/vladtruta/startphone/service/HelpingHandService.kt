@@ -8,7 +8,6 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
-import android.util.Log
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -22,15 +21,11 @@ import com.vladtruta.startphone.databinding.ServiceHelpingHandBinding
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.Tutorial
 import com.vladtruta.startphone.presentation.adapter.TutorialPageAdapter
-import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.NotificationsHelper
 import com.vladtruta.startphone.util.UIUtils
 import com.vladtruta.startphone.util.getSize
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -41,6 +36,7 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
 
     companion object {
         private const val TAG = "HelpingHandService"
+
         private const val ANIMATE_TO_NEAREST_WALL_DURATION_MS = 300L
 
         private const val STARTPHONE_FOREGROUND_SERVICE_ID = 731
@@ -56,7 +52,6 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     private val windowManager by inject<WindowManager>()
     private val notificationsHelper by inject<NotificationsHelper>()
     private val launcherApplicationsHelper by inject<LauncherApplicationsHelper>()
-    private val applicationRepository by inject<IAppRepo>()
 
     private val supervisorJob = SupervisorJob()
 
@@ -64,6 +59,7 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     private lateinit var params: WindowManager.LayoutParams
 
     private lateinit var tutorialPageAdapter: TutorialPageAdapter
+    private var tutorials = ArrayList<Tutorial>()
 
     private var screenWidth = 0
 
@@ -89,8 +85,8 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
         binding.root.setOnTouchListener(this)
 
         initViewPager()
-        initActions()
         initObservers()
+        initActions()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -258,12 +254,29 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     private fun initObservers() {
         launcherApplicationsHelper.currentlyRunningApplication.observe(this, Observer {
             updateDialogWithCurrentlyRunningApplication(it)
-            loadTutorialsInDialog(it)
+        })
+
+        launcherApplicationsHelper.tutorialsForCurrentlyRunningApplication.observe(this, Observer {
+            it ?: return@Observer
+
+            binding.tutorialPagesLl.visibility = if (it.isNotEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
+            tutorialPageAdapter.submitList(it.chunked(MAX_TUTORIALS_PER_PAGE))
         })
     }
 
+    override fun onTutorialClicked(tutorial: Tutorial) {
+
+    }
+
     private fun initActions() {
-        binding.closeHelpingHandEfab.setOnClickListener { closeHelpingHandDialog() }
+        binding.closeHelpingHandEfab.setOnClickListener {
+            closeHelpingHandDialog()
+        }
 
         binding.closeCurrentAppLl.setOnClickListener {
             launcherApplicationsHelper.startLauncher(this)
@@ -273,23 +286,6 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
             launcherApplicationsHelper.restartCurrentlyRunningApplication(this)
             closeHelpingHandDialog()
         }
-    }
-
-    private fun loadTutorialsInDialog(currentlyRunningApplication: ApplicationInfo?) {
-        CoroutineScope(supervisorJob + Dispatchers.Main).launch {
-            val packageName = currentlyRunningApplication?.packageName ?: return@launch
-
-            try {
-                val tutorials = applicationRepository.getTutorialsForPackageName(packageName)
-                tutorialPageAdapter.submitList(tutorials.chunked(MAX_TUTORIALS_PER_PAGE))
-            } catch (e: Exception) {
-                Log.e(TAG, "initTutorials Failure: ${e.message}", e)
-            }
-        }
-    }
-
-    override fun onTutorialClicked(tutorial: Tutorial) {
-
     }
 
     private fun openHelpingHandDialog() {

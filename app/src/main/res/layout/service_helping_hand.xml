@@ -139,11 +139,11 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:text="@string/close_this_application"
                 android:textAllCaps="true"
                 android:textAppearance="?attr/textAppearanceHeadline5"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:text="@string/close_this_application" />
+                android:textStyle="bold" />
         </LinearLayout>
 
         <View
@@ -195,7 +195,9 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/previous_page_efab"
