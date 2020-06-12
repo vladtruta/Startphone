@@ -2,6 +2,7 @@ package com.vladtruta.startphone.di
 
 import com.google.gson.Gson
 import com.vladtruta.startphone.BuildConfig
+import com.vladtruta.startphone.webservice.IAppApi
 import com.vladtruta.startphone.webservice.IOpenWeatherApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,11 +13,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 val networkModule = module {
     single { provideDefaultOkhttpClient() }
 
-    single { provideOpenWeatherRetrofit(get(), get()) }
-    single { provideOpenWeatherApi(get()) }
+    single { provideOpenWeatherApi(provideOpenWeatherRetrofit(get(), get())) }
 
-    single { provideApplicationRetrofit(get(), get()) }
-    single { provideApplicationApi(get()) }
+    single { provideApplicationApi(provideApplicationRetrofit(get(), get())) }
 }
 
 private fun provideDefaultOkhttpClient(): OkHttpClient {
@@ -51,6 +50,6 @@ private fun provideApplicationRetrofit(client: OkHttpClient, gson: Gson): Retrof
         .build()
 }
 
-private fun provideApplicationApi(retrofit: Retrofit): IOpenWeatherApi {
-    return retrofit.create(IOpenWeatherApi::class.java)
+private fun provideApplicationApi(retrofit: Retrofit): IAppApi {
+    return retrofit.create(IAppApi::class.java)
 }

@@ -22,7 +22,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    single { Gson() }
+    single { provideGson() }
 
     single { provideApplication() }
     single { provideWifiManager(get()) }
@@ -48,6 +48,10 @@ val appModule = module {
     single<IAppRepo> { ApplicationRepository(get()) }
 
     viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+}
+
+private fun provideGson(): Gson {
+    return Gson()
 }
 
 private fun provideApplication(): StartphoneApp {

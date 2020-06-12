@@ -3,14 +3,16 @@ package com.vladtruta.startphone.util
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.presentation.view.LauncherActivity
 
 
 class LauncherApplicationsHelper(private val packageManager: PackageManager) {
 
-    var currentlyRunningApplication: ApplicationInfo? = null
-        private set
+    private val _currentlyRunningApplication = MutableLiveData<ApplicationInfo>()
+    val currentlyRunningApplication: LiveData<ApplicationInfo> = _currentlyRunningApplication
 
     fun getApplicationInfoForAllApps(): List<ApplicationInfo> {
         val intent = Intent(Intent.ACTION_MAIN, null).apply {
@@ -33,11 +35,11 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
     }
 
     fun updateCurrentlyRunningApplication(applicationInfo: ApplicationInfo) {
-        currentlyRunningApplication = applicationInfo
+        _currentlyRunningApplication.postValue(applicationInfo)
     }
 
     fun restartCurrentlyRunningApplication(context: Context) {
-        currentlyRunningApplication?.packageName?.let {
+        currentlyRunningApplication.value?.packageName?.let {
             return startApplicationByPackageName(context, it)
         } ?: startLauncher(context)
     }

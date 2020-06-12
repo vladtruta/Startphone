@@ -5,20 +5,21 @@ import android.annotation.SuppressLint
 import android.app.LauncherActivity
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
-import android.os.IBinder
 import android.util.Log
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.ServiceHelpingHandBinding
+import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.Tutorial
 import com.vladtruta.startphone.presentation.adapter.TutorialPageAdapter
 import com.vladtruta.startphone.repository.IAppRepo
@@ -35,7 +36,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
-class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
+class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutListener,
     TutorialPageAdapter.TutorialPageListener {
 
     companion object {
@@ -71,10 +72,6 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
     private var initialTouchX = 0f
     private var initialTouchY = 0f
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
-
     @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate() {
@@ -93,7 +90,7 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
 
         initViewPager()
         initActions()
-        loadTutorials()
+        initObservers()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -256,6 +253,13 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
         })
     }
 
+    private fun initObservers() {
+        launcherApplicationsHelper.currentlyRunningApplication.observe(this, Observer {
+            updateDialogWithCurrentlyRunningApplication(it)
+            loadTutorialsInDialog(it)
+        })
+    }
+
     private fun initActions() {
         binding.closeHelpingHandEfab.setOnClickListener { closeHelpingHandDialog() }
 
@@ -269,21 +273,21 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
         }
     }
 
-    override fun onTutorialClicked(tutorial: Tutorial) {
-
-    }
-
-    private fun loadTutorials() {
+    private fun loadTutorialsInDialog(currentlyRunningApplication: ApplicationInfo?) {
         CoroutineScope(supervisorJob + Dispatchers.Main).launch {
-            launcherApplicationsHelper.currentlyRunningApplication?.packageName?.let {
-                try {
-                    val tutorials = applicationRepository.getTutorialsForPackageName(it)
-                    tutorialPageAdapter.submitList(tutorials.chunked(MAX_TUTORIALS_PER_PAGE))
-                } catch(e: Exception) {
-                    Log.e(TAG, "initTutorials Failure: ${e.message}", e)
-                }
+            val packageName = currentlyRunningApplication?.packageName ?: return@launch
+
+            try {
+                val tutorials = applicationRepository.getTutorialsForPackageName(packageName)
+                tutorialPageAdapter.submitList(tutorials.chunked(MAX_TUTORIALS_PER_PAGE))
+            } catch (e: Exception) {
+                Log.e(TAG, "initTutorials Failure: ${e.message}", e)
             }
         }
+    }
+
+    override fun onTutorialClicked(tutorial: Tutorial) {
+
     }
 
     private fun openHelpingHandDialog() {
@@ -293,16 +297,13 @@ class HelpingHandService : Service(), OnTouchListener, OnGlobalLayoutListener,
         )
         windowManager.updateViewLayout(binding.root, params)
 
-        updateDialogWithCurrentlyRunningApplication()
-
         binding.helpIv.visibility = View.GONE
         binding.helpingHandOverlayView.visibility = View.VISIBLE
         binding.closeHelpingHandEfab.visibility = View.VISIBLE
         binding.helpingHandLl.visibility = View.VISIBLE
     }
 
-    private fun updateDialogWithCurrentlyRunningApplication() {
-        val currentlyRunningApplication = launcherApplicationsHelper.currentlyRunningApplication
+    private fun updateDialogWithCurrentlyRunningApplication(currentlyRunningApplication: ApplicationInfo?) {
         binding.closeCurrentAppTv.text = UIUtils.getString(
             R.string.exit_app_placeholder,
             currentlyRunningApplication?.label ?: UIUtils.getString(R.string.this_application)
