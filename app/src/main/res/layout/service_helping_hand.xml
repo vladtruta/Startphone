@@ -96,11 +96,6 @@
             tools:itemCount="5"
             tools:listitem="@layout/list_item_tutorial" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?attr/dividerHorizontal" />
-
         <LinearLayout
             android:id="@+id/close_current_app_ll"
             android:layout_width="match_parent"
