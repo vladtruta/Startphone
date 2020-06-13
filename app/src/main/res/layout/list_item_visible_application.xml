@@ -6,16 +6,30 @@
     android:background="?attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/application_sw"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_gravity="center_vertical"
-        android:drawableStart="@drawable/ic_help"
-        android:drawablePadding="8dp"
-        android:padding="8dp"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        tools:text="Application" />
+        android:layout_height="64dp">
+
+        <ImageView
+            android:id="@+id/application_iv"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:importantForAccessibility="no"
+            tools:src="@drawable/ic_help" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/application_sw"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="64dp"
+            android:paddingEnd="8dp"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            tools:text="Application" />
+
+    </FrameLayout>
 
     <View
         android:layout_width="match_parent"

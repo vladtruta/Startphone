@@ -7,7 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.util.PreferencesHelper
-import kotlinx.coroutines.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 
 class OnboardingViewModel(
@@ -21,12 +24,11 @@ class OnboardingViewModel(
     private val _continueButtonEnabled = MutableLiveData<Boolean>()
     val continueButtonEnabled: LiveData<Boolean> = _continueButtonEnabled
 
-    private val _visibleApplications = MutableLiveData<List<ApplicationInfo>>(emptyList())
-
-    private val _userDateOfBirth = MutableLiveData<DateTime>()
-    private val _userGender = MutableLiveData<Char>()
-    private val _userId = MutableLiveData<String>()
-    private val _userEmail = MutableLiveData<String>()
+    private val visibleApplications = mutableListOf<ApplicationInfo>()
+    private var userDateOfBirth: DateTime? = null
+    private var userGender: Char? = null
+    private var userId: String? = null
+    private var userEmail: String? = null
 
     private val _signUpSuccess = MutableLiveData<Result<Unit>>()
     val signUpSuccess: LiveData<Result<Unit>> = _signUpSuccess
@@ -40,35 +42,27 @@ class OnboardingViewModel(
     }
 
     fun setUserDateOfBirth(dateOfBirth: DateTime) {
-        _userDateOfBirth.postValue(dateOfBirth)
+        userDateOfBirth = dateOfBirth
     }
 
     fun setUserGender(genderAbbr: Char) {
-        _userGender.postValue(genderAbbr)
+        userGender = genderAbbr
     }
 
     fun setUserId(id: String) {
-        _userId.postValue(id)
+        userId = id
     }
 
     fun setUserEmail(email: String) {
-        _userEmail.postValue(email)
+        userEmail = email
     }
 
     fun addVisibleApplication(applicationInfo: ApplicationInfo) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val applications = _visibleApplications.value!!
-            applications.toMutableList().add(applicationInfo)
-            _visibleApplications.postValue(applications)
-        }
+        visibleApplications.add(applicationInfo)
     }
 
     fun removeVisibleApplication(applicationInfo: ApplicationInfo) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val applications = _visibleApplications.value!!
-            applications.toMutableList().remove(applicationInfo)
-            _visibleApplications.postValue(applications)
-        }
+        visibleApplications.remove(applicationInfo)
     }
 
     fun signUp() {
@@ -88,13 +82,13 @@ class OnboardingViewModel(
     private suspend fun updateApplicationsAndUser() {
         coroutineScope {
             val tasks = listOf(
-                async { applicationRepository.updateApplications(_visibleApplications.value!!) },
+                async { applicationRepository.updateApplications(visibleApplications) },
                 async {
                     applicationRepository.updateUser(
-                        _userId.value!!,
-                        _userEmail.value!!,
-                        _userGender.value!!,
-                        _userDateOfBirth.value!!
+                        userId!!,
+                        userEmail!!,
+                        userGender!!,
+                        userDateOfBirth!!
                     )
                 }
             )
