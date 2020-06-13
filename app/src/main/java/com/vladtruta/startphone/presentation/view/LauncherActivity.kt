@@ -1,6 +1,9 @@
 package com.vladtruta.startphone.presentation.view
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +22,7 @@ import com.vladtruta.startphone.util.UIUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
+
 
 class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.ApplicationPageListener {
     companion object {
@@ -57,10 +61,20 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initViewPager()
-        initHelpingHandOverlay()
-        initActions()
-        initObservers()
+        //initViewPager()
+        //initHelpingHandOverlay()
+        //initActions()
+        //initObservers()
+
+        //ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 1)
+
+        if (!Settings.canDrawOverlays(this)) {
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:$packageName")
+            )
+            startActivityForResult(intent, 0)
+        }
     }
 
     private fun initViewPager() {

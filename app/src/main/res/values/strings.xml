@@ -27,4 +27,23 @@
     <string name="this_application">This Application</string>
     <string name="close_this_application">Close this application</string>
     <string name="tutorial_index_placeholder">%1$d.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="applications_description">Select the applications your senior will use:</string>
+    <string name="welcome">Welcome!</string>
+    <string name="welcome_description">Welcome to Startphone!\n\nFirst, we need to get some things set up. You can try to do it yourself, but if you run into trouble, make sure you have someone next to you.</string>
+    <string name="press_continue_when_ready">Press \'CONTINUE\' when ready</string>
+    <string name="text_continue">Continue</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_up_description">Provide us with some details about the senior who will use this smartphone:</string>
+    <string name="birthday">Birthday</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="sign_up_email_description">We also need a valid email address. Press the button below to link your Google Account:</string>
+    <string name="system_setup">System Setup</string>
+    <string name="system_setup_description">For an optimal experience, we need your help with changing some Settings.</string>
+    <string name="request">Request</string>
+    <string name="system_setup_location_permission_description">1. In order to monitor Internet connection, we need the location permission. Press \'REQUEST\', then \'Allow only while using the app\'.</string>
 </resources>

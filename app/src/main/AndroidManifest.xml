@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".presentation.view.GoogleSignInActivity"></activity>
+        <activity android:name=".presentation.view.OnboardingActivity" />
+        <activity android:name=".presentation.view.GoogleSignInActivity" />
         <activity
             android:name=".presentation.view.LauncherActivity"
             android:launchMode="singleTask">
@@ -34,7 +35,7 @@
         <service
             android:name=".service.HelpingHandService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
 </manifest>

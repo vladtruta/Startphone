@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.view.VisibleAppsFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_light"
+        android:elevation="5dp"
+        android:gravity="center_horizontal"
+        android:padding="4dp"
+        android:text="@string/welcome"
+        android:textAllCaps="true"
+        android:textAppearance="?attr/textAppearanceHeadline4"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:elevation="3dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/welcome_description"
+        android:textAppearance="?attr/textAppearanceHeadline4"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:elevation="3dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/press_continue_when_ready"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textColor="@android:color/black"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
