@@ -4,22 +4,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vladtruta.startphone.R
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.repository.IAppRepo
-import com.vladtruta.startphone.util.UIUtils
+import com.vladtruta.startphone.util.PreferencesHelper
 import kotlinx.coroutines.*
 import org.joda.time.DateTime
 
-class OnboardingViewModel(private val applicationRepository: IAppRepo) : ViewModel() {
+class OnboardingViewModel(
+    private val applicationRepository: IAppRepo,
+    private val preferencesHelper: PreferencesHelper
+) : ViewModel() {
 
-    private val _continueButtonText = MutableLiveData(UIUtils.getString(R.string.text_continue))
+    private val _continueButtonText = MutableLiveData<String>()
     val continueButtonText: LiveData<String> = _continueButtonText
 
     private val _continueButtonEnabled = MutableLiveData<Boolean>()
     val continueButtonEnabled: LiveData<Boolean> = _continueButtonEnabled
 
-    private val _visibleApplications = MutableLiveData<List<ApplicationInfo>>(emptyList())
+    private val _visibleApplications = MutableLiveData<List<ApplicationInfo>>()
 
     private val _userDateOfBirth = MutableLiveData<DateTime>()
     private val _userGender = MutableLiveData<Char>()
@@ -98,5 +100,9 @@ class OnboardingViewModel(private val applicationRepository: IAppRepo) : ViewMod
             )
             tasks.awaitAll()
         }
+    }
+
+    fun isUserLoggedIn(): Boolean {
+        return preferencesHelper.isUserLoggedIn()
     }
 }

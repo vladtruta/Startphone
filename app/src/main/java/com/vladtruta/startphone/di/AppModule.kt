@@ -53,7 +53,7 @@ val appModule = module {
 
     viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
-    viewModel { OnboardingViewModel(get()) }
+    viewModel { OnboardingViewModel(get(), get()) }
     viewModel { SignUpViewModel() }
     viewModel { VisibleAppsViewModel(get()) }
 }

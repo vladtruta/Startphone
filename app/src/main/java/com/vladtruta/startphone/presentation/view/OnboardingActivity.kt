@@ -26,9 +26,13 @@ class OnboardingActivity : AppCompatActivity() {
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initObservers()
-        initViewPager()
-        initActions()
+        if (onboardingViewModel.isUserLoggedIn()) {
+            openLauncher()
+        } else {
+            initObservers()
+            initViewPager()
+            initActions()
+        }
     }
 
     private fun initViewPager() {
@@ -38,7 +42,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun initActions() {
-        binding.onboardingVp.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
+        binding.onboardingVp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
                 binding.continueMb.isEnabled = false
             }
@@ -57,7 +61,7 @@ class OnboardingActivity : AppCompatActivity() {
         })
 
         binding.continueMb.setOnClickListener {
-            when(binding.onboardingVp.currentItem) {
+            when (binding.onboardingVp.currentItem) {
                 WELCOME.ordinal -> {
                     binding.onboardingVp.currentItem = binding.onboardingVp.currentItem + 1
                 }
