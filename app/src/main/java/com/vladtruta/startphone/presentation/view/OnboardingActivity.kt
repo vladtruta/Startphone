@@ -24,14 +24,10 @@ class OnboardingActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
 
-        if (onboardingViewModel.isUserLoggedIn()) {
-            openLauncher()
-        } else {
-            setContentView(binding.root)
-            initViewPager()
-            initObservers()
-            initActions()
-        }
+        setContentView(binding.root)
+        initViewPager()
+        initObservers()
+        initActions()
     }
 
     private fun initViewPager() {
@@ -109,8 +105,10 @@ class OnboardingActivity : BaseActivity() {
     }
 
     private fun openLauncher() {
-        val intent = Intent(this, LauncherActivity::class.java)
+        val intent = Intent(this, LauncherActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
         startActivity(intent)
-        finish()
     }
 }

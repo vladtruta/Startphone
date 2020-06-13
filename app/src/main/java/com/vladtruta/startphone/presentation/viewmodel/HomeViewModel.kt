@@ -12,7 +12,7 @@ import com.vladtruta.startphone.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LauncherViewModel(
+class HomeViewModel(
     private val weatherRepository: IWeatherRepo,
     private val applicationRepository: IAppRepo,
     private val batteryStatusHelper: BatteryStatusHelper,

@@ -283,7 +283,7 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
         }
 
         binding.closeCurrentAppLl.setOnClickListener {
-            launcherApplicationsHelper.startLauncher(this)
+            launcherApplicationsHelper.openLauncher(this)
         }
 
         binding.stuckLl.setOnClickListener {

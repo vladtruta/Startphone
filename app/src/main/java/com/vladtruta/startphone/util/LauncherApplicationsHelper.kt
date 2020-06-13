@@ -49,7 +49,7 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
     fun restartCurrentlyRunningApplication(context: Context) {
         currentlyRunningApplication.value?.packageName?.let {
             return startApplicationByPackageName(context, it)
-        } ?: startLauncher(context)
+        } ?: openLauncher(context)
     }
 
     fun startApplicationByPackageName(context: Context, packageName: String) {
@@ -58,10 +58,10 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
 
-        intent?.let { context.startActivity(intent) } ?: startLauncher(context)
+        intent?.let { context.startActivity(intent) } ?: openLauncher(context)
     }
 
-    fun startLauncher(context: Context) {
+    fun openLauncher(context: Context) {
         val intent = Intent(context, LauncherActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 

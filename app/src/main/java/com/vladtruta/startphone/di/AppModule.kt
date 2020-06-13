@@ -59,7 +59,7 @@ val appModule = module {
     viewModel { SystemSetupViewModel() }
     viewModel { VisibleAppsViewModel(get()) }
 
-    viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }
 
 private fun provideGson(): Gson {

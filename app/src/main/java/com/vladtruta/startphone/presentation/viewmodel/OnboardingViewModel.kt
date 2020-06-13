@@ -99,8 +99,4 @@ class OnboardingViewModel(
             tasks.awaitAll()
         }
     }
-
-    fun isUserLoggedIn(): Boolean {
-        return preferencesHelper.isUserLoggedIn()
-    }
 }
