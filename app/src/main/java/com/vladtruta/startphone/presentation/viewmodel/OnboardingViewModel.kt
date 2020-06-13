@@ -21,7 +21,7 @@ class OnboardingViewModel(
     private val _continueButtonEnabled = MutableLiveData<Boolean>()
     val continueButtonEnabled: LiveData<Boolean> = _continueButtonEnabled
 
-    private val _visibleApplications = MutableLiveData<List<ApplicationInfo>>()
+    private val _visibleApplications = MutableLiveData<List<ApplicationInfo>>(emptyList())
 
     private val _userDateOfBirth = MutableLiveData<DateTime>()
     private val _userGender = MutableLiveData<Char>()
@@ -57,7 +57,7 @@ class OnboardingViewModel(
 
     fun addVisibleApplication(applicationInfo: ApplicationInfo) {
         viewModelScope.launch(Dispatchers.Default) {
-            val applications = _visibleApplications.value ?: emptyList()
+            val applications = _visibleApplications.value!!
             applications.toMutableList().add(applicationInfo)
             _visibleApplications.postValue(applications)
         }
@@ -65,7 +65,7 @@ class OnboardingViewModel(
 
     fun removeVisibleApplication(applicationInfo: ApplicationInfo) {
         viewModelScope.launch(Dispatchers.Default) {
-            val applications = _visibleApplications.value ?: emptyList()
+            val applications = _visibleApplications.value!!
             applications.toMutableList().remove(applicationInfo)
             _visibleApplications.postValue(applications)
         }

@@ -42,13 +42,12 @@ class VisibleApplicationAdapter :
                     return@setOnClickListener
                 }
 
-                binding.applicationSw.toggle()
-
                 val visibleApplication = getItem(position).apply {
                     isVisible = binding.applicationSw.isChecked
                 }
 
                 listener?.onVisibleApplicationCheckedChanged(visibleApplication)
+                notifyItemChanged(position)
             }
         }
 

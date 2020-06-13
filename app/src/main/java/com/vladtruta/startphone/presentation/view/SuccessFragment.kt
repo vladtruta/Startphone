@@ -24,7 +24,7 @@ class SuccessFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.finish))
+        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.open_startphone))
         onboardingViewModel.setContinueButtonEnabled(true)
     }
 }

@@ -7,17 +7,17 @@ import com.vladtruta.startphone.model.local.SystemSetup
 
 class SystemSetupViewModel: ViewModel() {
 
-    private val _setupUpdate = MutableLiveData<SystemSetup>()
+    private val _setupUpdate = MutableLiveData(SystemSetup())
     val setupUpdate: LiveData<SystemSetup> = _setupUpdate
 
     fun setPermissionsEnabled(enabled: Boolean) {
-        val current = _setupUpdate.value ?: return
+        val current = _setupUpdate.value!!
         current.hasPermissions = enabled
         _setupUpdate.postValue(current)
     }
 
     fun setDrawOverlayEnabled(enabled: Boolean) {
-        val current = _setupUpdate.value ?: return
+        val current = _setupUpdate.value!!
         current.hasDrawOverlay = enabled
         _setupUpdate.postValue(current)
     }

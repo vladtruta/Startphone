@@ -41,30 +41,16 @@
         android:padding="8dp"
         android:text="@string/set_default_launcher_description"
         android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textColor="@android:color/black"
-        android:textSize="26sp" />
+        android:textColor="@android:color/black" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:layout_weight="1"
         android:importantForAccessibility="no"
         android:src="@drawable/tutorial_set_default_app" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:elevation="3dp"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="@string/press_finish_to_open_startphone"
-        android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textColor="@android:color/black"
-        android:textSize="26sp"
-        android:textStyle="bold" />
 
 </LinearLayout>
