@@ -10,7 +10,7 @@ import com.vladtruta.startphone.presentation.viewmodel.OnboardingViewModel
 import com.vladtruta.startphone.util.UIUtils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class WelcomeFragment : Fragment() {
+class SuccessFragment : Fragment() {
 
     private val onboardingViewModel by sharedViewModel<OnboardingViewModel>()
 
@@ -18,13 +18,13 @@ class WelcomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_welcome, container, false)
+        return inflater.inflate(R.layout.fragment_success, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.get_started))
+        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.finish))
         onboardingViewModel.setContinueButtonEnabled(true)
     }
 }

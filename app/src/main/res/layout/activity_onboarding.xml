@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".presentation.view.OnboardingActivity">
 
-    <androidx.viewpager.widget.ViewPager
+    <com.vladtruta.startphone.widgets.NoSwipeViewPager
         android:id="@+id/onboarding_vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -16,6 +17,20 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/dividerHorizontal"/>
+
+    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+        android:id="@+id/dots_indicator"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        app:dotsColor="@android:color/darker_gray"
+        app:dotsCornerRadius="8dp"
+        app:dotsSize="16dp"
+        app:dotsSpacing="4dp"
+        app:dotsWidthFactor="2.5"
+        app:selectedDotColor="@android:color/holo_green_dark"
+        app:progressMode="true" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/continue_mb"

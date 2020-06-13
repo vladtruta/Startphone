@@ -30,9 +30,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="applications_description">Select the applications your senior will use:</string>
-    <string name="welcome">Welcome!</string>
+    <string name="welcome">Welcome</string>
     <string name="welcome_description">Welcome to Startphone!\n\nFirst, we need to get some things set up. You can try to do it yourself, but if you run into trouble, make sure you have someone next to you.</string>
-    <string name="press_continue_when_ready">Press \'CONTINUE\' when ready</string>
+    <string name="press_get_started_when_ready">Press \'GET STARTED\' when ready</string>
     <string name="text_continue">Continue</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_up_description">Provide us with some details about the senior who will use this smartphone:</string>
@@ -48,4 +48,11 @@
     <string name="system_setup_location_permission_description">1. In order to monitor Internet connection, we need the location permission. Press \'REQUEST\', then \'Allow only while using the app\'.</string>
     <string name="display_over_other_apps_description">2. Startphone includes HelpingHand, an assistant menu that is present on the screen at all times. For that, we need a special permission. Press \'REQUEST\', then \'Allow display over other apps\'.</string>
     <string name="set_default_launcher_description">3. In order to make the user interface easier, Startphone needs to be set up as a default Launcher. Press \'REQUEST\', select \'Startphone\', then press \'Set as default\'</string>
+    <string name="success">Success</string>
+    <string name="press_finish_to_close_this_screen">Press \'FINISH\' to close this screen and open Startphone</string>
+    <string name="setup_complete_message">Congratulations!\nEverything is set up!</string>
+    <string name="try_again">Try again</string>
+    <string name="get_started">Get started</string>
+    <string name="finish">Finish</string>
+    <string name="permissions_rationale">We need your permission in order to properly set up Startphone.</string>
 </resources>

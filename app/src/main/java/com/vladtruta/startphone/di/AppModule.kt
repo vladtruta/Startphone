@@ -13,6 +13,9 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.vladtruta.startphone.presentation.viewmodel.LauncherViewModel
+import com.vladtruta.startphone.presentation.viewmodel.OnboardingViewModel
+import com.vladtruta.startphone.presentation.viewmodel.SignUpViewModel
+import com.vladtruta.startphone.presentation.viewmodel.VisibleAppsViewModel
 import com.vladtruta.startphone.repository.ApplicationRepository
 import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.repository.IWeatherRepo
@@ -48,6 +51,10 @@ val appModule = module {
     single<IAppRepo> { ApplicationRepository(get()) }
 
     viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+
+    viewModel { OnboardingViewModel(get()) }
+    viewModel { SignUpViewModel() }
+    viewModel { VisibleAppsViewModel(get()) }
 }
 
 private fun provideGson(): Gson {

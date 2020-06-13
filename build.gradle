@@ -30,6 +30,7 @@ buildscript {
         def auth_version = '18.0.0'
         def viewpager2_version = '1.0.0'
         def circle_image_view_version = '3.1.0'
+        def viewpager_dots_indicator_version = '4.1.2'
 
         libraries = [
                 // Kotlin Standard Library
@@ -92,6 +93,9 @@ buildscript {
 
                 // CircleImageView
                 "de.hdodenhof:circleimageview:$circle_image_view_version",
+
+                // ViewPager Dots Indicator
+                "com.tbuonomo.andrui:viewpagerdotsindicator:$viewpager_dots_indicator_version"
         ]
 
         testLibraries = [
@@ -130,6 +134,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
     }
 }
 

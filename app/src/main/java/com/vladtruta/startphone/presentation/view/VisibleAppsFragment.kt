@@ -5,56 +5,64 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.vladtruta.startphone.R
+import com.vladtruta.startphone.databinding.FragmentVisibleAppsBinding
+import com.vladtruta.startphone.model.local.VisibleApplication
+import com.vladtruta.startphone.presentation.adapter.VisibleApplicationAdapter
+import com.vladtruta.startphone.presentation.viewmodel.OnboardingViewModel
+import com.vladtruta.startphone.presentation.viewmodel.VisibleAppsViewModel
+import com.vladtruta.startphone.util.UIUtils
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class VisibleAppsFragment : Fragment(), VisibleApplicationAdapter.VisibleApplicationListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [VisibleAppsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class VisibleAppsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentVisibleAppsBinding
+    private lateinit var visibleApplicationAdapter: VisibleApplicationAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val visibleAppsViewModel by viewModel<VisibleAppsViewModel>()
+    private val onboardingViewModel by sharedViewModel<OnboardingViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_visible_apps, container, false)
+        binding = FragmentVisibleAppsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment VisibleAppsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            VisibleAppsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.text_continue))
+
+        initRecyclerView()
+        initObservers()
+    }
+
+    private fun initRecyclerView() {
+        visibleApplicationAdapter = VisibleApplicationAdapter()
+        visibleApplicationAdapter.listener = this
+        binding.applicationsRv.adapter = visibleApplicationAdapter
+    }
+
+    private fun initObservers() {
+        visibleAppsViewModel.applications.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+
+            visibleApplicationAdapter.submitList(it)
+        })
+    }
+
+    override fun onVisibleApplicationCheckedChanged(visibleApplication: VisibleApplication) {
+        onboardingViewModel.setContinueButtonEnabled(true)
+
+        if (visibleApplication.isVisible) {
+            onboardingViewModel.addVisibleApplication(visibleApplication.applicationInfo)
+        } else {
+            onboardingViewModel.removeVisibleApplication(visibleApplication.applicationInfo)
+        }
     }
 }
