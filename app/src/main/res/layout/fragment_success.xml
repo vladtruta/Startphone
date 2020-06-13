@@ -19,19 +19,6 @@
         android:textColor="@android:color/black"
         android:textStyle="bold" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:importantForAccessibility="no"
-        android:src="@drawable/ic_check_circle"
-        android:tint="@android:color/holo_green_dark" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,12 +28,8 @@
         android:padding="8dp"
         android:text="@string/setup_complete_message"
         android:textAppearance="?attr/textAppearanceHeadline4"
-        android:textColor="@android:color/black" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -56,7 +39,29 @@
         android:elevation="3dp"
         android:gravity="center"
         android:padding="8dp"
-        android:text="@string/press_finish_to_close_this_screen"
+        android:text="@string/set_default_launcher_description"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textColor="@android:color/black"
+        android:textSize="26sp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:importantForAccessibility="no"
+        android:src="@drawable/tutorial_set_default_app" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="3dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/press_finish_to_open_startphone"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textColor="@android:color/black"
         android:textSize="26sp"

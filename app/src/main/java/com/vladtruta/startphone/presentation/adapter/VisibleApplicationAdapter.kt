@@ -53,13 +53,14 @@ class VisibleApplicationAdapter :
         }
 
         fun bind(visibleApplication: VisibleApplication) {
-            binding.applicationSw.text = visibleApplication.applicationInfo.packageName
+            binding.applicationSw.text = visibleApplication.applicationInfo.label
             binding.applicationSw.setCompoundDrawablesRelativeWithIntrinsicBounds(
                 visibleApplication.applicationInfo.icon,
                 null,
                 null,
                 null
             )
+            binding.applicationSw.isChecked = visibleApplication.isVisible
         }
     }
 

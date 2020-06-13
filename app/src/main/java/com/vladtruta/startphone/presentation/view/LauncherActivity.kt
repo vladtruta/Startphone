@@ -43,12 +43,12 @@ class LauncherActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageL
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        when(requestCode) {
+        when (requestCode) {
             RC_SHOW_LAUNCHER_PICKER -> {
-                if (resultCode == Activity.RESULT_OK) {
-
-                } else {
-
+                if (resultCode != Activity.RESULT_OK) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        checkDefaultLauncher()
+                    }
                 }
             }
         }
@@ -66,16 +66,11 @@ class LauncherActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageL
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun checkDefaultLauncher() {
-        if (roleManager.isRoleAvailable(RoleManager.ROLE_HOME)){
+    private fun checkDefaultLauncher() {
+        if (roleManager.isRoleAvailable(RoleManager.ROLE_HOME)) {
             val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_HOME)
             startActivityForResult(intent, RC_SHOW_LAUNCHER_PICKER)
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun isDefaultLauncher(): Boolean {
-        return roleManager.isRoleHeld(RoleManager.ROLE_HOME)
     }
 
     private fun initViewPager() {
