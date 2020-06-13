@@ -8,7 +8,7 @@ import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.util.PreferencesHelper
 import kotlinx.coroutines.*
-import org.joda.time.DateTime
+import org.joda.time.LocalDate
 
 class OnboardingViewModel(
     private val applicationRepository: IAppRepo,
@@ -22,7 +22,7 @@ class OnboardingViewModel(
     val continueButtonEnabled: LiveData<Boolean> = _continueButtonEnabled
 
     val visibleApplications = mutableListOf<ApplicationInfo>()
-    private var userDateOfBirth: DateTime? = null
+    private var userDateOfBirth: LocalDate? = null
     private var userGender: Char? = null
     private var userId: String? = null
     private var userEmail: String? = null
@@ -38,7 +38,7 @@ class OnboardingViewModel(
         _continueButtonEnabled.postValue(enabled)
     }
 
-    fun setUserDateOfBirth(dateOfBirth: DateTime) {
+    fun setUserDateOfBirth(dateOfBirth: LocalDate) {
         userDateOfBirth = dateOfBirth
     }
 

@@ -10,7 +10,7 @@ import com.vladtruta.startphone.util.PreferencesHelper
 import com.vladtruta.startphone.webservice.IAppApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.joda.time.DateTime
+import org.joda.time.LocalDate
 
 
 class ApplicationRepository(private val applicationApi: IAppApi, private val preferencesHelper: PreferencesHelper) : IAppRepo {
@@ -38,11 +38,10 @@ class ApplicationRepository(private val applicationApi: IAppApi, private val pre
         id: String,
         email: String,
         gender: Char,
-        dateOfBirth: DateTime
+        dateOfBirth: LocalDate
     ) {
         withContext(Dispatchers.IO) {
-            val dayOfBirthEpoch = dateOfBirth.toInstant()
-            val userRequest = UserRequest(id, dayOfBirthEpoch.toString(), gender, email)
+            val userRequest = UserRequest(id, dateOfBirth.toString(), gender, email)
             try {
                 val response = applicationApi.updateUser(userRequest)
                 if (!response.isSuccessful) {

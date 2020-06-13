@@ -1,7 +1,7 @@
 package com.vladtruta.startphone.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
-import org.joda.time.DateTime
+import org.joda.time.LocalDate
 
 class SignUpViewModel : ViewModel() {
     companion object {
@@ -18,7 +18,7 @@ class SignUpViewModel : ViewModel() {
         }
     }
 
-    fun getDateTimeFromParameters(year: Int, month: Int, dayOfMonth: Int): DateTime {
-        return DateTime(year, month, dayOfMonth, 0, 0)
+    fun getDateTimeFromParameters(year: Int, month: Int, dayOfMonth: Int): LocalDate {
+        return LocalDate(year, month, dayOfMonth)
     }
 }

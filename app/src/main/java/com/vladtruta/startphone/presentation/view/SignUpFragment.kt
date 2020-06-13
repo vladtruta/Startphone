@@ -59,7 +59,6 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
 
         initGoogleSignIn()
         initViews()
-        initObservers()
         initActions()
     }
 
@@ -89,10 +88,6 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
 
     private fun initViews() {
         binding.ageDp.init(INITIAL_YEAR, INITIAL_MONTH - 1, INITIAL_DAY, this)
-    }
-
-    private fun initObservers() {
-
     }
 
     override fun onDateChanged(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
