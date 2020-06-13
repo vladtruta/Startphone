@@ -72,8 +72,7 @@ class ApplicationRepository(private val applicationApi: IAppApi, private val pre
                 }
             } catch (e: Exception) {
                 throw Exception(
-                    "Error when trying to send applications, applications: $applications",
-                    e
+                    "Error when trying to send applications", e
                 )
             }
         }

@@ -38,6 +38,7 @@ class OnboardingActivity : BaseActivity() {
         onboardingFragmentPagerAdapter = OnboardingFragmentPagerAdapter(supportFragmentManager)
         binding.onboardingVp.adapter = onboardingFragmentPagerAdapter
         binding.dotsIndicator.setViewPager(binding.onboardingVp)
+        binding.dotsIndicator.dotsClickable = false
     }
 
     private fun initActions() {
