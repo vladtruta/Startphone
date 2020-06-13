@@ -47,7 +47,7 @@ class LauncherActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageL
             RC_SHOW_LAUNCHER_PICKER -> {
                 if (resultCode != Activity.RESULT_OK) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        checkDefaultLauncher()
+                       // checkDefaultLauncher()
                     }
                 }
             }
@@ -59,10 +59,14 @@ class LauncherActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageL
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initViewPager()
-        initHelpingHandOverlay()
-        initActions()
-        initObservers()
+//        initViewPager()
+//        initHelpingHandOverlay()
+//        initActions()
+//        initObservers()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            checkDefaultLauncher()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)

@@ -4,11 +4,15 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
-class PreferencesHelper(private val application: Application) {
+
+class PreferencesHelper(private val application: Application, private val gson: Gson) {
     companion object {
         private const val KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN"
         private const val KEY_HELPING_HAND_ENABLED = "KEY_HELPING_HAND_ENABLED"
+        private const val KEY_VISIBLE_APPLICATIONS = "KEY_VISIBLE_APPLICATIONS"
     }
 
     private fun getSharedPreferences(): SharedPreferences {
@@ -33,5 +37,17 @@ class PreferencesHelper(private val application: Application) {
 
     fun isHelpingHandEnabled(): Boolean {
         return getSharedPreferences().getBoolean(KEY_HELPING_HAND_ENABLED, false)
+    }
+
+    fun saveVisibleApplications(applications: List<String>) {
+        getSharedPreferences().edit { putString(KEY_VISIBLE_APPLICATIONS, gson.toJson(applications)) }
+    }
+
+    fun getVisibleApplications(): List<String> {
+        val applicationsSerialized = getSharedPreferences().getString(KEY_VISIBLE_APPLICATIONS, "{}")
+        return gson.fromJson(
+            applicationsSerialized,
+            object : TypeToken<List<String?>?>() {}.type
+        )
     }
 }

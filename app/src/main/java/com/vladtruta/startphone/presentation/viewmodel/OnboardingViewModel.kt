@@ -7,10 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.util.PreferencesHelper
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.joda.time.DateTime
 
 class OnboardingViewModel(
@@ -69,6 +66,13 @@ class OnboardingViewModel(
         viewModelScope.launch {
             try {
                 updateApplicationsAndUser()
+
+                preferencesHelper.saveHelpingHandEnabled(true)
+                withContext(Dispatchers.Default) {
+                    val visibleApplicationPackages = visibleApplications.map { it.packageName }
+                    preferencesHelper.saveVisibleApplications(visibleApplicationPackages)
+                }
+
                 _signUpSuccess.postValue(Result.success(Unit))
             } catch (e: Exception) {
                 _signUpSuccess.postValue(Result.failure(e))

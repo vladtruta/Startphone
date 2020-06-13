@@ -21,7 +21,8 @@ class LauncherViewModel(
     private val mobileSignalHelper: MobileSignalHelper,
     private val locationHelper: LocationHelper,
     private val dateTimeHelper: DateTimeHelper,
-    private val launcherApplicationsHelper: LauncherApplicationsHelper
+    private val launcherApplicationsHelper: LauncherApplicationsHelper,
+    private val preferencesHelper: PreferencesHelper
 ) : ViewModel(),
     LocationHelper.LocationListener,
     BatteryStatusHelper.BatteryStatusListener,
@@ -64,7 +65,8 @@ class LauncherViewModel(
     val networkConnectionStrength: LiveData<Int> = _networkConnectionStrength
 
     private val _visibleAppLists = liveData(Dispatchers.Default) {
-        val appPages = launcherApplicationsHelper.getApplicationInfoForAllApps()
+        val savedPackages = preferencesHelper.getVisibleApplications().toTypedArray()
+        val appPages = launcherApplicationsHelper.getApplicationInfoForPackageNames(*savedPackages)
             .chunked(MAX_APPLICATIONS_PER_PAGE)
         val appPagesWithHelp = mutableListOf<List<ApplicationInfo>>()
 

@@ -49,7 +49,7 @@ val appModule = module {
     single { ImageHelper() }
     single { NotificationsHelper(get()) }
     single { LauncherApplicationsHelper(get()) }
-    single { PreferencesHelper(get()) }
+    single { PreferencesHelper(get(), get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
     single<IAppRepo> { ApplicationRepository(get(), get()) }
@@ -59,7 +59,7 @@ val appModule = module {
     viewModel { SystemSetupViewModel() }
     viewModel { VisibleAppsViewModel(get()) }
 
-    viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }
 
 private fun provideGson(): Gson {
