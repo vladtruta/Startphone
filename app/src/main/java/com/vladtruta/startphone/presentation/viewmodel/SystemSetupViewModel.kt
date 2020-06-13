@@ -21,10 +21,4 @@ class SystemSetupViewModel: ViewModel() {
         current.hasDrawOverlay = enabled
         _setupUpdate.postValue(current)
     }
-
-    fun setDefaultLauncherEnabled(enabled: Boolean) {
-        val current = _setupUpdate.value ?: return
-        current.hasDefaultLauncher = enabled
-        _setupUpdate.postValue(current)
-    }
 }

@@ -23,11 +23,11 @@ class OnboardingActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         if (onboardingViewModel.isUserLoggedIn()) {
             openLauncher()
         } else {
+            setContentView(binding.root)
             initViewPager()
             initObservers()
             initActions()
@@ -98,7 +98,6 @@ class OnboardingActivity : BaseActivity() {
         onboardingViewModel.signUpSuccess.observe(this, Observer {
             it.onSuccess {
                 openLauncher()
-                finish()
             }.onFailure {
                 Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
             }
@@ -111,5 +110,6 @@ class OnboardingActivity : BaseActivity() {
     private fun openLauncher() {
         val intent = Intent(this, LauncherActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

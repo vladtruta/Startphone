@@ -1,14 +1,18 @@
 package com.vladtruta.startphone.di
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.app.NotificationManager
+import android.app.role.RoleManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
+import android.os.Build
 import android.telephony.TelephonyManager
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
@@ -21,6 +25,7 @@ import com.vladtruta.startphone.util.*
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+@SuppressLint("NewApi")
 val appModule = module {
     single { provideGson() }
 
@@ -33,6 +38,7 @@ val appModule = module {
     single { provideWindowManager(get()) }
     single { provideFusedLocationProviderClient(get()) }
     single { provideNotificationManager(get()) }
+    single { provideRoleManager(get()) }
 
     single { BatteryStatusHelper(get()) }
     single { DateTimeHelper() }
@@ -86,6 +92,11 @@ private fun provideWindowManager(application: Application): WindowManager {
 
 private fun provideNotificationManager(application: Application): NotificationManager? {
     return application.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+private fun provideRoleManager(application: Application): RoleManager? {
+    return application.applicationContext.getSystemService(Context.ROLE_SERVICE) as RoleManager
 }
 
 private fun providePackageManager(application: Application): PackageManager {

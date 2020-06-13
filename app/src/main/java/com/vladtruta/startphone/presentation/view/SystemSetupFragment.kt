@@ -1,17 +1,12 @@
 package com.vladtruta.startphone.presentation.view
 
-import android.app.Activity
-import android.app.role.RoleManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.vladtruta.startphone.R
@@ -28,8 +23,7 @@ import pub.devrel.easypermissions.EasyPermissions
 
 class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     companion object {
-        private const val RC_DRAW_OVERLAY = 636
-        private const val RC_SHOW_LAUNCHER_PICKER = 823
+        private const val RC_DRAW_OVERLAY = 988
 
         private const val RC_PERMISSIONS = 265
         private val PERMISSIONS = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -43,7 +37,7 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             RC_DRAW_OVERLAY -> {
-                if (resultCode == Activity.RESULT_OK) {
+                if (canDrawOverlay()) {
                     setDrawOverlayEnabled(true)
                 } else {
                     setDrawOverlayEnabled(false)
@@ -54,13 +48,6 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                     setPermissionsEnabled(true)
                 } else {
                     setPermissionsEnabled(false)
-                }
-            }
-            RC_SHOW_LAUNCHER_PICKER -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    setDefaultLauncherEnabled(true)
-                } else {
-                    setDefaultLauncherEnabled(false)
                 }
             }
             else -> {
@@ -88,6 +75,13 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         super.onResume()
 
         onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.text_continue))
+
+        if (hasPermissions()) {
+            setPermissionsEnabled(true)
+        }
+        if (canDrawOverlay()) {
+            setDrawOverlayEnabled(true)
+        }
     }
 
     private fun initActions() {
@@ -98,19 +92,13 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         binding.requestOverlayMb.setOnClickListener {
             checkDrawOverlay()
         }
-
-        binding.defaultLauncherMb.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                checkDefaultLauncher()
-            }
-        }
     }
     
     private fun initObservers() {
         systemSetupViewModel.setupUpdate.observe(viewLifecycleOwner, Observer { 
             it ?: return@Observer
             
-            val shouldContinue = it.hasPermissions && it.hasDrawOverlay && it.hasDefaultLauncher
+            val shouldContinue = it.hasPermissions && it.hasDrawOverlay
             onboardingViewModel.setContinueButtonEnabled(shouldContinue)
         })
     }
@@ -160,24 +148,19 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun checkDrawOverlay() {
-        if (!Settings.canDrawOverlays(requireActivity())) {
+        if (!canDrawOverlay()) {
             val intent = Intent(
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:${activity?.packageName}}")
+                Uri.parse("package:${activity?.packageName}")
             )
-            activity?.startActivityForResult(intent, 0)
+            startActivityForResult(intent, RC_DRAW_OVERLAY)
         } else {
             setDrawOverlayEnabled(true)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    fun checkDefaultLauncher() {
-        val roleManager = activity?.getSystemService(Context.ROLE_SERVICE) as RoleManager
-        if (roleManager.isRoleAvailable(RoleManager.ROLE_HOME)) {
-            val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_HOME)
-            activity?.startActivityForResult(intent, RC_SHOW_LAUNCHER_PICKER)
-        }
+    private fun canDrawOverlay(): Boolean {
+        return Settings.canDrawOverlays(requireActivity())
     }
 
     private fun setPermissionsEnabled(enabled: Boolean) {
@@ -203,19 +186,6 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         } else {
             binding.requestOverlayTv.setTextColor(UIUtils.getColor(android.R.color.holo_red_dark))
             binding.requestOverlayTv.text = UIUtils.getString(R.string.try_again)    
-        }
-    }
-
-    private fun setDefaultLauncherEnabled(enabled: Boolean) {
-        systemSetupViewModel.setDefaultLauncherEnabled(enabled)
-
-        binding.defaultLauncherMb.isEnabled = !enabled
-        if (enabled) {
-            binding.defaultLauncherTv.setTextColor(UIUtils.getColor(android.R.color.holo_green_dark))
-            binding.defaultLauncherTv.text = UIUtils.getString(R.string.success)
-        } else {
-            binding.defaultLauncherTv.setTextColor(UIUtils.getColor(android.R.color.holo_red_dark))
-            binding.defaultLauncherTv.text = UIUtils.getString(R.string.try_again)    
         }
     }
 }
