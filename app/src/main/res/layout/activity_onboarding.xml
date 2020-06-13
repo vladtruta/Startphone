@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".presentation.view.OnboardingActivity">
 
@@ -16,32 +16,47 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/dividerHorizontal"/>
+        android:background="?attr/dividerHorizontal" />
 
     <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
         android:id="@+id/dots_indicator"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:layout_height="wrap_content"
         app:dotsColor="@android:color/darker_gray"
         app:dotsCornerRadius="8dp"
         app:dotsSize="16dp"
         app:dotsSpacing="4dp"
         app:dotsWidthFactor="2.5"
-        app:selectedDotColor="@android:color/holo_green_dark"
-        app:progressMode="true" />
+        app:progressMode="true"
+        app:selectedDotColor="@android:color/holo_green_dark" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/continue_mb"
-        android:layout_width="220dp"
+    <FrameLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@android:color/holo_green_dark"
-        android:padding="16dp"
-        android:text="@string/text_continue"
-        android:textSize="24sp" />
+        android:layout_gravity="center_horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/continue_mb"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:padding="16dp"
+            android:text="@string/text_continue"
+            android:textSize="24sp" />
+
+        <ProgressBar
+            android:id="@+id/loading_pb"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="4dp"
+            android:elevation="10dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
 
 </LinearLayout>

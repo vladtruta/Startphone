@@ -2,6 +2,8 @@ package com.vladtruta.startphone.presentation.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
@@ -69,7 +71,10 @@ class OnboardingActivity : AppCompatActivity() {
                     binding.onboardingVp.currentItem = binding.onboardingVp.currentItem + 1
                 }
                 SUCCESS.ordinal -> {
+                    it.isEnabled = false
+                    binding.loadingPb.visibility = View.VISIBLE
 
+                    onboardingViewModel.signUp()
                 }
                 else -> {
                     // Do nothing
@@ -85,6 +90,18 @@ class OnboardingActivity : AppCompatActivity() {
 
         onboardingViewModel.continueButtonEnabled.observe(this, Observer {
             binding.continueMb.isEnabled = it
+        })
+
+        onboardingViewModel.signUpSuccess.observe(this, Observer {
+            it.onSuccess {
+                openLauncher()
+                finish()
+            }.onFailure {
+                Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+            }
+
+            binding.continueMb.isEnabled = true
+            binding.loadingPb.visibility = View.GONE
         })
     }
 

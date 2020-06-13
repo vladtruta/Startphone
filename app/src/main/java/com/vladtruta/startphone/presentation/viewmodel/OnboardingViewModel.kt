@@ -8,8 +8,7 @@ import com.vladtruta.startphone.R
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.util.UIUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.joda.time.DateTime
 
 class OnboardingViewModel(private val applicationRepository: IAppRepo) : ViewModel() {
@@ -26,6 +25,9 @@ class OnboardingViewModel(private val applicationRepository: IAppRepo) : ViewMod
     private val _userGender = MutableLiveData<Char>()
     private val _userId = MutableLiveData<String>()
     private val _userEmail = MutableLiveData<String>()
+
+    private val _signUpSuccess = MutableLiveData<Result<Unit>>()
+    val signUpSuccess: LiveData<Result<Unit>> = _signUpSuccess
 
     fun setContinueButtonText(text: String) {
         _continueButtonText.postValue(text)
@@ -68,6 +70,33 @@ class OnboardingViewModel(private val applicationRepository: IAppRepo) : ViewMod
     }
 
     fun signUp() {
+        viewModelScope.launch {
+            try {
+                updateApplicationsAndUser()
+                _signUpSuccess.postValue(Result.success(Unit))
+            } catch (e: Exception) {
+                _signUpSuccess.postValue(Result.failure(e))
+            }
+        }
+    }
 
+    /**
+     * Executes both network calls in parallel, on separate coroutines
+     */
+    private suspend fun updateApplicationsAndUser() {
+        coroutineScope {
+            val tasks = listOf(
+                async { applicationRepository.updateApplications(_visibleApplications.value!!) },
+                async {
+                    applicationRepository.updateUser(
+                        _userId.value!!,
+                        _userEmail.value!!,
+                        _userGender.value!!,
+                        _userDateOfBirth.value!!
+                    )
+                }
+            )
+            tasks.awaitAll()
+        }
     }
 }

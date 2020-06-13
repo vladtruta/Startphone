@@ -17,7 +17,7 @@ interface IAppApi {
     suspend fun getTutorialsForPackageName(@Query("packageName") packageName: String): BaseResponse<List<TutorialResponse>>
 
     @POST("user")
-    suspend fun updateUser(@Body request: UserRequest): BaseResponse<Any>
+    suspend fun updateUser(@Body request: UserRequest): BaseResponse<String>
 
     @POST("application")
     suspend fun updateApplications(@Body request: ApplicationListRequest): BaseResponse<Any>

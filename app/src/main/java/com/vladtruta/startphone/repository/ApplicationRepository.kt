@@ -6,13 +6,14 @@ import com.vladtruta.startphone.model.requests.ApplicationListRequest
 import com.vladtruta.startphone.model.requests.MissingTutorialRequest
 import com.vladtruta.startphone.model.requests.UserRequest
 import com.vladtruta.startphone.model.requests.WatchedTutorialRequest
+import com.vladtruta.startphone.util.PreferencesHelper
 import com.vladtruta.startphone.webservice.IAppApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.joda.time.DateTime
 
 
-class ApplicationRepository(private val applicationApi: IAppApi) : IAppRepo {
+class ApplicationRepository(private val applicationApi: IAppApi, private val preferencesHelper: PreferencesHelper) : IAppRepo {
 
     override suspend fun getTutorialsForPackageName(packageName: String): List<Tutorial> {
         return withContext(Dispatchers.IO) {
@@ -45,7 +46,9 @@ class ApplicationRepository(private val applicationApi: IAppApi) : IAppRepo {
             try {
                 val response = applicationApi.updateUser(userRequest)
                 if (!response.isSuccessful) {
-                    throw Exception("API returned unsuccessful result")
+                    throw Exception(response.error)
+                } else {
+                    preferencesHelper.saveAuthorizationToken(response.data)
                 }
             } catch (e: Exception) {
                 throw Exception("Error when trying to sign up", e)
@@ -65,7 +68,7 @@ class ApplicationRepository(private val applicationApi: IAppApi) : IAppRepo {
             try {
                 val response = applicationApi.updateApplications(request)
                 if (!response.isSuccessful) {
-                    throw Exception("API returned unsuccessful result")
+                    throw Exception(response.error)
                 }
             } catch (e: Exception) {
                 throw Exception(
@@ -82,7 +85,7 @@ class ApplicationRepository(private val applicationApi: IAppApi) : IAppRepo {
             try {
                 val response = applicationApi.updateMissingTutorial(request)
                 if (!response.isSuccessful) {
-                    throw Exception("API returned unsuccessful result")
+                    throw Exception(response.error)
                 }
             } catch (e: Exception) {
                 throw Exception(
@@ -99,7 +102,7 @@ class ApplicationRepository(private val applicationApi: IAppApi) : IAppRepo {
             try {
                 val response = applicationApi.updateWatchedTutorial(request)
                 if (!response.isSuccessful) {
-                    throw Exception("API returned unsuccessful result")
+                    throw Exception(response.error)
                 }
             } catch (e: Exception) {
                 throw Exception(

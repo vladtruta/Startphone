@@ -49,7 +49,7 @@ val appModule = module {
     single { PreferencesHelper(get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
-    single<IAppRepo> { ApplicationRepository(get()) }
+    single<IAppRepo> { ApplicationRepository(get(), get()) }
 
     viewModel { LauncherViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
