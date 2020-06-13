@@ -1,7 +1,7 @@
 package com.vladtruta.startphone.webservice
 
 import com.vladtruta.startphone.BuildConfig
-import com.vladtruta.startphone.model.responses.ApiWeatherResponse
+import com.vladtruta.startphone.model.responses.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,6 +15,6 @@ interface IOpenWeatherApi {
         @Query("exclude") exclude: String = "minutely,hourly,daily",
         @Query("lang") languageCode: String = "en",
         @Query("appid") apiKey: String = BuildConfig.OPEN_WEATHER_API_KEY
-    ): ApiWeatherResponse
+    ): WeatherResponse
 
 }

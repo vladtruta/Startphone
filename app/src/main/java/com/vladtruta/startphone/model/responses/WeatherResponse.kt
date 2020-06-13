@@ -3,7 +3,7 @@ package com.vladtruta.startphone.model.responses
 import com.google.gson.annotations.SerializedName
 import com.vladtruta.startphone.model.local.Weather
 
-data class ApiWeatherResponse(
+data class WeatherResponse(
     @SerializedName("current")
     val current: ApiCurrent? = null
 ) {

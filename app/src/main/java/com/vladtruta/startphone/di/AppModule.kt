@@ -46,6 +46,7 @@ val appModule = module {
     single { ImageHelper() }
     single { NotificationsHelper(get()) }
     single { LauncherApplicationsHelper(get()) }
+    single { PreferencesHelper(get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
     single<IAppRepo> { ApplicationRepository(get()) }

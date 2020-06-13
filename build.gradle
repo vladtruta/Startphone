@@ -31,6 +31,7 @@ buildscript {
         def viewpager2_version = '1.0.0'
         def circle_image_view_version = '3.1.0'
         def viewpager_dots_indicator_version = '4.1.2'
+        def preferences_version = '1.1.1'
 
         libraries = [
                 // Kotlin Standard Library
@@ -95,7 +96,10 @@ buildscript {
                 "de.hdodenhof:circleimageview:$circle_image_view_version",
 
                 // ViewPager Dots Indicator
-                "com.tbuonomo.andrui:viewpagerdotsindicator:$viewpager_dots_indicator_version"
+                "com.tbuonomo.andrui:viewpagerdotsindicator:$viewpager_dots_indicator_version",
+
+                // Preferences
+                "androidx.preference:preference-ktx:$preferences_version",
         ]
 
         testLibraries = [

@@ -2,8 +2,10 @@ package com.vladtruta.startphone.di
 
 import com.google.gson.Gson
 import com.vladtruta.startphone.BuildConfig
+import com.vladtruta.startphone.util.PreferencesHelper
 import com.vladtruta.startphone.webservice.IAppApi
 import com.vladtruta.startphone.webservice.IOpenWeatherApi
+import com.vladtruta.startphone.webservice.SessionInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -11,14 +13,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
-    single { provideDefaultOkhttpClient() }
+    single { provideDefaultOkhttpClient(get()) }
 
     single { provideOpenWeatherApi(provideOpenWeatherRetrofit(get(), get())) }
 
     single { provideApplicationApi(provideApplicationRetrofit(get(), get())) }
 }
 
-private fun provideDefaultOkhttpClient(): OkHttpClient {
+private fun provideDefaultOkhttpClient(preferencesHelper: PreferencesHelper): OkHttpClient {
     val okHttpClient = OkHttpClient.Builder()
 
     if (BuildConfig.DEBUG) {
@@ -26,6 +28,8 @@ private fun provideDefaultOkhttpClient(): OkHttpClient {
             level = HttpLoggingInterceptor.Level.BODY
         })
     }
+
+    okHttpClient.addInterceptor(SessionInterceptor(preferencesHelper))
 
     return okHttpClient.build()
 }

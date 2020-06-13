@@ -3,7 +3,7 @@ package com.vladtruta.startphone.model.responses
 import com.google.gson.annotations.SerializedName
 import com.vladtruta.startphone.model.local.Tutorial
 
-data class ApiTutorialResponse(
+data class TutorialResponse(
     @SerializedName("id")
     val id: Int? = null,
     @SerializedName("packageName")

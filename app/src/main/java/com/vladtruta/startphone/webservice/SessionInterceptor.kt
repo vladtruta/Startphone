@@ -1,9 +1,10 @@
 package com.vladtruta.startphone.webservice
 
+import com.vladtruta.startphone.util.PreferencesHelper
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class SessionInterceptor : Interceptor {
+class SessionInterceptor(private val preferencesHelper: PreferencesHelper) : Interceptor {
     companion object {
         private const val HEADER_AUTHORIZATION = "Authorization"
     }
@@ -12,9 +13,9 @@ class SessionInterceptor : Interceptor {
         val original = chain.request()
 
         val requestBuilder = original.newBuilder()
-       // if (SessionUtils.isUserLoggedIn()) {
-            //requestBuilder.addHeader(HEADER_AUTHORIZATION, SessionUtils.getAuthorizationToken()!!)
-        //}
+        if (preferencesHelper.isUserLoggedIn()) {
+            requestBuilder.addHeader(HEADER_AUTHORIZATION, preferencesHelper.getAuthorizationToken()!!)
+        }
 
         return chain.proceed(requestBuilder.build())
     }
