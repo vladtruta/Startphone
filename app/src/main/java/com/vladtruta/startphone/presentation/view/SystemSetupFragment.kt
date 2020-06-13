@@ -80,10 +80,14 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.text_continue))
-        
         initActions()
         initObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.text_continue))
     }
 
     private fun initActions() {

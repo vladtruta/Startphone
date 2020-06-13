@@ -23,6 +23,7 @@ class StartphoneApp : Application(), LifecycleObserver {
     private val mobileSignalHelper by inject<MobileSignalHelper>()
     private val wifiConnectionHelper by inject<WifiConnectionHelper>()
     private val networkConnectivityHelper by inject<NetworkConnectivityHelper>()
+    private val preferencesHelper by inject<PreferencesHelper>()
 
     private lateinit var helpingHandIntent: Intent
 
@@ -53,7 +54,7 @@ class StartphoneApp : Application(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppEnteredBackground() {
-        if (hasDrawOverlayPermissions()) {
+        if (hasDrawOverlayPermissions() && preferencesHelper.isHelpingHandEnabled()) {
             startService(helpingHandIntent)
         }
     }

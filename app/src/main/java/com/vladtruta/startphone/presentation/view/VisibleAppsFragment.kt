@@ -36,10 +36,14 @@ class VisibleAppsFragment : Fragment(), VisibleApplicationAdapter.VisibleApplica
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.text_continue))
-
         initRecyclerView()
         initObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.text_continue))
     }
 
     private fun initRecyclerView() {

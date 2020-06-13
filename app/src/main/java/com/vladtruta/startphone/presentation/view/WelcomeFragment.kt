@@ -21,8 +21,8 @@ class WelcomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_welcome, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
         onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.get_started))
         onboardingViewModel.setContinueButtonEnabled(true)

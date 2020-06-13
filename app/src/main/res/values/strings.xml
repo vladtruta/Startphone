@@ -35,13 +35,13 @@
     <string name="press_get_started_when_ready">Press \'GET STARTED\' when ready</string>
     <string name="text_continue">Continue</string>
     <string name="sign_up">Sign Up</string>
-    <string name="sign_up_description">Provide us with some details about the senior who will use this smartphone:</string>
+    <string name="sign_up_description">1. Provide us with some details about the senior who will use this smartphone:</string>
     <string name="birthday">Birthday</string>
     <string name="gender">Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="other">Other</string>
-    <string name="sign_up_email_description">We also need a valid email address. Press the button below to link your Google Account:</string>
+    <string name="sign_up_email_description">2. We also need a valid email address. Press the button below to link your Google Account:</string>
     <string name="system_setup">System Setup</string>
     <string name="system_setup_description">For an optimal experience, we need your help with changing some Settings.</string>
     <string name="request">Request</string>

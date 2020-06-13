@@ -57,6 +57,15 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initGoogleSignIn()
+        initViews()
+        initObservers()
+        initActions()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         onboardingViewModel.setContinueButtonText(UIUtils.getString(R.string.text_continue))
         onboardingViewModel.setUserGender(
             signUpViewModel.getGenderFromId(binding.genderRg.checkedRadioButtonId)
@@ -68,11 +77,6 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
                 INITIAL_DAY
             )
         )
-
-        initGoogleSignIn()
-        initViews()
-        initObservers()
-        initActions()
     }
 
     private fun initGoogleSignIn() {
@@ -97,7 +101,7 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
                 signUpViewModel.getDateTimeFromParameters(year, monthOfYear, dayOfMonth)
             onboardingViewModel.setUserDateOfBirth(dateOfBirth)
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+            //Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
         }
     }
 

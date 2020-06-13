@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -14,7 +13,7 @@ import com.vladtruta.startphone.presentation.adapter.OnboardingFragmentPagerAdap
 import com.vladtruta.startphone.presentation.viewmodel.OnboardingViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class OnboardingActivity : AppCompatActivity() {
+class OnboardingActivity : BaseActivity() {
 
     private lateinit var binding: ActivityOnboardingBinding
     private lateinit var onboardingFragmentPagerAdapter: FragmentPagerAdapter
@@ -29,8 +28,8 @@ class OnboardingActivity : AppCompatActivity() {
         if (onboardingViewModel.isUserLoggedIn()) {
             openLauncher()
         } else {
-            initObservers()
             initViewPager()
+            initObservers()
             initActions()
         }
     }
