@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".presentation.view.LauncherActivity">
+        <activity android:name=".presentation.view.LauncherActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

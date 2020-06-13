@@ -42,6 +42,10 @@ class LauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launcher)
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         if (preferencesHelper.isUserLoggedIn()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -63,18 +67,12 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun showOnboarding() {
-        val intent = Intent(this, OnboardingActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
+        val intent = Intent(this, OnboardingActivity::class.java)
         startActivity(intent)
     }
 
     private fun showHome() {
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
+        val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
     }
 }
