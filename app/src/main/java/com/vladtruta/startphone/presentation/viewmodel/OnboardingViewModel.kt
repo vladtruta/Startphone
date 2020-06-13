@@ -21,7 +21,7 @@ class OnboardingViewModel(
     private val _continueButtonEnabled = MutableLiveData<Boolean>()
     val continueButtonEnabled: LiveData<Boolean> = _continueButtonEnabled
 
-    private val visibleApplications = mutableListOf<ApplicationInfo>()
+    val visibleApplications = mutableListOf<ApplicationInfo>()
     private var userDateOfBirth: DateTime? = null
     private var userGender: Char? = null
     private var userId: String? = null
@@ -52,14 +52,6 @@ class OnboardingViewModel(
 
     fun setUserEmail(email: String) {
         userEmail = email
-    }
-
-    fun addVisibleApplication(applicationInfo: ApplicationInfo) {
-        visibleApplications.add(applicationInfo)
-    }
-
-    fun removeVisibleApplication(applicationInfo: ApplicationInfo) {
-        visibleApplications.remove(applicationInfo)
     }
 
     fun signUp() {

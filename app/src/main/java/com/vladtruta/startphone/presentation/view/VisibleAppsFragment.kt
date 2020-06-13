@@ -61,12 +61,12 @@ class VisibleAppsFragment : Fragment(), VisibleApplicationAdapter.VisibleApplica
     }
 
     override fun onVisibleApplicationCheckedChanged(visibleApplication: VisibleApplication) {
-        onboardingViewModel.setContinueButtonEnabled(true)
-
         if (visibleApplication.isVisible) {
-            onboardingViewModel.addVisibleApplication(visibleApplication.applicationInfo)
+            onboardingViewModel.visibleApplications.add(visibleApplication.applicationInfo)
         } else {
-            onboardingViewModel.removeVisibleApplication(visibleApplication.applicationInfo)
+            onboardingViewModel.visibleApplications.remove(visibleApplication.applicationInfo)
         }
+
+        onboardingViewModel.setContinueButtonEnabled(onboardingViewModel.visibleApplications.isNotEmpty())
     }
 }
