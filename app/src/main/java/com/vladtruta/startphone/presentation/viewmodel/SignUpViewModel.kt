@@ -3,7 +3,7 @@ package com.vladtruta.startphone.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import org.joda.time.DateTime
 
-class SignUpViewModel: ViewModel() {
+class SignUpViewModel : ViewModel() {
     companion object {
         enum class GENDER(val value: Char) {
             MALE('M'), FEMALE('F'), OTHER('O')
@@ -11,7 +11,7 @@ class SignUpViewModel: ViewModel() {
     }
 
     fun getGenderFromId(id: Int): Char {
-        return when(id) {
+        return when (id) {
             1 -> GENDER.MALE.value
             2 -> GENDER.FEMALE.value
             else -> GENDER.OTHER.value
@@ -19,11 +19,6 @@ class SignUpViewModel: ViewModel() {
     }
 
     fun getDateTimeFromParameters(year: Int, month: Int, dayOfMonth: Int): DateTime {
-        val dateTime = DateTime(year, month, dayOfMonth, 0, 0)
-        if (dateTime > DateTime.now()) {
-            throw Exception("Invalid birthday")
-        } else {
-            return dateTime
-        }
+        return DateTime(year, month, dayOfMonth, 0, 0)
     }
 }

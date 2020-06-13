@@ -11,5 +11,6 @@
     <color name="help_red_dark">#782F2F</color>
     <color name="help_red_30">#4DD15353</color>
     <color name="light_gray">#DCDCDC</color>
+    <color name="lighter_gray">#F3F3F3</color>
     <color name="dark_brown">#3C2100</color>
 </resources>

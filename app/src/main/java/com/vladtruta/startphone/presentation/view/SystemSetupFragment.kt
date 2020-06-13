@@ -160,12 +160,12 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun checkDrawOverlay() {
-        if (!Settings.canDrawOverlays(requireContext())) {
+        if (!Settings.canDrawOverlays(requireActivity())) {
             val intent = Intent(
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                 Uri.parse("package:${activity?.packageName}}")
             )
-            startActivityForResult(intent, 0)
+            activity?.startActivityForResult(intent, 0)
         } else {
             setDrawOverlayEnabled(true)
         }
@@ -182,7 +182,8 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private fun setPermissionsEnabled(enabled: Boolean) {
         systemSetupViewModel.setPermissionsEnabled(enabled)
-        
+
+        binding.requestPermissionsMb.isEnabled = !enabled
         if (enabled) {
             binding.requestPermissionsTv.setTextColor(UIUtils.getColor(android.R.color.holo_green_dark))
             binding.requestPermissionsTv.text = UIUtils.getString(R.string.success)    
@@ -194,7 +195,8 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private fun setDrawOverlayEnabled(enabled: Boolean) {
         systemSetupViewModel.setDrawOverlayEnabled(enabled)
-        
+
+        binding.requestOverlayMb.isEnabled = !enabled
         if (enabled) {
             binding.requestOverlayTv.setTextColor(UIUtils.getColor(android.R.color.holo_green_dark))
             binding.requestOverlayTv.text = UIUtils.getString(R.string.success)
@@ -206,7 +208,8 @@ class SystemSetupFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private fun setDefaultLauncherEnabled(enabled: Boolean) {
         systemSetupViewModel.setDefaultLauncherEnabled(enabled)
-        
+
+        binding.defaultLauncherMb.isEnabled = !enabled
         if (enabled) {
             binding.defaultLauncherTv.setTextColor(UIUtils.getColor(android.R.color.holo_green_dark))
             binding.defaultLauncherTv.text = UIUtils.getString(R.string.success)

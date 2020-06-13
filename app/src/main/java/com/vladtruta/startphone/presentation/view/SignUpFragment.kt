@@ -88,7 +88,7 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
     }
 
     private fun initViews() {
-        binding.ageDp.init(INITIAL_YEAR, INITIAL_MONTH, INITIAL_DAY, this)
+        binding.ageDp.init(INITIAL_YEAR, INITIAL_MONTH - 1, INITIAL_DAY, this)
     }
 
     private fun initObservers() {
@@ -96,13 +96,9 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
     }
 
     override fun onDateChanged(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        try {
-            val dateOfBirth =
-                signUpViewModel.getDateTimeFromParameters(year, monthOfYear, dayOfMonth)
-            onboardingViewModel.setUserDateOfBirth(dateOfBirth)
-        } catch (e: Exception) {
-            //Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
-        }
+        val dateOfBirth =
+            signUpViewModel.getDateTimeFromParameters(year, monthOfYear + 1, dayOfMonth)
+        onboardingViewModel.setUserDateOfBirth(dateOfBirth)
     }
 
     private fun initActions() {

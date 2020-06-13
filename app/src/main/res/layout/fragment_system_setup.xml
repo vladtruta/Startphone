@@ -12,7 +12,7 @@
         android:background="@android:color/holo_orange_light"
         android:elevation="5dp"
         android:gravity="center_horizontal"
-        android:padding="4dp"
+        android:padding="8dp"
         android:text="@string/system_setup"
         android:textAllCaps="true"
         android:textAppearance="?attr/textAppearanceHeadline4"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/light_gray"
-        android:elevation="3dp"
+        android:elevation="6dp"
         android:gravity="center_horizontal"
         android:padding="8dp"
         android:text="@string/system_setup_description"
@@ -44,10 +44,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_gray"
+                android:background="@color/lighter_gray"
                 android:gravity="center_horizontal"
                 android:padding="8dp"
-                android:elevation="1dp"
+                android:elevation="3dp"
                 android:text="@string/system_setup_location_permission_description"
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:backgroundTint="@android:color/holo_orange_light"
+                        android:backgroundTint="@color/color_orange_grey"
                         android:padding="16dp"
                         android:text="@string/request"
                         android:textColor="@android:color/black"
@@ -96,10 +96,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_gray"
+                android:background="@color/lighter_gray"
                 android:gravity="center_horizontal"
                 android:padding="8dp"
-                android:elevation="1dp"
+                android:elevation="3dp"
                 android:text="@string/display_over_other_apps_description"
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
@@ -119,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:backgroundTint="@android:color/holo_orange_light"
+                        android:backgroundTint="@color/color_orange_grey"
                         android:padding="16dp"
                         android:text="@string/request"
                         android:textColor="@android:color/black"
@@ -148,10 +148,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_gray"
+                android:background="@color/lighter_gray"
                 android:gravity="center_horizontal"
                 android:padding="8dp"
-                android:elevation="1dp"
+                android:elevation="3dp"
                 android:text="@string/set_default_launcher_description"
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
@@ -171,7 +171,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:backgroundTint="@android:color/holo_orange_light"
+                        android:backgroundTint="@color/color_orange_grey"
                         android:padding="16dp"
                         android:text="@string/request"
                         android:textColor="@android:color/black"
