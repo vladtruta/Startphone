@@ -38,6 +38,10 @@ class OnboardingViewModel(
         _continueButtonEnabled.postValue(enabled)
     }
 
+    fun getUserDateOfBirth(): LocalDate? {
+        return userDateOfBirth
+    }
+
     fun setUserDateOfBirth(dateOfBirth: LocalDate) {
         userDateOfBirth = dateOfBirth
     }

@@ -69,13 +69,15 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
         onboardingViewModel.setUserGender(
             signUpViewModel.getGenderFromId(binding.genderRg.checkedRadioButtonId)
         )
-        onboardingViewModel.setUserDateOfBirth(
-            signUpViewModel.getDateTimeFromParameters(
-                INITIAL_YEAR,
-                INITIAL_MONTH,
-                INITIAL_DAY
+        if (onboardingViewModel.getUserDateOfBirth() == null) {
+            onboardingViewModel.setUserDateOfBirth(
+                signUpViewModel.getDateTimeFromParameters(
+                    INITIAL_YEAR,
+                    INITIAL_MONTH,
+                    INITIAL_DAY
+                )
             )
-        )
+        }
     }
 
     private fun initGoogleSignIn() {
