@@ -1,12 +1,15 @@
 package com.vladtruta.startphone.presentation.view
 
-import android.content.Intent
-import android.net.Uri
+import android.app.role.RoleManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -61,19 +64,51 @@ class LauncherActivity : AppCompatActivity(), ApplicationPageAdapter.Application
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        showOnLockScreen()
+
         //initViewPager()
         //initHelpingHandOverlay()
         //initActions()
         //initObservers()
 
-        //ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 1)
+        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 1)
 
-        if (!Settings.canDrawOverlays(this)) {
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
+//        if (!Settings.canDrawOverlays(this)) {
+//            val intent = Intent(
+//                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                Uri.parse("package:$packageName")
+//            )
+//            startActivityForResult(intent, 0)
+//        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            showLauncherSelector(this, 737)
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun showOnLockScreen() {
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setTurnScreenOn(true)
+            setShowWhenLocked(true)
+        } else {
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                        or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
             )
-            startActivityForResult(intent, 0)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun showLauncherSelector(activity: AppCompatActivity, requestCode : Int) {
+        val roleManager = activity.getSystemService(Context.ROLE_SERVICE) as RoleManager
+        if(roleManager.isRoleAvailable(RoleManager.ROLE_HOME)){
+            val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_HOME)
+            activity.startActivityForResult(intent, requestCode)
         }
     }
 

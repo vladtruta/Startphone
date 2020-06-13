@@ -46,4 +46,6 @@
     <string name="system_setup_description">For an optimal experience, we need your help with changing some Settings.</string>
     <string name="request">Request</string>
     <string name="system_setup_location_permission_description">1. In order to monitor Internet connection, we need the location permission. Press \'REQUEST\', then \'Allow only while using the app\'.</string>
+    <string name="display_over_other_apps_description">2. Startphone includes HelpingHand, an assistant menu that is present on the screen at all times. For that, we need a special permission. Press \'REQUEST\', then \'Allow display over other apps\'.</string>
+    <string name="set_default_launcher_description">3. In order to make the user interface easier, Startphone needs to be set up as a default Launcher. Press \'REQUEST\', select \'Startphone\', then press \'Set as default\'</string>
 </resources>

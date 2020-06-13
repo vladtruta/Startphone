@@ -22,7 +22,11 @@
         <activity android:name=".presentation.view.GoogleSignInActivity" />
         <activity
             android:name=".presentation.view.LauncherActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            tools:targetApi="o_mr1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
