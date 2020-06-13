@@ -63,8 +63,6 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
 
     fun openLauncher(context: Context) {
         val intent = Intent(context, LauncherActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
         context.startActivity(intent)
     }
 }
