@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.ActivitySettingsBinding
 import com.vladtruta.startphone.model.local.VisibleApplication
@@ -79,7 +80,7 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
         }
 
         binding.logoutMb.setOnClickListener {
-            signOut()
+            showLogoutConfirmation()
         }
     }
 
@@ -89,6 +90,17 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
             visibleApplication.isVisible
         )
         setResult(Activity.RESULT_OK)
+    }
+
+    private fun showLogoutConfirmation() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.confirm_logout_title)
+            .setMessage(R.string.confirm_logout_message)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                signOut()
+            }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
     }
 
     private fun signOut() {

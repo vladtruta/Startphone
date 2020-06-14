@@ -17,6 +17,7 @@ import com.vladtruta.startphone.presentation.viewmodel.HomeViewModel
 import com.vladtruta.startphone.util.ImageHelper
 import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.UIUtils
+import com.vladtruta.startphone.widgets.CustomClicksTouchListener
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
@@ -25,6 +26,8 @@ import kotlin.math.roundToInt
 class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListener {
     companion object {
         private const val TAG = "HomeActivity"
+
+        private const val LONG_CLICK_SETTINGS_DELAY_MS = 10000L
 
         private const val RC_SETTINGS = 451
     }
@@ -136,10 +139,16 @@ class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListe
             binding.applicationsVp.setCurrentItem(binding.applicationsVp.currentItem + 1, true)
         }
 
-        binding.timeIncl.root.setOnLongClickListener {
-            launchSettings()
-            return@setOnLongClickListener true
-        }
+        binding.timeIncl.root.setOnTouchListener(object :
+            CustomClicksTouchListener(LONG_CLICK_SETTINGS_DELAY_MS) {
+            override fun onLongClick() {
+                launchSettings()
+            }
+
+            override fun onClick() {
+                // Only a short tap, do nothing
+            }
+        })
     }
 
     private fun initObservers() {
