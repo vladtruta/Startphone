@@ -6,13 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.repository.IAppRepo
+import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.PreferencesHelper
 import kotlinx.coroutines.*
 import org.joda.time.LocalDate
 
 class OnboardingViewModel(
     private val applicationRepository: IAppRepo,
-    private val preferencesHelper: PreferencesHelper
+    private val preferencesHelper: PreferencesHelper,
+    private val launcherApplicationsHelper: LauncherApplicationsHelper
 ) : ViewModel() {
 
     private val _continueButtonText = MutableLiveData<String>()
@@ -81,8 +83,10 @@ class OnboardingViewModel(
      */
     private suspend fun updateApplicationsAndUser() {
         coroutineScope {
+            val allApplications = launcherApplicationsHelper.getApplicationInfoForAllApps()
+
             val tasks = listOf(
-                async { applicationRepository.updateApplications(visibleApplications) },
+                async { applicationRepository.updateApplications(allApplications) },
                 async {
                     applicationRepository.updateUser(
                         userId!!,

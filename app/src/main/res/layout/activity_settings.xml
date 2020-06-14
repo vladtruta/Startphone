@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.view.VisibleAppsFragment">
+    tools:context=".presentation.view.SettingsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,6 +26,15 @@
             android:textColor="@android:color/black"
             android:textStyle="bold"
             app:cornerRadius="0dp" />
+
+        <ProgressBar
+            android:id="@+id/loading_pb"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_orange_light"
+            android:indeterminateTint="@android:color/black"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <TextView
             android:layout_width="match_parent"

@@ -3,6 +3,7 @@ package com.vladtruta.startphone.presentation.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -36,8 +37,8 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
         initGoogleSignIn()
 
         initRecyclerView()
-        initObservers()
         initActions()
+        initObservers()
     }
 
     private fun initRecyclerView() {
@@ -54,6 +55,25 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
     }
 
+    private fun initActions() {
+        binding.backMb.setOnClickListener {
+            if (settingsViewModel.areAllAppsHidden()) {
+                Toast.makeText(
+                    this,
+                    UIUtils.getString(R.string.select_at_least_one_app),
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                binding.loadingPb.visibility = View.VISIBLE
+                settingsViewModel.sendUpdateApplicationsRequest()
+            }
+        }
+
+        binding.logoutMb.setOnClickListener {
+            showLogoutConfirmation()
+        }
+    }
+
     private fun initObservers() {
         settingsViewModel.signedInEmail.observe(this, Observer {
             binding.signedInEmailTv.text = it
@@ -64,24 +84,14 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
 
             visibleApplicationAdapter.submitList(it)
         })
-    }
 
-    private fun initActions() {
-        binding.backMb.setOnClickListener {
-            if (settingsViewModel.areAllAppsHidden()) {
-                Toast.makeText(
-                    this,
-                    UIUtils.getString(R.string.select_at_least_one_app),
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
+        settingsViewModel.updateApplicationRequestSent.observe(this, Observer {
+            it ?: return@Observer
+
+            if (it == true) {
                 finish()
             }
-        }
-
-        binding.logoutMb.setOnClickListener {
-            showLogoutConfirmation()
-        }
+        })
     }
 
     override fun onVisibleApplicationCheckedChanged(visibleApplication: VisibleApplication) {

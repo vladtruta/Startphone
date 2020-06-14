@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".presentation.view.SettingsActivity"></activity>
+        <activity android:name=".presentation.view.SettingsActivity"/>
         <activity
             android:name=".presentation.view.LauncherActivity"
             android:launchMode="singleTask">

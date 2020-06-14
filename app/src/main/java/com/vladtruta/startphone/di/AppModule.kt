@@ -54,11 +54,11 @@ val appModule = module {
     single<IWeatherRepo> { WeatherRepository(get()) }
     single<IAppRepo> { ApplicationRepository(get(), get()) }
 
-    viewModel { OnboardingViewModel(get(), get()) }
+    viewModel { OnboardingViewModel(get(), get(), get()) }
     viewModel { SignUpViewModel() }
     viewModel { SystemSetupViewModel() }
     viewModel { VisibleAppsViewModel(get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
 
     viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }
