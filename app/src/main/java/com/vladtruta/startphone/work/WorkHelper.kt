@@ -74,4 +74,9 @@ class WorkHelper(private val application: Application, private val gson: Gson) {
 
         WorkManager.getInstance(application).enqueue(work)
     }
+
+    fun clearWork() {
+        WorkManager.getInstance(application).cancelAllWork()
+        WorkManager.getInstance(application).pruneWork()
+    }
 }
