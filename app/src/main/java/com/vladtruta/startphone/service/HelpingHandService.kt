@@ -416,7 +416,6 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
         binding.watchAgainNoMb.setOnClickListener {
             closeWatchAgainDialog()
             closeVideoOverlay()
-            closeHelpingHandDialog()
         }
 
         binding.watchAgainYesMb.setOnClickListener {

@@ -35,6 +35,8 @@ class HomeViewModel(
         private const val TAG = "LauncherViewModel"
 
         private const val MAX_APPLICATIONS_PER_PAGE = 6
+
+        private val addHelpButton = false
     }
 
     private val _currentWeather = MutableLiveData<Result<Weather>>()
@@ -64,27 +66,31 @@ class HomeViewModel(
     )
     val networkConnectionStrength: LiveData<Int> = _networkConnectionStrength
 
+    @Suppress("ConstantConditionIf")
     private val _visibleAppLists = liveData(Dispatchers.Default) {
         val savedPackages = preferencesHelper.getVisibleApplications().toTypedArray()
         val appPages = launcherApplicationsHelper.getApplicationInfoForPackageNames(*savedPackages)
             .chunked(MAX_APPLICATIONS_PER_PAGE)
-        val appPagesWithHelp = mutableListOf<List<ApplicationInfo>>()
 
-        appPages.forEach { page ->
-            val pageWithHelp = page.toMutableList().apply {
-                add(
-                    0,
-                    ApplicationInfo(
-                        UIUtils.getString(R.string.i_need_help),
-                        "",
-                        UIUtils.getDrawable(R.drawable.ic_help)!!
+        if (addHelpButton) {
+            val appPagesWithHelp = mutableListOf<List<ApplicationInfo>>()
+            appPages.forEach { page ->
+                val pageWithHelp = page.toMutableList().apply {
+                    add(
+                        0,
+                        ApplicationInfo(
+                            UIUtils.getString(R.string.i_need_help),
+                            "",
+                            UIUtils.getDrawable(R.drawable.ic_help)!!
+                        )
                     )
-                )
+                }
+                appPagesWithHelp.add(pageWithHelp)
             }
-            appPagesWithHelp.add(pageWithHelp)
+            emit(appPagesWithHelp.toList())
+        } else {
+            emit(appPages)
         }
-
-        emit(appPagesWithHelp.toList())
     }
     val visibleAppLists: LiveData<List<List<ApplicationInfo>>> = _visibleAppLists
 
