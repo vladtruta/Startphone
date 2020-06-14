@@ -9,5 +9,6 @@ interface IAppRepo {
     suspend fun updateUser(id: String, email: String, gender: Char, dateOfBirth: LocalDate)
     suspend fun updateApplications(applications: List<ApplicationInfo>)
     suspend fun updateMissingTutorial(packageName: String)
-    suspend fun updateWatchedTutorial(id: Int, useful: Boolean)
+    suspend fun updateWatchedTutorial(id: Int)
+    suspend fun updateRatedTutorial(id: Int, useful: Boolean)
 }

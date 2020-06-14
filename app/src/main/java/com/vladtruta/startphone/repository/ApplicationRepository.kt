@@ -2,10 +2,7 @@ package com.vladtruta.startphone.repository
 
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.Tutorial
-import com.vladtruta.startphone.model.requests.ApplicationListRequest
-import com.vladtruta.startphone.model.requests.MissingTutorialRequest
-import com.vladtruta.startphone.model.requests.UserRequest
-import com.vladtruta.startphone.model.requests.WatchedTutorialRequest
+import com.vladtruta.startphone.model.requests.*
 import com.vladtruta.startphone.util.PreferencesHelper
 import com.vladtruta.startphone.webservice.IAppApi
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +10,10 @@ import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 
 
-class ApplicationRepository(private val applicationApi: IAppApi, private val preferencesHelper: PreferencesHelper) : IAppRepo {
+class ApplicationRepository(
+    private val applicationApi: IAppApi,
+    private val preferencesHelper: PreferencesHelper
+) : IAppRepo {
 
     override suspend fun getTutorialsForPackageName(packageName: String): List<Tutorial> {
         return withContext(Dispatchers.IO) {
@@ -94,9 +94,9 @@ class ApplicationRepository(private val applicationApi: IAppApi, private val pre
         }
     }
 
-    override suspend fun updateWatchedTutorial(id: Int, useful: Boolean) {
+    override suspend fun updateWatchedTutorial(id: Int) {
         withContext(Dispatchers.IO) {
-            val request = WatchedTutorialRequest(id, useful)
+            val request = WatchedTutorialRequest(id)
             try {
                 val response = applicationApi.updateWatchedTutorial(request)
                 if (!response.isSuccessful) {
@@ -104,7 +104,24 @@ class ApplicationRepository(private val applicationApi: IAppApi, private val pre
                 }
             } catch (e: Exception) {
                 throw Exception(
-                    "Error when trying to update watched tutorial, id: $id, useful: $useful",
+                    "Error when trying to update watched tutorial, id: $id",
+                    e
+                )
+            }
+        }
+    }
+
+    override suspend fun updateRatedTutorial(id: Int, useful: Boolean) {
+        withContext(Dispatchers.IO) {
+            val request = RatedTutorialRequest(id, useful)
+            try {
+                val response = applicationApi.updateRatedTutorial(request)
+                if (!response.isSuccessful) {
+                    throw Exception(response.error)
+                }
+            } catch (e: Exception) {
+                throw Exception(
+                    "Error when trying to update rated tutorial, id: $id, useful: $useful",
                     e
                 )
             }

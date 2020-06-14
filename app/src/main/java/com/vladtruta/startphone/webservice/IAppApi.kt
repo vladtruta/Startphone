@@ -1,9 +1,6 @@
 package com.vladtruta.startphone.webservice
 
-import com.vladtruta.startphone.model.requests.ApplicationListRequest
-import com.vladtruta.startphone.model.requests.MissingTutorialRequest
-import com.vladtruta.startphone.model.requests.UserRequest
-import com.vladtruta.startphone.model.requests.WatchedTutorialRequest
+import com.vladtruta.startphone.model.requests.*
 import com.vladtruta.startphone.model.responses.BaseResponse
 import com.vladtruta.startphone.model.responses.TutorialResponse
 import retrofit2.http.Body
@@ -27,4 +24,7 @@ interface IAppApi {
 
     @POST("watched")
     suspend fun updateWatchedTutorial(@Body request: WatchedTutorialRequest): BaseResponse<Any>
+
+    @POST("rated")
+    suspend fun updateRatedTutorial(@Body request: RatedTutorialRequest): BaseResponse<Any>
 }

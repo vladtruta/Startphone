@@ -23,10 +23,15 @@ import com.vladtruta.startphone.databinding.ServiceHelpingHandBinding
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.Tutorial
 import com.vladtruta.startphone.presentation.adapter.TutorialPageAdapter
+import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.NotificationsHelper
 import com.vladtruta.startphone.util.UIUtils
 import com.vladtruta.startphone.util.getSize
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -53,6 +58,7 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     private val windowManager by inject<WindowManager>()
     private val notificationsHelper by inject<NotificationsHelper>()
     private val launcherApplicationsHelper by inject<LauncherApplicationsHelper>()
+    private val applicationRepository by inject<IAppRepo>()
 
     private lateinit var binding: ServiceHelpingHandBinding
     private lateinit var params: WindowManager.LayoutParams
@@ -66,7 +72,9 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     private var initialTouchX = 0f
     private var initialTouchY = 0f
 
-    private var videoUseful: Boolean? = null
+    private var userAlreadyRated = false
+
+    private val job = SupervisorJob()
 
     @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
@@ -97,6 +105,7 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
 
     override fun onDestroy() {
         windowManager.removeView(binding.root)
+        job.cancel()
 
         super.onDestroy()
     }
@@ -262,10 +271,11 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
         launcherApplicationsHelper.tutorialsForCurrentlyRunningApplication.observe(this, Observer {
             it ?: return@Observer
 
-            binding.tutorialPagesLl.visibility = if (it.isNotEmpty()) {
-                View.VISIBLE
+            if (it.isEmpty()) {
+                binding.tutorialPagesLl.visibility = View.GONE
+                sendTutorialMissingRequest()
             } else {
-                View.GONE
+                binding.tutorialPagesLl.visibility = View.VISIBLE
             }
 
             tutorialPageAdapter.submitList(it.chunked(MAX_TUTORIALS_PER_PAGE))
@@ -273,7 +283,7 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     }
 
     override fun onTutorialClicked(tutorial: Tutorial) {
-        videoUseful = null
+        userAlreadyRated = false
 
         openVideoOverlay()
         initTutorialOverlay(tutorial)
@@ -362,13 +372,18 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
 
         binding.tutorialVv.setVideoURI(Uri.parse(tutorial.videoUrl))
         binding.tutorialVv.start()
+        sendTutorialWatchedRequest(tutorial)
 
         binding.tutorialVv.setOnPreparedListener {
             binding.loadingVideoPb.visibility = View.GONE
         }
 
         binding.tutorialVv.setOnCompletionListener {
-            videoUseful?.let { openWatchAgainDialog() } ?: run { openUsefulDialog() }
+            if (userAlreadyRated) {
+                openWatchAgainDialog()
+            } else {
+                openUsefulDialog()
+            }
         }
 
         binding.tutorialVv.setOnErrorListener { mp, what, extra ->
@@ -380,11 +395,17 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
         binding.usefulNoMb.setOnClickListener {
             closeUsefulDialog()
             openWatchAgainDialog()
+
+            userAlreadyRated = true
+            sendTutorialRatedRequest(tutorial, false)
         }
 
         binding.usefulYesMb.setOnClickListener {
             closeUsefulDialog()
             openWatchAgainDialog()
+
+            userAlreadyRated = true
+            sendTutorialRatedRequest(tutorial, true)
         }
 
         binding.watchAgainNoMb.setOnClickListener {
@@ -395,7 +416,9 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
 
         binding.watchAgainYesMb.setOnClickListener {
             closeWatchAgainDialog()
+
             binding.tutorialVv.start()
+            sendTutorialWatchedRequest(tutorial)
         }
     }
 
@@ -438,4 +461,42 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
             y = BUBBLE_INITIAL_Y_POSITION
         }
     }
+
+    //region Network Requests
+    private fun sendTutorialWatchedRequest(tutorial: Tutorial) {
+        CoroutineScope(Dispatchers.Main + job).launch {
+            try {
+                applicationRepository.updateWatchedTutorial(tutorial.id)
+            } catch (e: Exception) {
+                Log.e(TAG, "sendTutorialWatchedRequest Failure: ${e.message}", e)
+            }
+        }
+    }
+
+    private fun sendTutorialRatedRequest(tutorial: Tutorial, videoUseful: Boolean) {
+        CoroutineScope(Dispatchers.Main + job).launch {
+            try {
+                applicationRepository.updateRatedTutorial(tutorial.id, videoUseful)
+            } catch (e: Exception) {
+                Log.e(TAG, "sendTutorialRatedRequest Failure: ${e.message}", e)
+            }
+        }
+    }
+
+    private fun sendTutorialMissingRequest() {
+        val packageName =
+            launcherApplicationsHelper.currentlyRunningApplication.value?.packageName ?: run {
+                Log.e(TAG, "packageName of current app is null")
+                return
+            }
+
+        CoroutineScope(Dispatchers.Main + job).launch {
+            try {
+                applicationRepository.updateMissingTutorial(packageName)
+            } catch (e: Exception) {
+                Log.e(TAG, "sendTutorialMissingRequest Failure: ${e.message}", e)
+            }
+        }
+    }
+    //endregion
 }

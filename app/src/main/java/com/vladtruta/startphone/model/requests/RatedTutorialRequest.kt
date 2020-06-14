@@ -2,7 +2,9 @@ package com.vladtruta.startphone.model.requests
 
 import com.google.gson.annotations.SerializedName
 
-data class WatchedTutorialRequest(
+data class RatedTutorialRequest(
     @SerializedName("tutorialId")
-    val tutorialId: Int
+    val tutorialId: Int,
+    @SerializedName("useful")
+    val useful: Boolean
 )
