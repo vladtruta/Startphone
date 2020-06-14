@@ -7,7 +7,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.view.*
 import android.view.View.OnTouchListener
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -25,7 +27,6 @@ import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.NotificationsHelper
 import com.vladtruta.startphone.util.UIUtils
 import com.vladtruta.startphone.util.getSize
-import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.android.inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -53,13 +54,10 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     private val notificationsHelper by inject<NotificationsHelper>()
     private val launcherApplicationsHelper by inject<LauncherApplicationsHelper>()
 
-    private val supervisorJob = SupervisorJob()
-
     private lateinit var binding: ServiceHelpingHandBinding
     private lateinit var params: WindowManager.LayoutParams
 
     private lateinit var tutorialPageAdapter: TutorialPageAdapter
-    private var tutorials = ArrayList<Tutorial>()
 
     private var screenWidth = 0
 
@@ -67,6 +65,8 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     private var initialY = 0
     private var initialTouchX = 0f
     private var initialTouchY = 0f
+
+    private var videoUseful: Boolean? = null
 
     @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
@@ -97,7 +97,6 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
 
     override fun onDestroy() {
         windowManager.removeView(binding.root)
-        supervisorJob.cancel()
 
         super.onDestroy()
     }
@@ -274,12 +273,16 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     }
 
     override fun onTutorialClicked(tutorial: Tutorial) {
+        videoUseful = null
 
+        openVideoOverlay()
+        initTutorialOverlay(tutorial)
     }
 
     private fun initActions() {
         binding.closeHelpingHandEfab.setOnClickListener {
             closeHelpingHandDialog()
+            closeVideoOverlay()
         }
 
         binding.closeCurrentAppLl.setOnClickListener {
@@ -324,6 +327,92 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
         binding.helpingHandOverlayView.visibility = View.GONE
         binding.closeHelpingHandEfab.visibility = View.GONE
         binding.helpingHandLl.visibility = View.GONE
+    }
+
+    private fun openVideoOverlay() {
+        binding.closeCurrentAppLl.visibility = View.GONE
+        binding.stuckLl.visibility = View.GONE
+        binding.tutorialPagesLl.visibility = View.GONE
+        binding.tutorialsVp.visibility = View.GONE
+
+        binding.tutorialFl.visibility = View.VISIBLE
+        binding.loadingVideoPb.visibility = View.VISIBLE
+
+        binding.usefulLl.visibility = View.GONE
+        binding.watchAgainLl.visibility = View.GONE
+    }
+
+    private fun closeVideoOverlay() {
+        binding.closeCurrentAppLl.visibility = View.VISIBLE
+        binding.stuckLl.visibility = View.VISIBLE
+        binding.tutorialPagesLl.visibility = View.VISIBLE
+        binding.tutorialsVp.visibility = View.VISIBLE
+
+        binding.tutorialFl.visibility = View.GONE
+        binding.loadingVideoPb.visibility = View.GONE
+
+        binding.usefulLl.visibility = View.GONE
+        binding.watchAgainLl.visibility = View.GONE
+
+        binding.tutorialVv.stopPlayback()
+    }
+
+    private fun initTutorialOverlay(tutorial: Tutorial) {
+        binding.helpTitleTv.text = tutorial.title
+
+        binding.tutorialVv.setVideoURI(Uri.parse(tutorial.videoUrl))
+        binding.tutorialVv.start()
+
+        binding.tutorialVv.setOnPreparedListener {
+            binding.loadingVideoPb.visibility = View.GONE
+        }
+
+        binding.tutorialVv.setOnCompletionListener {
+            videoUseful?.let { openWatchAgainDialog() } ?: run { openUsefulDialog() }
+        }
+
+        binding.tutorialVv.setOnErrorListener { mp, what, extra ->
+            Log.e(TAG, "$mp, $what, $extra")
+
+            return@setOnErrorListener false
+        }
+
+        binding.usefulNoMb.setOnClickListener {
+            closeUsefulDialog()
+            openWatchAgainDialog()
+        }
+
+        binding.usefulYesMb.setOnClickListener {
+            closeUsefulDialog()
+            openWatchAgainDialog()
+        }
+
+        binding.watchAgainNoMb.setOnClickListener {
+            closeWatchAgainDialog()
+            closeVideoOverlay()
+            closeHelpingHandDialog()
+        }
+
+        binding.watchAgainYesMb.setOnClickListener {
+            closeWatchAgainDialog()
+            binding.tutorialVv.start()
+        }
+    }
+
+    private fun openUsefulDialog() {
+        binding.usefulLl.visibility = View.VISIBLE
+    }
+
+    private fun closeUsefulDialog() {
+        binding.usefulLl.visibility = View.GONE
+    }
+
+    private fun openWatchAgainDialog() {
+        binding.watchAgainLl.visibility = View.VISIBLE
+    }
+
+    private fun closeWatchAgainDialog() {
+        binding.watchAgainLl.visibility = View.GONE
     }
 
     private fun updateWindowParams(width: Int, height: Int) {

@@ -56,4 +56,8 @@
     <string name="finish">Finish</string>
     <string name="permissions_rationale">We need your permission in order to properly set up Startphone.</string>
     <string name="open_startphone">Open Startphone</string>
+    <string name="did_you_find_this_tutorial_useful">Did you find this tutorial useful?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="do_you_want_to_watch_it_again">Do you want to watch it again?</string>
 </resources>
