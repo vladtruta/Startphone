@@ -27,8 +27,7 @@ class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListe
     companion object {
         private const val TAG = "HomeActivity"
 
-        private const val LONG_CLICK_SETTINGS_DELAY_MS = 10000L
-
+        private const val LONG_CLICK_SETTINGS_DELAY_MS = 10000L // 10 Seconds
         private const val RC_SETTINGS = 451
     }
 
