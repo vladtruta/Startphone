@@ -60,4 +60,8 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="do_you_want_to_watch_it_again">Do you want to watch it again?</string>
+    <string name="settings">Settings</string>
+    <string name="back">Back</string>
+    <string name="logout">Logout</string>
+    <string name="signed_in_as">Signed in as:</string>
 </resources>

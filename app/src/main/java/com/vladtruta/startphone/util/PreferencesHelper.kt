@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken
 class PreferencesHelper(private val application: Application, private val gson: Gson) {
     companion object {
         private const val KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN"
+        private const val KEY_EMAIL = "KEY_EMAIL"
         private const val KEY_HELPING_HAND_ENABLED = "KEY_HELPING_HAND_ENABLED"
         private const val KEY_VISIBLE_APPLICATIONS = "KEY_VISIBLE_APPLICATIONS"
     }
@@ -27,8 +28,24 @@ class PreferencesHelper(private val application: Application, private val gson: 
         return getSharedPreferences().getString(KEY_AUTH_TOKEN, null)
     }
 
+    fun clearAuthorizationToken() {
+        getSharedPreferences().edit { remove(KEY_AUTH_TOKEN) }
+    }
+
     fun isUserLoggedIn(): Boolean {
         return !getAuthorizationToken().isNullOrEmpty()
+    }
+
+    fun getUserEmail(): String? {
+        return getSharedPreferences().getString(KEY_EMAIL, null)
+    }
+
+    fun saveUserEmail(email: String) {
+        getSharedPreferences().edit { putString(KEY_EMAIL, email) }
+    }
+
+    fun clearUserEmail() {
+        getSharedPreferences().edit { remove(KEY_EMAIL) }
     }
 
     fun saveHelpingHandEnabled(enabled: Boolean) {
@@ -40,11 +57,17 @@ class PreferencesHelper(private val application: Application, private val gson: 
     }
 
     fun saveVisibleApplications(applications: List<String>) {
-        getSharedPreferences().edit { putString(KEY_VISIBLE_APPLICATIONS, gson.toJson(applications)) }
+        getSharedPreferences().edit {
+            putString(
+                KEY_VISIBLE_APPLICATIONS,
+                gson.toJson(applications)
+            )
+        }
     }
 
     fun getVisibleApplications(): List<String> {
-        val applicationsSerialized = getSharedPreferences().getString(KEY_VISIBLE_APPLICATIONS, "{}")
+        val applicationsSerialized =
+            getSharedPreferences().getString(KEY_VISIBLE_APPLICATIONS, "{}")
         return gson.fromJson(
             applicationsSerialized,
             object : TypeToken<List<String?>?>() {}.type

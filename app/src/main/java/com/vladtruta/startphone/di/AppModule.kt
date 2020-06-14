@@ -58,6 +58,7 @@ val appModule = module {
     viewModel { SignUpViewModel() }
     viewModel { SystemSetupViewModel() }
     viewModel { VisibleAppsViewModel(get()) }
+    viewModel { SettingsViewModel(get(), get()) }
 
     viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }

@@ -18,7 +18,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".presentation.view.LauncherActivity"
+        <activity android:name=".presentation.view.SettingsActivity"></activity>
+        <activity
+            android:name=".presentation.view.LauncherActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.view.OnboardingActivity"
             android:launchMode="singleTask"
@@ -36,14 +37,13 @@
             android:showWhenLocked="true"
             android:turnScreenOn="true"
             tools:targetApi="o_mr1" />
-
         <activity
             android:name=".presentation.view.HomeActivity"
             android:launchMode="singleTask"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
-            tools:targetApi="o_mr1"/>
+            tools:targetApi="o_mr1" />
 
         <service
             android:name=".service.HelpingHandService"

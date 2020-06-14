@@ -1,5 +1,6 @@
 package com.vladtruta.startphone.presentation.view
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,8 @@ import kotlin.math.roundToInt
 class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListener {
     companion object {
         private const val TAG = "HomeActivity"
+
+        private const val RC_SETTINGS = 451
     }
 
     private val launcherViewModel by viewModel<HomeViewModel>()
@@ -34,6 +37,19 @@ class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListe
     private lateinit var binding: ActivityHomeBinding
     private lateinit var applicationPageAdapter: ApplicationPageAdapter
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            RC_SETTINGS -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    launcherViewModel.refreshVisibleApps()
+                }
+            }
+            else -> {
+                super.onActivityResult(requestCode, resultCode, data)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -43,6 +59,8 @@ class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListe
         initHelpingHandOverlay()
         initActions()
         initObservers()
+
+        launcherViewModel.refreshVisibleApps()
     }
 
     private fun initViewPager() {
@@ -115,6 +133,11 @@ class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListe
 
         binding.nextPageEfab.setOnClickListener {
             binding.applicationsVp.setCurrentItem(binding.applicationsVp.currentItem + 1, true)
+        }
+
+        binding.timeIncl.root.setOnLongClickListener {
+            launchSettings()
+            return@setOnLongClickListener true
         }
     }
 
@@ -307,11 +330,8 @@ class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListe
         binding.helpingHandOverlayIncl.root.visibility = View.GONE
     }
 
-    private fun launchOnboarding() {
-        val intent = Intent(this, OnboardingActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        startActivity(intent)
+    private fun launchSettings() {
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivityForResult(intent, RC_SETTINGS)
     }
 }

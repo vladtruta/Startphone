@@ -1,7 +1,10 @@
 package com.vladtruta.startphone.presentation.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.vladtruta.startphone.R
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.FormattedDateTime
@@ -67,31 +70,7 @@ class HomeViewModel(
     val networkConnectionStrength: LiveData<Int> = _networkConnectionStrength
 
     @Suppress("ConstantConditionIf")
-    private val _visibleAppLists = liveData(Dispatchers.Default) {
-        val savedPackages = preferencesHelper.getVisibleApplications().toTypedArray()
-        val appPages = launcherApplicationsHelper.getApplicationInfoForPackageNames(*savedPackages)
-            .chunked(MAX_APPLICATIONS_PER_PAGE)
-
-        if (addHelpButton) {
-            val appPagesWithHelp = mutableListOf<List<ApplicationInfo>>()
-            appPages.forEach { page ->
-                val pageWithHelp = page.toMutableList().apply {
-                    add(
-                        0,
-                        ApplicationInfo(
-                            UIUtils.getString(R.string.i_need_help),
-                            "",
-                            UIUtils.getDrawable(R.drawable.ic_help)!!
-                        )
-                    )
-                }
-                appPagesWithHelp.add(pageWithHelp)
-            }
-            emit(appPagesWithHelp.toList())
-        } else {
-            emit(appPages)
-        }
-    }
+    private val _visibleAppLists = MutableLiveData<List<List<ApplicationInfo>>>(emptyList())
     val visibleAppLists: LiveData<List<List<ApplicationInfo>>> = _visibleAppLists
 
     init {
@@ -164,8 +143,41 @@ class HomeViewModel(
                 val tutorials = applicationRepository.getTutorialsForPackageName(packageName)
                 launcherApplicationsHelper.updateTutorialsForCurrentlyRunningApplication(tutorials)
             } catch (e: Exception) {
-               Log.e(TAG, "retrieveTutorialsForPackageName Failure: ${e.message}", e)
+                Log.e(TAG, "retrieveTutorialsForPackageName Failure: ${e.message}", e)
             }
+        }
+    }
+
+    fun refreshVisibleApps() {
+        viewModelScope.launch(Dispatchers.Default) {
+            _visibleAppLists.postValue(getVisibleApps())
+        }
+    }
+
+    @Suppress("ConstantConditionIf")
+    private fun getVisibleApps(): List<List<ApplicationInfo>> {
+        val savedPackages = preferencesHelper.getVisibleApplications().toTypedArray()
+        val appPages = launcherApplicationsHelper.getApplicationInfoForPackageNames(*savedPackages)
+            .chunked(MAX_APPLICATIONS_PER_PAGE)
+
+        if (addHelpButton) {
+            val appPagesWithHelp = mutableListOf<List<ApplicationInfo>>()
+            appPages.forEach { page ->
+                val pageWithHelp = page.toMutableList().apply {
+                    add(
+                        0,
+                        ApplicationInfo(
+                            UIUtils.getString(R.string.i_need_help),
+                            "",
+                            UIUtils.getDrawable(R.drawable.ic_help)!!
+                        )
+                    )
+                }
+                appPagesWithHelp.add(pageWithHelp)
+            }
+            return appPagesWithHelp.toList()
+        } else {
+            return appPages
         }
     }
 }

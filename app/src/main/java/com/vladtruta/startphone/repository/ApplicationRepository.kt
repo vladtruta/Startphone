@@ -48,6 +48,7 @@ class ApplicationRepository(
                     throw Exception(response.error)
                 } else {
                     preferencesHelper.saveAuthorizationToken(response.data)
+                    preferencesHelper.saveUserEmail(email)
                 }
             } catch (e: Exception) {
                 throw Exception("Error when trying to sign up", e)
