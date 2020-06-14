@@ -5,6 +5,7 @@ import com.vladtruta.startphone.model.local.Tutorial
 import com.vladtruta.startphone.model.requests.*
 import com.vladtruta.startphone.util.PreferencesHelper
 import com.vladtruta.startphone.webservice.IAppApi
+import com.vladtruta.startphone.work.WorkHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
@@ -12,7 +13,8 @@ import org.joda.time.LocalDate
 
 class ApplicationRepository(
     private val applicationApi: IAppApi,
-    private val preferencesHelper: PreferencesHelper
+    private val preferencesHelper: PreferencesHelper,
+    private val workHelper: WorkHelper
 ) : IAppRepo {
 
     override suspend fun getTutorialsForPackageName(packageName: String): List<Tutorial> {
@@ -71,9 +73,8 @@ class ApplicationRepository(
                     throw Exception(response.error)
                 }
             } catch (e: Exception) {
-                throw Exception(
-                    "Error when trying to send applications", e
-                )
+                workHelper.enqueueApplicationsRequest(applications)
+                throw Exception("Error when trying to send applications", e)
             }
         }
     }
@@ -87,10 +88,8 @@ class ApplicationRepository(
                     throw Exception(response.error)
                 }
             } catch (e: Exception) {
-                throw Exception(
-                    "Error when trying to send missing tutorial, packageName: $packageName",
-                    e
-                )
+                workHelper.enqueueMissingTutorialRequest(packageName)
+                throw Exception("Error when trying to send missing tutorial", e)
             }
         }
     }
@@ -104,10 +103,8 @@ class ApplicationRepository(
                     throw Exception(response.error)
                 }
             } catch (e: Exception) {
-                throw Exception(
-                    "Error when trying to update watched tutorial, id: $id",
-                    e
-                )
+                workHelper.enqueueWatchedTutorialRequest(id)
+                throw Exception("Error when trying to update watched tutorial, id: $id", e)
             }
         }
     }
@@ -121,10 +118,8 @@ class ApplicationRepository(
                     throw Exception(response.error)
                 }
             } catch (e: Exception) {
-                throw Exception(
-                    "Error when trying to update rated tutorial, id: $id, useful: $useful",
-                    e
-                )
+                workHelper.enqueueRatedTutorialRequest(id, useful)
+                throw Exception("Error when trying to update rated tutorial", e)
             }
         }
     }

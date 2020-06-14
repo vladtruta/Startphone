@@ -22,6 +22,7 @@ import com.vladtruta.startphone.repository.IAppRepo
 import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.repository.WeatherRepository
 import com.vladtruta.startphone.util.*
+import com.vladtruta.startphone.work.WorkHelper
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -50,9 +51,10 @@ val appModule = module {
     single { NotificationsHelper(get()) }
     single { LauncherApplicationsHelper(get()) }
     single { PreferencesHelper(get(), get()) }
+    single { WorkHelper(get(), get()) }
 
     single<IWeatherRepo> { WeatherRepository(get()) }
-    single<IAppRepo> { ApplicationRepository(get(), get()) }
+    single<IAppRepo> { ApplicationRepository(get(), get(), get()) }
 
     viewModel { OnboardingViewModel(get(), get(), get()) }
     viewModel { SignUpViewModel() }
