@@ -51,5 +51,7 @@ class SettingsViewModel(
     fun signOut() {
         preferencesHelper.clearAuthorizationToken()
         preferencesHelper.clearUserEmail()
+        preferencesHelper.clearVisibleApplications()
+        preferencesHelper.saveHelpingHandEnabled(false)
     }
 }

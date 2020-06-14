@@ -73,4 +73,8 @@ class PreferencesHelper(private val application: Application, private val gson: 
             object : TypeToken<List<String?>?>() {}.type
         )
     }
+
+    fun clearVisibleApplications() {
+        getSharedPreferences().edit { remove(KEY_VISIBLE_APPLICATIONS) }
+    }
 }
