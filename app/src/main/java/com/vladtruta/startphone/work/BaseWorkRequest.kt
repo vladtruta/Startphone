@@ -11,11 +11,8 @@ import org.koin.core.inject
 abstract class BaseWorkRequest(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params), KoinComponent {
 
-    companion object {
-        @JvmStatic
-        protected val RETRY_LIMIT = 3
-    }
-
+    protected val RETRY_LIMIT = 3
     protected val gson by inject<Gson>()
     protected val applicationRepository: IAppRepo by inject()
+
 }
