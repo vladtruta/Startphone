@@ -14,7 +14,7 @@ class SessionInterceptor(private val preferencesHelper: PreferencesHelper) : Int
 
         val requestBuilder = original.newBuilder()
         if (preferencesHelper.isUserLoggedIn()) {
-            requestBuilder.addHeader(HEADER_AUTHORIZATION, preferencesHelper.getAuthorizationToken()!!)
+            requestBuilder.addHeader(HEADER_AUTHORIZATION, "Bearer ${preferencesHelper.getAuthorizationToken()!!}")
         }
 
         return chain.proceed(requestBuilder.build())

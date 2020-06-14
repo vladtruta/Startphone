@@ -355,7 +355,12 @@ class HelpingHandService : LifecycleService(), OnTouchListener, OnGlobalLayoutLi
     private fun closeVideoOverlay() {
         binding.closeCurrentAppLl.visibility = View.VISIBLE
         binding.stuckLl.visibility = View.VISIBLE
-        binding.tutorialPagesLl.visibility = View.VISIBLE
+        binding.tutorialPagesLl.visibility =
+            if (launcherApplicationsHelper.tutorialsForCurrentlyRunningApplication.value.isNullOrEmpty()) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
         binding.tutorialsVp.visibility = View.VISIBLE
 
         binding.tutorialFl.visibility = View.GONE
