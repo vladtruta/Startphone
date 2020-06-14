@@ -42,6 +42,7 @@ class HomeActivity : BaseActivity(), ApplicationPageAdapter.ApplicationPageListe
             RC_SETTINGS -> {
                 if (resultCode == Activity.RESULT_OK) {
                     launcherViewModel.refreshVisibleApps()
+                    initViewPager()
                 }
             }
             else -> {

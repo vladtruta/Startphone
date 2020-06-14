@@ -1,7 +1,6 @@
 package com.vladtruta.startphone.presentation.viewmodel
 
 import androidx.lifecycle.*
-import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.VisibleApplication
 import com.vladtruta.startphone.util.LauncherApplicationsHelper
 import com.vladtruta.startphone.util.PreferencesHelper
@@ -22,8 +21,13 @@ class SettingsViewModel(
         val savedPackages = preferencesHelper.getVisibleApplications().toTypedArray()
         val visibleApps =
             launcherApplicationsHelper.getApplicationInfoForPackageNames(*savedPackages)
+        val allApsWithVisibility = allApps.map {
+            VisibleApplication(
+                it,
+                visibleApps.any { visibleApp -> visibleApp.packageName == it.packageName })
+        }.sortedBy { !it.isVisible }
 
-        emit(allApps.map { VisibleApplication(it, visibleApps.contains(it)) })
+        emit(allApsWithVisibility)
     }
     val visibleApplications: LiveData<List<VisibleApplication>> = _visibleApplications
 
@@ -31,16 +35,17 @@ class SettingsViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             val apps = _visibleApplications.value
 
-            apps?.firstOrNull { it.applicationInfo.packageName == packageName }
-                ?.isVisible = visibility
+            val app =  apps?.firstOrNull { it.applicationInfo.packageName == packageName }
+            app?.isVisible = visibility
 
-            apps?.map { it.applicationInfo.packageName }
+            apps?.filter { it.isVisible }
+                ?.map { it.applicationInfo.packageName }
                 ?.let { preferencesHelper.saveVisibleApplications(it) }
         }
     }
 
-    fun getVisibleApplicationsInfo(): List<ApplicationInfo> {
-        return _visibleApplications.value?.map { it.applicationInfo } ?: emptyList()
+    fun areAllAppsHidden(): Boolean {
+        return _visibleApplications.value?.all { !it.isVisible } ?: true
     }
 
     fun signOut() {

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.vladtruta.startphone.BuildConfig
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import com.vladtruta.startphone.model.local.Tutorial
 import com.vladtruta.startphone.presentation.view.LauncherActivity
@@ -24,6 +25,7 @@ class LauncherApplicationsHelper(private val packageManager: PackageManager) {
         }
 
         return packageManager.queryIntentActivities(intent, 0)
+            .filter { it.activityInfo.packageName != BuildConfig.APPLICATION_ID }
             .map {
                 ApplicationInfo(
                     it.loadLabel(packageManager).toString(),

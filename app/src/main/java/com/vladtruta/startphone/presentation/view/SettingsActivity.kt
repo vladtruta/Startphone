@@ -3,15 +3,18 @@ package com.vladtruta.startphone.presentation.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.vladtruta.startphone.R
 import com.vladtruta.startphone.databinding.ActivitySettingsBinding
 import com.vladtruta.startphone.model.local.VisibleApplication
 import com.vladtruta.startphone.presentation.adapter.VisibleApplicationAdapter
 import com.vladtruta.startphone.presentation.viewmodel.SettingsViewModel
+import com.vladtruta.startphone.util.UIUtils
 import org.koin.android.ext.android.inject
 
 
@@ -29,7 +32,7 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //initGoogleSignIn()
+        initGoogleSignIn()
 
         initRecyclerView()
         initObservers()
@@ -64,7 +67,15 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
 
     private fun initActions() {
         binding.backMb.setOnClickListener {
-            finish()
+            if (settingsViewModel.areAllAppsHidden()) {
+                Toast.makeText(
+                    this,
+                    UIUtils.getString(R.string.select_at_least_one_app),
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                finish()
+            }
         }
 
         binding.logoutMb.setOnClickListener {

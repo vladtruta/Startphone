@@ -64,4 +64,5 @@
     <string name="back">Back</string>
     <string name="logout">Logout</string>
     <string name="signed_in_as">Signed in as:</string>
+    <string name="select_at_least_one_app">You must have at least one visible app</string>
 </resources>
