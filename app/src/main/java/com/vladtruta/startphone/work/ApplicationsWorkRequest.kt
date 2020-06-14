@@ -17,6 +17,8 @@
 package com.vladtruta.startphone.work
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.work.WorkerParameters
 import com.vladtruta.startphone.model.local.ApplicationInfo
 import kotlinx.coroutines.Dispatchers
@@ -25,17 +27,26 @@ import kotlinx.coroutines.withContext
 class ApplicationsWorkRequest(context: Context, params: WorkerParameters) :
     BaseWorkRequest(context, params) {
     companion object {
-        const val ARG_APPLICATIONS = "ARG_APPLICATIONS"
+        const val ARG_APPLICATION_PACKAGE_NAMES = "ARG_APPLICATION_PACKAGE_NAMES"
+        const val ARG_APPLICATION_PACKAGE_LABELS = "ARG_APPLICATION_PACKAGE_LABELS"
     }
 
     override suspend fun doWork(): Result {
-        val applications = withContext(Dispatchers.Default) {
-            val applicationsSerialized =
-                inputData.getString(ARG_APPLICATIONS) ?: return@withContext null
-            val applicationsArray =
-                gson.fromJson(applicationsSerialized, Array<ApplicationInfo>::class.java)
-            return@withContext applicationsArray.toList()
-        } ?: return Result.failure()
+        val packageNames =
+            inputData.getStringArray(ARG_APPLICATION_PACKAGE_NAMES) ?: return Result.failure()
+        val packageLabels =
+            inputData.getStringArray(ARG_APPLICATION_PACKAGE_LABELS) ?: return Result.failure()
+
+        val applications = mutableListOf<ApplicationInfo>()
+        packageNames.forEachIndexed { index, s ->
+            applications.add(
+                ApplicationInfo(
+                    packageLabels[index],
+                    s,
+                    ColorDrawable(Color.TRANSPARENT)
+                )
+            )
+        }
 
         return withContext(Dispatchers.IO) {
             try {

@@ -22,13 +22,20 @@ class WorkHelper(private val application: Application, private val gson: Gson) {
     }
 
     fun enqueueApplicationsRequest(applications: List<ApplicationInfo>) {
+        val data = Data.Builder()
+            .putStringArray(
+                ApplicationsWorkRequest.ARG_APPLICATION_PACKAGE_NAMES,
+                applications.map { it.packageName }.toTypedArray()
+            )
+            .putStringArray(
+                ApplicationsWorkRequest.ARG_APPLICATION_PACKAGE_LABELS,
+                applications.map { it.label }.toTypedArray()
+            )
+            .build()
+
         val work = OneTimeWorkRequestBuilder<ApplicationsWorkRequest>()
             .setConstraints(constraints)
-            .setInputData(
-                workDataOf(
-                    ApplicationsWorkRequest.ARG_APPLICATIONS to gson.toJson(applications)
-                )
-            )
+            .setInputData(data)
             .addTag(TAG_SEND_APPLICATIONS)
             .build()
 
