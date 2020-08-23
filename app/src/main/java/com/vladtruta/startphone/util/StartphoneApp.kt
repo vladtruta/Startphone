@@ -69,7 +69,7 @@ class StartphoneApp : Application(), LifecycleObserver {
     val isInForeground: Boolean
         get() = ProcessLifecycleOwner.get().lifecycle.currentState >= Lifecycle.State.STARTED
 
-    fun hasDrawOverlayPermissions(): Boolean {
+    private fun hasDrawOverlayPermissions(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Settings.canDrawOverlays(instance)
         } else {
