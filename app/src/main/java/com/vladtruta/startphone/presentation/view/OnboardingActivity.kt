@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.vladtruta.startphone.databinding.ActivityOnboardingBinding
 import com.vladtruta.startphone.presentation.adapter.OnboardingFragmentPagerAdapter
-import com.vladtruta.startphone.presentation.adapter.OnboardingFragmentPagerAdapter.Companion.HOME_TABS.*
+import com.vladtruta.startphone.presentation.adapter.OnboardingFragmentPagerAdapter.Companion.HomeTabs.*
 import com.vladtruta.startphone.presentation.viewmodel.OnboardingViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

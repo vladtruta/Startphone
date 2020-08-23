@@ -20,26 +20,26 @@ class OnboardingFragmentPagerAdapter(fm: FragmentManager) :
             UIUtils.getString(R.string.success)
         )
 
-        enum class HOME_TABS {
+        enum class HomeTabs {
             WELCOME, SIGN_UP, SYSTEM_SETUP, APPLICATIONS, SUCCESS
         }
     }
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            HOME_TABS.WELCOME.ordinal -> {
+            HomeTabs.WELCOME.ordinal -> {
                 WelcomeFragment()
             }
-            HOME_TABS.SIGN_UP.ordinal -> {
+            HomeTabs.SIGN_UP.ordinal -> {
                 SignUpFragment()
             }
-            HOME_TABS.SYSTEM_SETUP.ordinal -> {
+            HomeTabs.SYSTEM_SETUP.ordinal -> {
                 SystemSetupFragment()
             }
-            HOME_TABS.APPLICATIONS.ordinal -> {
+            HomeTabs.APPLICATIONS.ordinal -> {
                 VisibleAppsFragment()
             }
-            HOME_TABS.SUCCESS.ordinal -> {
+            HomeTabs.SUCCESS.ordinal -> {
                 SuccessFragment()
             }
             else -> {
