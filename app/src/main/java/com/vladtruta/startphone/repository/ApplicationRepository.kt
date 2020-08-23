@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 
-class ApplicationRepository(
+open class ApplicationRepository(
     private val applicationApi: IAppApi,
     private val preferencesHelper: PreferencesHelper,
     private val workHelper: WorkHelper,
