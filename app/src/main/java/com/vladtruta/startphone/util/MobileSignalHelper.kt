@@ -1,5 +1,6 @@
 package com.vladtruta.startphone.util
 
+import android.annotation.SuppressLint
 import android.telephony.*
 import android.util.Log
 
@@ -30,6 +31,7 @@ class MobileSignalHelper(private val telephonyManager: TelephonyManager) {
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
     }
 
+    @SuppressLint("MissingPermission")
     fun calculateSignalStrength(): Int {
         val signalStrength = when (val cellInfo = telephonyManager.allCellInfo.firstOrNull()) {
             is CellInfoGsm -> {

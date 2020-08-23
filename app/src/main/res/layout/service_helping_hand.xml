@@ -257,7 +257,7 @@
                     android:layout_height="48dp"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_close"
-                    android:tint="@android:color/holo_red_dark" />
+                    app:tint="@android:color/holo_red_dark" />
 
             </FrameLayout>
 

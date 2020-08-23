@@ -1,5 +1,6 @@
 package com.vladtruta.startphone.util
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 
@@ -10,6 +11,7 @@ class LocationHelper(private val fusedLocationProviderClient: FusedLocationProvi
 
     private val listeners = mutableListOf<LocationListener>()
 
+    @SuppressLint("MissingPermission")
     fun requestLastKnownLocation() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) {
