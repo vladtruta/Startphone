@@ -23,6 +23,8 @@ import com.vladtruta.startphone.repository.IWeatherRepo
 import com.vladtruta.startphone.repository.WeatherRepository
 import com.vladtruta.startphone.util.*
 import com.vladtruta.startphone.work.WorkHelper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -53,8 +55,8 @@ val appModule = module {
     single { PreferencesHelper(get(), get()) }
     single { WorkHelper(get()) }
 
-    single<IWeatherRepo> { WeatherRepository(get()) }
-    single<IAppRepo> { ApplicationRepository(get(), get(), get()) }
+    single<IWeatherRepo> { WeatherRepository(get(), provideIODispatcher()) }
+    single<IAppRepo> { ApplicationRepository(get(), get(), get(), provideIODispatcher()) }
 
     viewModel { OnboardingViewModel(get(), get(), get()) }
     viewModel { SignUpViewModel() }
@@ -108,4 +110,12 @@ private fun providePackageManager(application: Application): PackageManager {
 
 private fun provideFusedLocationProviderClient(application: Application): FusedLocationProviderClient {
     return LocationServices.getFusedLocationProviderClient(application.applicationContext)
+}
+
+private fun provideIODispatcher(): CoroutineDispatcher {
+    return Dispatchers.IO
+}
+
+private fun provideDefaultDispatcher(): CoroutineDispatcher {
+    return Dispatchers.Default
 }

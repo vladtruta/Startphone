@@ -6,27 +6,23 @@ import com.vladtruta.startphone.model.requests.*
 import com.vladtruta.startphone.util.PreferencesHelper
 import com.vladtruta.startphone.webservice.IAppApi
 import com.vladtruta.startphone.work.WorkHelper
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
-
 
 class ApplicationRepository(
     private val applicationApi: IAppApi,
     private val preferencesHelper: PreferencesHelper,
-    private val workHelper: WorkHelper
+    private val workHelper: WorkHelper,
+    private val ioDispatcher: CoroutineDispatcher
 ) : IAppRepo {
 
-    init {
-        //workHelper.clearWork()
-    }
-
     override suspend fun getTutorialsForPackageName(packageName: String): List<Tutorial> {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 val response = applicationApi.getTutorialsForPackageName(packageName)
                 if (!response.isSuccessful) {
-                    throw Exception("API returned unsuccessful result")
+                    throw Exception("API returned unsuccessful result: ${response.error}")
                 }
 
                 return@withContext response.data
@@ -46,7 +42,7 @@ class ApplicationRepository(
         gender: Char,
         dateOfBirth: LocalDate
     ) {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val userRequest = UserRequest(id, dateOfBirth.toString(), gender, email)
             try {
                 val response = applicationApi.updateUser(userRequest)
@@ -63,7 +59,7 @@ class ApplicationRepository(
     }
 
     override suspend fun updateApplications(applications: List<ApplicationInfo>) {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val applicationList = applications.map {
                 ApplicationListRequest.ApplicationRequest(
                     it.packageName,
@@ -84,7 +80,7 @@ class ApplicationRepository(
     }
 
     override suspend fun updateMissingTutorial(packageName: String) {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val request = MissingTutorialRequest(packageName)
             try {
                 val response = applicationApi.updateMissingTutorial(request)
@@ -99,7 +95,7 @@ class ApplicationRepository(
     }
 
     override suspend fun updateWatchedTutorial(id: Int) {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val request = WatchedTutorialRequest(id)
             try {
                 val response = applicationApi.updateWatchedTutorial(request)
@@ -114,7 +110,7 @@ class ApplicationRepository(
     }
 
     override suspend fun updateRatedTutorial(id: Int, useful: Boolean) {
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val request = RatedTutorialRequest(id, useful)
             try {
                 val response = applicationApi.updateRatedTutorial(request)
