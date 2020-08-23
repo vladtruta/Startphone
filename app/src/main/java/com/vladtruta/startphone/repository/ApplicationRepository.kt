@@ -17,6 +17,10 @@ class ApplicationRepository(
     private val workHelper: WorkHelper
 ) : IAppRepo {
 
+    init {
+        //workHelper.clearWork()
+    }
+
     override suspend fun getTutorialsForPackageName(packageName: String): List<Tutorial> {
         return withContext(Dispatchers.IO) {
             try {

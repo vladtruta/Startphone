@@ -3,10 +3,9 @@ package com.vladtruta.startphone.work
 import android.app.Application
 import android.util.Log
 import androidx.work.*
-import com.google.gson.Gson
 import com.vladtruta.startphone.model.local.ApplicationInfo
 
-class WorkHelper(private val application: Application, private val gson: Gson) {
+class WorkHelper(private val application: Application) {
 
     companion object {
         private const val TAG = "WorkHelper"
