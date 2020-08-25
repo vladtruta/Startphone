@@ -90,7 +90,7 @@ class ApplicationRepositoryTest {
         }
 
     @Test
-    fun getTutorialsForPackageName_operationNotSuccessful_shouldThrowError() =
+    fun getTutorialsForPackageName_operationNotSuccessful_shouldThrowException() =
         runBlockingTest {
             coEvery { applicationApi.getTutorialsForPackageName(ofType(String::class)) } returns BaseResponse(
                 false,
@@ -116,7 +116,7 @@ class ApplicationRepositoryTest {
         }
 
     @Test
-    fun getTutorialsForPackageName_packageNameValid_tutorialResponseInvalid_shouldThrowError() =
+    fun getTutorialsForPackageName_packageNameValid_tutorialResponseInvalid_shouldThrowException() =
         runBlockingTest {
             val tutorialResponses = listOf(
                 TutorialResponse(
