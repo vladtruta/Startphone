@@ -32,7 +32,7 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
     }
 
     private lateinit var binding: FragmentSignUpBinding
-    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var signInClient: GoogleSignInClient
 
     private val signUpViewModel by viewModel<SignUpViewModel>()
     private val onboardingViewModel by sharedViewModel<OnboardingViewModel>()
@@ -57,7 +57,7 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initGoogleSignIn()
+        initSignIn()
         initViews()
         initActions()
     }
@@ -80,12 +80,12 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
         }
     }
 
-    private fun initGoogleSignIn() {
+    private fun initSignIn() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestId()
             .requestEmail()
             .build()
-        googleSignInClient = GoogleSignIn.getClient(requireActivity(), googleSignInOptions)
+        signInClient = GoogleSignIn.getClient(requireActivity(), googleSignInOptions)
     }
 
     private fun initViews() {
@@ -105,12 +105,12 @@ class SignUpFragment : Fragment(), DatePicker.OnDateChangedListener {
         }
 
         binding.googleSignInButton.setOnClickListener {
-            performGoogleSignIn()
+            performSignIn()
         }
     }
 
-    private fun performGoogleSignIn() {
-        val signInIntent = googleSignInClient.signInIntent
+    private fun performSignIn() {
+        val signInIntent = signInClient.signInIntent
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN)
     }
 

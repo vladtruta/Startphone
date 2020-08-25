@@ -27,14 +27,14 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
     private val settingsViewModel by inject<SettingsViewModel>()
     private lateinit var visibleApplicationAdapter: VisibleApplicationAdapter
 
-    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var signInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initGoogleSignIn()
+        initSignIn()
 
         initRecyclerView()
         initActions()
@@ -47,12 +47,12 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
         binding.applicationsRv.adapter = visibleApplicationAdapter
     }
 
-    private fun initGoogleSignIn() {
+    private fun initSignIn() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestId()
             .requestEmail()
             .build()
-        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+        signInClient = GoogleSignIn.getClient(this, googleSignInOptions)
     }
 
     private fun initActions() {
@@ -114,7 +114,7 @@ class SettingsActivity : AppCompatActivity(), VisibleApplicationAdapter.VisibleA
     }
 
     private fun signOut() {
-        googleSignInClient.signOut()
+        signInClient.signOut()
             .addOnCompleteListener {
                 settingsViewModel.signOut()
                 openLauncher()
