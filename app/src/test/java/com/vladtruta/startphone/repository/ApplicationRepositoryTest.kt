@@ -75,7 +75,7 @@ class ApplicationRepositoryTest {
     @Test
     fun getTutorialsForPackageName_packageNameInvalid_shouldReturnEmptyList() =
         runBlockingTest {
-            coEvery { applicationApi.getTutorialsForPackageName(ofType(String::class)) } returns BaseResponse(
+            coEvery { applicationApi.getTutorialsForPackageName("INVALID") } returns BaseResponse(
                 true,
                 emptyList()
             )
